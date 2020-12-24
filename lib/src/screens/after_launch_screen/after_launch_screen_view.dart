@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:wively/src/data/local_database/db_provider.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/screens/home/home_view.dart';
@@ -21,6 +23,7 @@ class _AfterLaunchScreenState extends State<AfterLaunchScreen> {
     if (token == null) {
       routeName = LoginScreen.routeName;
     }
+    await Firebase.initializeApp();
     Timer.run(() {
       // In case user is already logged in, go to home_screen
       // otherwise, go to login_screen

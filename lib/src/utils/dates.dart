@@ -4,13 +4,13 @@ class UtilDates {
   static final int oneDayInMilliseconds = 86400000;
 
   static final daysOfWeek = [
-    "Segunda",
-    "Terça",
-    "Quarta",
-    "Quinta",
-    "Sexta",
-    "Sábado",
-    "Domingo"
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
   ];
 
   static final formatHour = new DateFormat("HH:mm");
@@ -42,7 +42,7 @@ class UtilDates {
     }
     
     if (daysSinceMessage == 1) {
-      return "Ontem";
+      return "Yesterday";
     }
 
     return messageWeekDay(milliseconds);
@@ -62,11 +62,11 @@ class UtilDates {
     }
 
     if (daysSinceMessage == 0) {
-      return "Hoje";
+      return "Today";
     }
     
     if (daysSinceMessage == 1) {
-      return "Ontem";
+      return "Yesterday";
     }
 
     return messageWeekDay(milliseconds);

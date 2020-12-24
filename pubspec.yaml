@@ -41,7 +41,7 @@ dependencies:
 
   intl: ^0.16.1
 
-  firebase_messaging: ^6.0.9
+  firebase_messaging: ^7.0.3
 
   flutter_statusbarcolor: ^0.2.3
 
@@ -50,6 +50,8 @@ dependencies:
   path_provider: ^1.5.1
 
   emoji_picker: ^0.1.0
+
+  firebase_core: ^0.5.3
 
 
 dev_dependencies:
