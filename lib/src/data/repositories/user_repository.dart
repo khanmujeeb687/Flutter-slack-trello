@@ -12,7 +12,6 @@ class UserRepository {
     try {
       var response = await http.get('${MyUrls.serverUrl}/users');
       final List<dynamic> usersResponse = jsonDecode(response.body)['users'];
-
       final List<User> users =
           usersResponse.map((user) => User.fromJson(user)).toList();
       return users;

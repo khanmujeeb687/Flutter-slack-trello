@@ -1,4 +1,5 @@
 import 'package:wively/src/screens/home/home_controller.dart';
+import 'package:wively/src/screens/room/create_room.dart';
 import 'package:wively/src/screens/settings/settings_view.dart';
 import 'package:wively/src/widgets/chat_card.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
@@ -48,6 +49,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(Icons.settings),
                 onPressed: () {
                   Navigator.of(context).pushNamed(SettingsScreen.routeName);
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.supervised_user_circle),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(CreateRoom.routeName);
                 },
               ),
             ],
