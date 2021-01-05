@@ -9,6 +9,7 @@ class MyUrls {
   //endpoints
 
   static const String ROOM=serverUrl+'/room';
+  static const String ROOM_ONE=serverUrl+'/room/single';
   static const String ADD_USER_TO_ROOM=serverUrl+'/room/user';
   static const String SEND_MESSAGE_TO_ROOM=serverUrl+'/room/message';
 

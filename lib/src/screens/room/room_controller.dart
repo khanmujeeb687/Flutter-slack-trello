@@ -26,17 +26,19 @@ class RoomController extends StateControl with WidgetsBindingObserver {
   List<Room> get rooms => _rooms;
 
 
+  Room _room;
+  Room get room => _room;
+
   ProgressDialog _progressDialog;
 
   RoomController({
-    @required this.context,
+    @required this.context
   }) {
     this.init();
   }
 
   @override
   void init() {
-    getRooms();
   }
 
   void getRooms() async {
@@ -63,6 +65,19 @@ class RoomController extends StateControl with WidgetsBindingObserver {
     Navigator.of(context).popAndPushNamed(ContactScreen.routeName);
     _loading = false;
     notifyListeners();
+  }
+
+  void getRoomData(String roomId)async{
+      var response =await _roomRepository.getRoomById(roomId);
+      if (response is CustomError) {
+        _error = true;
+      }
+      if (response is Room) {
+        _room = response;
+      }
+      _loading = false;
+      notifyListeners();
+
   }
 
 

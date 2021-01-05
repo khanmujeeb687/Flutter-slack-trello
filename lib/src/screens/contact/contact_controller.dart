@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/message.dart';
+import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/data/repositories/chat_repository.dart';
+import 'package:wively/src/screens/room/room_info.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:wively/src/utils/dates.dart';
 import 'package:wively/src/utils/state_control.dart';
@@ -65,6 +67,10 @@ class ContactController extends StateControl {
     final userString = await CustomSharedPreferences.get("user");
     final userJson = jsonDecode(userString);
     return User.fromJson(userJson);
+  }
+  
+  openRoom(roomId){
+    Navigator.of(context).pushNamed(RoomInfo.routeName,arguments: RoomInfoArguments(roomId));
   }
 
   sendMessage() async {

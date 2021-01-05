@@ -34,6 +34,7 @@ class _CreateRoomState extends State<CreateRoom> {
           TextFieldWithButton(context: context, textEditingController: _controller, onSubmit: (){
             if(_controller.text.isNotEmpty){
               _roomRepository.createRoom(_controller.text);
+              Navigator.pop(context);
             }
           },showEmojiKeyboard: false,)
         ],

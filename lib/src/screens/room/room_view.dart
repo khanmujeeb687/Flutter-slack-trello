@@ -25,6 +25,7 @@ class _RoomScreenState extends State<RoomScreen> {
   void initState() {
     super.initState();
     _roomController = RoomController(context: context);
+    _roomController.getRooms();
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/custom_error.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/models/room.dart';
@@ -40,6 +41,18 @@ class RoomRepository{
       return rooms;
     } catch (err) {
       debugPrint(err.toString());
+      return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
+    }
+  }
+
+  Future<dynamic> getRoomById(String roomId)async{
+    try {
+      var response = await http.get(MyUrls.ROOM_ONE+'/'+roomId);
+      final dynamic roomJson = jsonDecode(response.body)['room'];
+      Room room =Room.fromJson(roomJson);
+      return room;
+    } catch (err) {
+      Fluttertoast.showToast(msg:err);
       return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
     }
   }

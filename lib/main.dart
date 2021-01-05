@@ -6,6 +6,7 @@ import 'package:wively/src/screens/home/home_view.dart';
 import 'package:wively/src/screens/login/login_view.dart';
 import 'package:wively/src/screens/register/register_view.dart';
 import 'package:wively/src/screens/room/create_room.dart';
+import 'package:wively/src/screens/room/room_info.dart';
 import 'package:wively/src/screens/room/room_view.dart';
 import 'package:wively/src/screens/settings/settings_view.dart';
 import 'package:wively/src/widgets/custom_page_route.dart';
@@ -73,6 +74,9 @@ class MyApp extends StatelessWidget {
             case '/create_room':
               return CustomPageRoute.build(
                   builder: (_) => CreateRoom(), settings: settings);
+            case '/RouteInfo':
+              return CustomPageRoute.build(
+                  builder: (_) => RoomInfo(settings.arguments), settings: settings);
             default:
               return CustomPageRoute.build(
                   builder: (_) => AfterLaunchScreen(), settings: settings);
