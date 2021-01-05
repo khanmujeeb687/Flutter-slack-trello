@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/custom_error.dart';
 import 'package:wively/src/data/models/message.dart';
@@ -139,10 +141,10 @@ class HomeController extends StateControl with WidgetsBindingObserver {
     });
   }
 
-  //TODO
   void onMessage() async {
     socket.on("message", (dynamic data) async {
-      print("message $data");
+      User user =await CustomSharedPreferences.getMyUser();
+      if(data['message']['from']['_id']==user.id) return;
       Map<String, dynamic> json = data['message'];
       Map<String, dynamic> roomJson = json['room'];
       Chat chat = Chat.fromJson({

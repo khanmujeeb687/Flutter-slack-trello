@@ -14,7 +14,7 @@ class RoomTable {
           create table tb_room (
             id_room integer primary key autoincrement, 
             _id text not null,
-            room_name text not null,
+            room_name text not null
             )
           ''');
     await db.execute('''

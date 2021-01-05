@@ -10,8 +10,8 @@ class Room {
   String id;
   String roomName;
   User createdBy;
-  List<User> admins;
-  List<User> members;
+  List<User> admins=[];
+  List<User> members=[];
   int createdAt;
   // String taslBoardId;
   // Room parent;
@@ -28,10 +28,10 @@ class Room {
   Room.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     roomName = json['roomName'];
-    createdBy = json['createdBy'];
+    createdBy = User.fromJson(json['createdBy']);
     createdAt = json['createdAt'];
-    members = json['members'].map((member)=>User.fromJson(member));
-    admins = json['admins'].map((admin)=>User.fromJson(admin));
+    json['members'].forEach((member)=>members.add(User.fromJson(member)));
+    json['admins'].forEach((admin)=>admins.add(User.fromJson(admin)));
   }
 
 

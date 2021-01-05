@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/local_database/message_table.dart';
+import 'package:wively/src/data/local_database/room_table.dart';
 import 'package:wively/src/data/local_database/user_table.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/message.dart';
@@ -33,6 +36,7 @@ class DBProvider {
     String path = join(documentsDirectory.path, "fala_comigo.db");
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
+      await RoomTable.createTable(db);
       await UserTable.createTable(db);
       await ChatTable.createTable(db);
       await MessageTable.createTable(db);
@@ -62,7 +66,7 @@ class DBProvider {
     final db = await database;
     final rooms = await db.rawQuery('''
       SELECT tb_room._id,
-             tb_room.room_name,
+             tb_room.room_name
       FROM tb_room
       WHERE tb_room._id = '$id'
     ''');
@@ -104,7 +108,7 @@ class DBProvider {
   Future<Room> createRoomIfNotExists(Chat chat) async {
     final _room = await getRoom(chat.room.id);
     if (_room == null) {
-      await createRoom(_room);
+      await createRoom(chat.room);
     }
     return chat.room;
   }
@@ -187,6 +191,18 @@ class DBProvider {
     final id = await db.insert('tb_message', message.toLocalDatabaseMap());
     return id;
   }
+
+
+  void testAQuery()async{
+    final db = await database;
+    final maps=await db.rawQuery('''
+    SELECT * FROM tb_room
+    ''');
+    Fluttertoast.showToast(msg: maps.toString());
+
+
+  }
+
 
   Future<List<Chat>> getChatsWithMessages() async {
     final db = await database;

@@ -13,7 +13,7 @@ class RoomCard extends StatelessWidget {
         child: Text(room.roomName[0]),
       ),
       title: Text(room.roomName),
-      subtitle: Text('createdBy ~'+room.admins[0].name),
+      subtitle: Text('createdBy ~'+room.createdBy.name),
       onTap: (){
       onPress(room);
       },

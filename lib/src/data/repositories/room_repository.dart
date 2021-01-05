@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:wively/src/data/models/custom_error.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/models/room.dart';
@@ -29,14 +30,16 @@ class RoomRepository{
 
    Future<dynamic> getRooms() async {
     try {
-      var response = await http.get(MyUrls.ROOM);
+      User user=await CustomSharedPreferences.getMyUser();
+      var response = await http.get(MyUrls.ROOM+'/'+user.id);
       final dynamic roomJson = jsonDecode(response.body)['rooms'];
-
-      final List<Room> rooms =
-      roomJson.map((room) => Room.fromJson(room)).toList();
+      debugPrint(roomJson.toString());
+      List<Room> rooms=[];
+      roomJson.forEach((room)=>rooms.add(Room.fromJson(room)));
+      // final List<dynamic> rooms = roomJson.map((room) => Room.fromJson(room)).toList();
       return rooms;
-
     } catch (err) {
+      debugPrint(err.toString());
       return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
     }
   }
