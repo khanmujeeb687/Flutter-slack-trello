@@ -47,6 +47,10 @@ class _RoomInfoState extends State<RoomInfo> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed:()=> _roomController.addNewMember(widget.roomInfoArguments.roomId),
+      ),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:wively/src/data/models/custom_error.dart';
 import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/data/repositories/room_repository.dart';
+import 'package:wively/src/screens/add_chat/add_chat_view.dart';
 import 'package:wively/src/screens/contact/contact_view.dart';
 import 'package:wively/src/utils/state_control.dart';
 
@@ -78,6 +79,10 @@ class RoomController extends StateControl with WidgetsBindingObserver {
       _loading = false;
       notifyListeners();
 
+  }
+
+  void addNewMember(roomId){
+    Navigator.of(context).pushNamed(AddChatScreen.routeName,arguments: roomId);
   }
 
 

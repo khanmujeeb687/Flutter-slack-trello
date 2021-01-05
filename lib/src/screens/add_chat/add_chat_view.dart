@@ -6,8 +6,12 @@ import 'package:wively/src/widgets/user_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+
 class AddChatScreen extends StatefulWidget {
   static final String routeName = '/add-chat';
+
+  String roomId;
+  AddChatScreen(this.roomId);
 
   @override
   _AddChatScreenState createState() => _AddChatScreenState();
@@ -31,7 +35,7 @@ class _AddChatScreenState extends State<AddChatScreen> {
         builder: (context, snapshot) {
           return Scaffold(
             appBar: CustomAppBar(
-              title: Text('New chat'),
+              title: Text('New member'),
             ),
             body: renderUsers(),
           );
@@ -63,7 +67,7 @@ class _AddChatScreenState extends State<AddChatScreen> {
               children: <Widget>[
                 UserCard(
                   user: user,
-                  onTap:(a)=>{},
+                  onTap:(a)=>{_addChatController.addToThisGroup(widget.roomId,user.name)},
                 ),
               ],
             );

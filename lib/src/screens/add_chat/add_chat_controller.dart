@@ -16,6 +16,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:wively/src/widgets/my_button.dart';
 
 class AddChatController extends StateControl {
   UserRepository _userRepository = UserRepository();
@@ -96,6 +97,30 @@ class AddChatController extends StateControl {
         messageTextStyle: TextStyle(
             color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
     _progressDialog.show();
+  }
+
+
+  void addToThisGroup(roomId,name){
+
+    showModalBottomSheet(context: context,builder: (context){
+      return Container(
+        height: 100,
+        padding: EdgeInsets.all(20),
+        alignment:Alignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Add $name to this group?'),
+            RaisedButton(
+              child: Text('+Add'),
+              onPressed: (){
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ),
+      );
+    });
   }
 
   Future<bool> _dismissProgressDialog() {
