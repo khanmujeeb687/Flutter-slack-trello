@@ -26,7 +26,7 @@ class Message {
     roomId = json['roomId'];
     message = json['message'];
     from = json['from']['_id'];
-    to_room = json['to_room']['_id'];
+    to_room = json['room']['_id'];
     unreadByMe = json['unreadByMe'] ?? true;
     sendAt = json['sendAt'];
   }
@@ -37,7 +37,7 @@ class Message {
     json['roomId'] = roomId;
     json['message'] = message;
     json['from'] = from;
-    json['to_room'] = to_room;
+    json['room'] = to_room;
     json['sendAt'] = sendAt;
     return json;
   }
