@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:wively/src/data/models/message.dart';
+import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -9,14 +10,14 @@ class Chat {
 
   String id;
   List<Message> messages;
-  User user;
+  Room room;
   int unreadMessages;
   String lastMessage;
   int lastMessageSendAt;
 
   Chat({
     @required this.id,
-    @required this.user,
+    @required this.room,
     this.messages = const [],
     this.unreadMessages,
     this.lastMessage,
@@ -25,7 +26,7 @@ class Chat {
 
   Chat.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
-    user = User.fromJson(json['user']);
+    room = Room.fromJson(json['room']);
     messages = [];
   }
 
@@ -37,10 +38,9 @@ class Chat {
 
   Chat.fromLocalDatabaseMap(Map<String, dynamic> map) {
     id = map['_id'];
-    user = User.fromLocalDatabaseMap({
-      '_id': map['user_id'],
-      'name': map['name'],
-      'username': map['username'],
+    room = Room.fromLocalDatabaseMap({
+      '_id': map['room_id'],
+      'room_name': map['room_name'],
     });
     messages = [];
     unreadMessages = map['unread_messages'];
@@ -51,7 +51,6 @@ class Chat {
   Map<String, dynamic> toLocalDatabaseMap() {
     Map<String, dynamic> map = {};
     map['_id'] = id;
-    map['user_id'] = user.id;
     return map;
   }
 

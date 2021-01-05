@@ -54,7 +54,7 @@ class ChatCard extends StatelessWidget {
               children: <Widget>[
                 CircleAvatar(
                   child: Text(
-                    chat.user.name[0].toUpperCase(),
+                    chat.room.roomName[0].toUpperCase(),
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -80,7 +80,7 @@ class ChatCard extends StatelessWidget {
                                       CrossAxisAlignment.stretch,
                                   children: <Widget>[
                                     Text(
-                                      chat.user.name,
+                                      chat.room.roomName,
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,

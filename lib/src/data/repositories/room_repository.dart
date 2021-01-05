@@ -33,7 +33,7 @@ class RoomRepository{
       final dynamic roomJson = jsonDecode(response.body)['rooms'];
 
       final List<Room> rooms =
-      roomJson.map((room) => User.fromJson(room)).toList();
+      roomJson.map((room) => Room.fromJson(room)).toList();
       return rooms;
 
     } catch (err) {

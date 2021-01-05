@@ -35,4 +35,20 @@ class Room {
   }
 
 
+
+  Map<String, dynamic> toLocalDatabaseMap() {
+    Map<String, dynamic> map = {};
+    map['_id'] = id;
+    map['room_name'] = roomName;
+    return map;
+  }
+
+  Room.fromLocalDatabaseMap(Map<String, dynamic> json) {
+    id = json['_id'];
+    roomName = json['room_name'];
+  }
+
+
+
+
 }

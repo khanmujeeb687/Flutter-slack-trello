@@ -60,24 +60,24 @@ class AddChatController extends StateControl {
     notifyListeners();
   }
 
-  void newChat(User user) async {
-    
-    // _showProgressDialog();
-
-    final Chat chat = Chat(
-      id: user.chatId,
-      user: user,
-    );
-    final _provider = Provider.of<ChatsProvider>(context, listen: false);
-    _provider.createUserIfNotExists(chat.user);
-    _provider.createChatIfNotExists(chat);
-    _provider.setSelectedChat(chat);
-    Navigator.of(context).popAndPushNamed(ContactScreen.routeName);
-    // _dismissProgressDialog();
-    // Provider.of<ChatsProvider>(context, listen: false).setSelectedChat(chat.id);
-    _loading = false;
-    notifyListeners();
-  }
+  // void newChat(User user) async {
+  //
+  //   // _showProgressDialog();
+  //
+  //   final Chat chat = Chat(
+  //     id: user.chatId,
+  //     user: user,
+  //   );
+  //   final _provider = Provider.of<ChatsProvider>(context, listen: false);
+  //   _provider.createUserIfNotExists(chat.user);
+  //   _provider.createChatIfNotExists(chat);
+  //   _provider.setSelectedChat(chat);
+  //   Navigator.of(context).popAndPushNamed(ContactScreen.routeName);
+  //   // _dismissProgressDialog();
+  //   // Provider.of<ChatsProvider>(context, listen: false).setSelectedChat(chat.id);
+  //   _loading = false;
+  //   notifyListeners();
+  // }
 
   void _showProgressDialog() {
     _progressDialog = ProgressDialog(context,

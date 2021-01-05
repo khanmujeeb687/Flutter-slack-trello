@@ -68,6 +68,10 @@ class ChatsProvider with ChangeNotifier {
     await DBProvider.db.createUserIfNotExists(user);
     updateChats();
   }
+  createRoomIfNotExists(Chat chat) async {
+    await DBProvider.db.createRoomIfNotExists(chat);
+    updateChats();
+  }
 
   createChatIfNotExists(Chat chat) async {
     await DBProvider.db.createChatIfNotExists(chat);
@@ -75,11 +79,11 @@ class ChatsProvider with ChangeNotifier {
   }
 
   createChatAndUserIfNotExists(Chat chat) async {
-    await DBProvider.db.createUserIfNotExists(chat.user);
+    await DBProvider.db.createRoomIfNotExists(chat);
     await DBProvider.db.createChatIfNotExists(chat);
     updateChats();
   }
-  
+
   addMessageToChat(Message message) async {
     await DBProvider.db.addMessage(message);
     updateChats();

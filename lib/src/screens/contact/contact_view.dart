@@ -60,7 +60,7 @@ class _ContactScreenState extends State<ContactScreen> {
                   children: <Widget>[
                     CircleAvatar(
                       child: Text(
-                        _contactController.selectedChat.user.name[0]
+                        _contactController.selectedChat.room.roomName[0]
                             .toUpperCase(),
                         style: TextStyle(
                           color: Colors.white,
@@ -78,14 +78,14 @@ class _ContactScreenState extends State<ContactScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          _contactController.selectedChat.user.name,
+                          _contactController.selectedChat.room.roomName,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
                         Text(
-                          "@${_contactController.selectedChat.user.username}",
+                          "@${_contactController.selectedChat.room.roomName}",
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 10,

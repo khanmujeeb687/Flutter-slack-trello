@@ -9,7 +9,9 @@ import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/data/repositories/chat_repository.dart';
 import 'package:wively/src/data/repositories/user_repository.dart';
 import 'package:wively/src/screens/add_chat/add_chat_view.dart';
+import 'package:wively/src/screens/contact/contact_view.dart';
 import 'package:wively/src/screens/login/login_view.dart';
+import 'package:wively/src/screens/room/room_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:wively/src/utils/socket_controller.dart';
 import 'package:wively/src/utils/state_control.dart';
@@ -124,14 +126,15 @@ class HomeController extends StateControl with WidgetsBindingObserver {
     });
   }
 
+  //TODO
   void onMessage() async {
     socket.on("message", (dynamic data) async {
       print("message $data");
       Map<String, dynamic> json = data['message'];
-      Map<String, dynamic> userJson = json['from'];
+      Map<String, dynamic> roomJson = json['room'];
       Chat chat = Chat.fromJson({
         "_id": json['chatId'],
-        "user": userJson,
+        "room": roomJson,
       });
       Message message = Message.fromJson(json);
       Provider.of<ChatsProvider>(context, listen: false)
@@ -183,6 +186,10 @@ class HomeController extends StateControl with WidgetsBindingObserver {
 
   void openAddChatScreen() async {
     Navigator.of(context).pushNamed(AddChatScreen.routeName);
+  }
+
+  void addRoomScreen() async {
+    Navigator.of(context).pushNamed(RoomScreen.routeName);
   }
 
   void openSettings() async {

@@ -3,30 +3,30 @@ class Message {
 
   int localId;
   String id;
-  String chatId;
+  String roomId;
   String message;
   String from;
-  String to;
+  String to_room;
   int sendAt;
   bool unreadByMe;
 
   Message({
     this.localId,
     this.id,
-    this.chatId,
+    this.roomId,
     this.message,
     this.from,
-    this.to,
+    this.to_room,
     this.sendAt,
     this.unreadByMe,
   });
 
   Message.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
-    chatId = json['chatId'];
+    roomId = json['roomId'];
     message = json['message'];
     from = json['from']['_id'];
-    to = json['to']['_id'];
+    to_room = json['to_room']['_id'];
     unreadByMe = json['unreadByMe'] ?? true;
     sendAt = json['sendAt'];
   }
@@ -34,10 +34,10 @@ class Message {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
     json['_id'] = id;
-    json['chatId'] = chatId;
+    json['roomId'] = roomId;
     json['message'] = message;
     json['from'] = from;
-    json['to'] = to;
+    json['to_room'] = to_room;
     json['sendAt'] = sendAt;
     return json;
   }
@@ -45,10 +45,10 @@ class Message {
   Message.fromLocalDatabaseMap(Map<String, dynamic> json) {
     localId = json['id_message'];
     id = json['_id'];
-    chatId = json['chat_id'];
+    roomId = json['room_id'];
     message = json['message'];
     from = json['from_user'];
-    to = json['to_user'];
+    to_room = json['to_room'];
     sendAt = json['send_at'];
     unreadByMe = json['unread_by_me'] == 1;
   }
@@ -56,10 +56,10 @@ class Message {
   Map<String, dynamic> toLocalDatabaseMap() {
     Map<String, dynamic> map = {};
     map['_id'] = id;
-    map['chat_id'] = chatId;
+    map['room_id'] = roomId;
     map['message'] = message;
     map['from_user'] = from;
-    map['to_user'] = to;
+    map['to_room'] = to_room;
     map['send_at'] = sendAt;
     map['unread_by_me'] = unreadByMe ?? false;
     return map;
@@ -73,10 +73,10 @@ class Message {
     return Message(
       localId: localId ?? this.localId,
       id: id ?? this.id,
-      chatId: this.chatId,
+      roomId: this.roomId,
       message: this.message,
       from: this.from,
-      to: this.to,
+      to_room: this.to_room,
       sendAt: this.sendAt,
       unreadByMe: unreadByMe ?? this.unreadByMe,
     );

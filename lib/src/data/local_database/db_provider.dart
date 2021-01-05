@@ -4,6 +4,7 @@ import 'package:wively/src/data/local_database/message_table.dart';
 import 'package:wively/src/data/local_database/user_table.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/message.dart';
+import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -57,6 +58,20 @@ class DBProvider {
     return null;
   }
 
+  Future<Room> getRoom(String id) async {
+    final db = await database;
+    final rooms = await db.rawQuery('''
+      SELECT tb_room._id,
+             tb_room.room_name,
+      FROM tb_room
+      WHERE tb_room._id = '$id'
+    ''');
+    if (rooms.length > 0) {
+      return Room.fromLocalDatabaseMap(rooms.first);
+    }
+    return null;
+  }
+
   Future<User> createUser(User user) async {
     try {
       final db = await database;
@@ -65,6 +80,16 @@ class DBProvider {
     } catch (err) {
       print("error $err");
       return user;
+    }
+  }
+  Future<Room> createRoom(Room room) async {
+    try {
+      final db = await database;
+      await db.insert('tb_room', room.toLocalDatabaseMap());
+      return room;
+    } catch (err) {
+      print("error $err");
+      return room;
     }
   }
 
@@ -76,15 +101,23 @@ class DBProvider {
     return user;
   }
 
+  Future<Room> createRoomIfNotExists(Chat chat) async {
+    final _room = await getRoom(chat.room.id);
+    if (_room == null) {
+      await createRoom(_room);
+    }
+    return chat.room;
+  }
+
   Future<Chat> createChatIfNotExists(Chat chat) async {
     try {
       final db = await database;
-      final chats = await db.rawQuery('''
-        SELECT * FROM tb_chat
+      final room_chats = await db.rawQuery('''
+        SELECT * FROM tb_room_chat
         WHERE _id = '${chat.id}'
       ''');
-      if (chats.length == 0) {
-        await db.insert('tb_chat', chat.toLocalDatabaseMap());
+      if (room_chats.length == 0) {
+        await db.insert('tb_room_chat', chat.toLocalDatabaseMap());
       }
       return chat;
     } catch (err) {
@@ -93,18 +126,18 @@ class DBProvider {
     }
   }
 
-  Future<List<Message>> getChatMessages(String chatId) async {
+  Future<List<Message>> getChatMessages(String roomId) async {
     final db = await database;
     final maps = await db.rawQuery('''
       SELECT tb_message.id_message,
              tb_message._id,
              tb_message.from_user,
-             tb_message.to_user,
+             tb_message.to_room,
              tb_message.message,
              tb_message.send_at,
              tb_message.unread_by_me
       FROM tb_message
-      WHERE tb_message.chat_id = '$chatId'
+      WHERE tb_message.room_id = '$roomId'
       ORDER BY tb_message.send_at DESC
       LIMIT 25
     ''');
@@ -121,22 +154,22 @@ class DBProvider {
     await db.rawQuery('''
       UPDATE tb_message
       SET unread_by_me = 0
-      WHERE chat_id = '$id'
+      WHERE room_id = '$id'
     ''');
   }
 
-  Future<List<Message>> getChatMessagesWithOffset(String chatId, int localMessageId) async {
+  Future<List<Message>> getChatMessagesWithOffset(String roomId, int localMessageId) async {
     final db = await database;
     final maps = await db.rawQuery('''
       SELECT tb_message.id_message,
              tb_message._id,
              tb_message.from_user,
-             tb_message.to_user,
+             tb_message.to_room,
              tb_message.message,
              tb_message.send_at,
              tb_message.unread_by_me
       FROM tb_message
-      WHERE tb_message.chat_id = '$chatId'
+      WHERE tb_message.room_id = '$roomId'
       AND tb_message.id_message < $localMessageId
       ORDER BY tb_message.send_at DESC
       LIMIT 25
@@ -158,22 +191,21 @@ class DBProvider {
   Future<List<Chat>> getChatsWithMessages() async {
     final db = await database;
     final maps = await db.rawQuery('''
-      SELECT tb_chat._id,
-             tb_user._id as user_id,
-             tb_user.name,
-             tb_user.username,
+      SELECT tb_room_chat._id,
+             tb_room._id as room_id,
+             tb_room.room_name,
              tb_message.id_message,
              tb_message._id as message_id,
              tb_message.from_user,
-             tb_message.to_user,
+             tb_message.to_room,
              tb_message.message,
              tb_message.send_at,
              tb_message.unread_by_me
-      FROM tb_chat
+      FROM tb_room_chat
       INNER JOIN tb_message
-        ON tb_chat._id = tb_message.chat_id
-      INNER JOIN tb_user
-        ON tb_user._id = tb_chat.user_id
+        ON tb_room_chat._id = tb_message.room_id
+      INNER JOIN tb_room
+        ON tb_room_chat._id = tb_room._id
       ORDER BY tb_message.send_at DESC
     ''');
     if (maps.length > 0) {
@@ -187,7 +219,7 @@ class DBProvider {
         final message = Message.fromLocalDatabaseMap({
             "_id": map['message_id'],
             "from": map['from_user'],
-            "to": map['to_user'],
+            "to": map['to_room'],
             "message": map['message'],
             "send_at": map['send_at'],
             "unread_by_me": map['unread_by_me'],
@@ -205,8 +237,9 @@ class DBProvider {
   Future<void> clearDatabase() async {
     final db = await database;
     await db.rawQuery("DELETE FROM tb_message");
-    await db.rawQuery("DELETE FROM tb_chat");
+    await db.rawQuery("DELETE FROM tb_room_chat");
     await db.rawQuery("DELETE FROM tb_user");
+    await db.rawQuery("DELETE FROM tb_room");
   }
 
 }

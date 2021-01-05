@@ -74,11 +74,11 @@ class ContactController extends StateControl {
     final user = await CustomSharedPreferences.getMyUser();
     final myId = user.id;
     final selectedChat = Provider.of<ChatsProvider>(context, listen: false).selectedChat;
-    final to = selectedChat.user.id;
+    final to = selectedChat.room.id;
     final newMessage = Message(
-      chatId: selectedChat.id,
+      roomId: selectedChat.id,
       from: myId,
-      to: to,
+      to_room: to,
       message: message,
       sendAt: DateTime.now().millisecondsSinceEpoch,
       unreadByMe: false,
