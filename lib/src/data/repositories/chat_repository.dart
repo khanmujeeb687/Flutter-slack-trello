@@ -50,6 +50,21 @@ class ChatRepository {
     }
   }
 
+  Future<dynamic> sendMessageToRoom(String message, String from,String roomId) async {
+    try {
+      var body = jsonEncode({'message': message, 'roomId': roomId, 'from': from});
+      var response = await http.post(
+        '${MyUrls.serverUrl}/room/message',
+        body: body,
+      );
+      final dynamic messageResponse = jsonDecode(response.body)['message'];
+      Message _message = Message.fromJson(messageResponse);
+      return _message;
+    } catch (err) {
+      return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
+    }
+  }
+
   Future<dynamic> getChatByUsersIds(String userId) async {
     try {
       var response = await http.get('${MyUrls.serverUrl}/chats/user/$userId');
@@ -74,9 +89,17 @@ class ChatRepository {
     }
   }
 
+  //TODO
   Future<void> deleteMessage(String messageId) async {
     try {
       await http.delete('${MyUrls.serverUrl}/message/$messageId');
+    } catch (err) {
+      print("Error $err");
+    }
+  }
+  Future<void> deleteRoomMessage(String messageId,String userId) async {
+    try {
+      await http.delete('${MyUrls.serverUrl}/room/message/$messageId/$userId',);
     } catch (err) {
       print("Error $err");
     }

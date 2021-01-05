@@ -85,7 +85,7 @@ class ContactController extends StateControl {
     );
     textController.text = "";
     await Provider.of<ChatsProvider>(context, listen: false).addMessageToChat(newMessage);
-    await _chatRepository.sendMessage(message, to);
+    await _chatRepository.sendMessageToRoom(message,user.id,selectedChat.id);
     
   }
 

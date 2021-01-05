@@ -46,6 +46,9 @@ class HomeController extends StateControl with WidgetsBindingObserver {
   List<User> _users = [];
   List<User> get users => _users;
 
+  User _user;
+  User get user=>_user;
+
   AppLifecycleState _notification;
 
   final duration = const Duration(milliseconds: 100);
@@ -56,6 +59,15 @@ class HomeController extends StateControl with WidgetsBindingObserver {
     @required this.context,
   }) {
     this.init();
+  }
+
+
+
+  void getMyUser()async {
+    var a=await CustomSharedPreferences.getMyUser();
+    if(user!=null){
+      _user=a;
+    }
   }
 
   @override
@@ -102,6 +114,7 @@ class HomeController extends StateControl with WidgetsBindingObserver {
     configureFirebaseMessaging();
     connectSocket();
     WidgetsBinding.instance.addObserver(this);
+    getMyUser();
   }
 
   void initSocket() {
@@ -141,7 +154,7 @@ class HomeController extends StateControl with WidgetsBindingObserver {
           .createChatAndUserIfNotExists(chat);
       Provider.of<ChatsProvider>(context, listen: false)
           .addMessageToChat(message);
-      await _chatRepository.deleteMessage(message.id);
+      await _chatRepository.deleteRoomMessage(message.id,user.id);
     });
   }
 
