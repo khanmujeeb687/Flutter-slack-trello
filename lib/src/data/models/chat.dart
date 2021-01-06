@@ -41,6 +41,7 @@ class Chat {
     room = Room.fromLocalDatabaseMap({
       '_id': map['room_id'],
       'room_name': map['room_name'],
+      'task_board_id':map['task_board_id']
     });
     messages = [];
     unreadMessages = map['unread_messages'];

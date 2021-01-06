@@ -7,6 +7,7 @@ import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/data/repositories/chat_repository.dart';
 import 'package:wively/src/screens/room/room_info.dart';
+import 'package:wively/src/screens/task_board/task_board_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:wively/src/utils/dates.dart';
 import 'package:wively/src/utils/state_control.dart';
@@ -61,6 +62,10 @@ class ContactController extends StateControl {
 
   initProvider() {
     _chatsProvider = Provider.of<ChatsProvider>(context);
+  }
+
+  void openBoard(){
+    Navigator.pushNamed(context, TaskBoardScreen.routeName,arguments: selectedChat.room.taskBoardId);
   }
 
   getMyUser() async {

@@ -66,7 +66,8 @@ class DBProvider {
     final db = await database;
     final rooms = await db.rawQuery('''
       SELECT tb_room._id,
-             tb_room.room_name
+             tb_room.room_name,
+             tb_room.task_board_id
       FROM tb_room
       WHERE tb_room._id = '$id'
     ''');
@@ -210,6 +211,7 @@ class DBProvider {
       SELECT tb_room_chat._id,
              tb_room._id as room_id,
              tb_room.room_name,
+             tb_room.task_board_id,
              tb_message.id_message,
              tb_message._id as message_id,
              tb_message.from_user,

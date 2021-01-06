@@ -1,3 +1,4 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
@@ -96,6 +97,19 @@ class _ContactScreenState extends State<ContactScreen> {
                   ],
                 ),
               ),
+              actions: [
+                Hero(
+                  tag: _contactController.selectedChat.room.taskBoardId,
+                  child: MaterialButton(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      icon: Icon(Icons.dashboard),
+                      onPressed: _contactController.openBoard
+                      ,
+                    ),
+                  ),
+                )
+              ],
             ),
             body: SafeArea(
               child: Container(

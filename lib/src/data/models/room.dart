@@ -13,7 +13,7 @@ class Room {
   List<User> admins=[];
   List<User> members=[];
   int createdAt;
-  // String taslBoardId;
+  String taskBoardId;
   // Room parent;
 
   Room({
@@ -29,6 +29,7 @@ class Room {
     id = json['_id'];
     roomName = json['roomName'];
     createdAt = json['createdAt'];
+    taskBoardId=json['taskBoardId'];
     if(!(json['createdBy'] is String)){
       createdBy = User.fromJson(json['createdBy']);
       json['members'].forEach((member)=>members.add(User.fromJson(member)));
@@ -42,12 +43,14 @@ class Room {
     Map<String, dynamic> map = {};
     map['_id'] = id;
     map['room_name'] = roomName;
+    map['task_board_id']=taskBoardId;
     return map;
   }
 
   Room.fromLocalDatabaseMap(Map<String, dynamic> json) {
     id = json['_id'];
     roomName = json['room_name'];
+    taskBoardId=json['task_board_id'];
   }
 
 
