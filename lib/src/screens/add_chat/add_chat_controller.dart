@@ -7,6 +7,7 @@ import 'package:wively/src/data/models/custom_error.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/data/repositories/chat_repository.dart';
+import 'package:wively/src/data/repositories/room_repository.dart';
 import 'package:wively/src/data/repositories/user_repository.dart';
 import 'package:wively/src/screens/contact/contact_view.dart';
 import 'package:wively/src/utils/state_control.dart';
@@ -21,6 +22,7 @@ import 'package:wively/src/widgets/my_button.dart';
 class AddChatController extends StateControl {
   UserRepository _userRepository = UserRepository();
   ChatRepository _chatRepository = ChatRepository();
+  RoomRepository _roomRepository = RoomRepository();
 
   final BuildContext context;
 
@@ -100,7 +102,7 @@ class AddChatController extends StateControl {
   }
 
 
-  void addToThisGroup(roomId,name){
+  void addToThisGroup(roomId,name,userId){
 
     showModalBottomSheet(context: context,builder: (context){
       return Container(
@@ -113,7 +115,8 @@ class AddChatController extends StateControl {
             Text('Add $name to this group?'),
             RaisedButton(
               child: Text('+Add'),
-              onPressed: (){
+              onPressed: ()async {
+                await _roomRepository.addNewMember(roomId, userId);
                 Navigator.pop(context);
               },
             )

@@ -56,4 +56,14 @@ class RoomRepository{
       return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
     }
   }
+
+  Future<dynamic> addNewMember(String roomId,String userId)async{
+    try {
+      var body = jsonEncode({ "roomId":roomId, "userId":userId});
+      var response = await http.post(MyUrls.ADD_USER_TO_ROOM,body: body);
+    } catch (err) {
+      Fluttertoast.showToast(msg:err);
+      return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
+    }
+  }
 }

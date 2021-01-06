@@ -28,10 +28,12 @@ class Room {
   Room.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     roomName = json['roomName'];
-    createdBy = User.fromJson(json['createdBy']);
     createdAt = json['createdAt'];
-    json['members'].forEach((member)=>members.add(User.fromJson(member)));
-    json['admins'].forEach((admin)=>admins.add(User.fromJson(admin)));
+    if(!(json['createdBy'] is String)){
+      createdBy = User.fromJson(json['createdBy']);
+      json['members'].forEach((member)=>members.add(User.fromJson(member)));
+      json['admins'].forEach((admin)=>admins.add(User.fromJson(admin)));
+    }
   }
 
 

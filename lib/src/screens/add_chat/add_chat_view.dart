@@ -67,7 +67,7 @@ class _AddChatScreenState extends State<AddChatScreen> {
               children: <Widget>[
                 UserCard(
                   user: user,
-                  onTap:(a)=>{_addChatController.addToThisGroup(widget.roomId,user.name)},
+                  onTap:(a)=>{_addChatController.addToThisGroup(widget.roomId,user.name,user.id)},
                 ),
               ],
             );
