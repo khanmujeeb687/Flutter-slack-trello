@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:wively/src/widgets/task_status_dilaog.dart';
 
 class TaskBoardController extends StateControl {
   final BuildContext context;
@@ -50,8 +51,6 @@ class TaskBoardController extends StateControl {
     if(data is Room){
       this.room=data;
     }
-    loading=false;
-    notifyListeners();
   }
 
   void fetchBoard(String roomId) async{
@@ -104,6 +103,29 @@ class TaskBoardController extends StateControl {
         Fluttertoast.showToast(msg: 'Some error occurred');
       }
     }
+  }
+
+
+  updateTask(Task task,status) async{
+    _taskBoardRepository.editTask(task.id,status);
+    Navigator.pop(context);
+    tasks.removeAt(tasks.indexOf(task));
+    task.status=status;
+    tasks.insert(0, task);
+    notifyListeners();
+  }
+
+  changeStatus(Task task){
+    showDialog(
+      context: context,
+      builder: (context){
+        return TaskStatusDialog((){
+          updateTask(task, 'done');
+        }, (){
+          updateTask(task, 'un_done');
+        });
+      }
+    );
   }
 
   @override

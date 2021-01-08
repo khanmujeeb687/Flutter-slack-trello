@@ -95,6 +95,7 @@ class _TaskBoardViewState extends State<TaskBoardScreen> {
         padding: EdgeInsets.all(10),
         width: MediaQuery.of(context).size.width,
         child: ListTile(
+          onTap: ()=>_taskBoardController.changeStatus(task),
           leading: CircleAvatar(
             child: Text(task.title[0]),
           ),

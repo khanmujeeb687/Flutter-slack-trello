@@ -29,25 +29,27 @@ class TaskBoardRepository {
   Future<dynamic> createNewTask(map) async {
     try {
       var data = jsonEncode(map);
-      Response response = await http.post(MyUrls.ADD_TASK,body: data);
+      Response response = await http.post(MyUrls.ADD_TASK, body: data);
       final dynamic taskJson = jsonDecode(response.body)['task'];
-      Task task=Task.fromJson(taskJson);
+      Task task = Task.fromJson(taskJson);
       return task;
     } catch (e) {
 
+      return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
 
     }
 
+  }
 
-    Future<dynamic> editTask(taskId) async {
+    Future<dynamic> editTask(taskId,status) async {
       try {
-        Response response = await http.patch(MyUrls.ADD_TASK + '/' + taskId);
+        Response response = await http.patch(MyUrls.ADD_TASK + '/' + taskId,body: jsonEncode({'status': status}));
         final dynamic taskJson = jsonDecode(response.body)['task'];
       } catch (e) {
-
+        return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
 
       }
     }
   }
-}
+
 

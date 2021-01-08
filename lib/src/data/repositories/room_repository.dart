@@ -14,10 +14,10 @@ class RoomRepository{
    CustomHttpClient http = CustomHttpClient();
 
 
-   Future<dynamic> createRoom(roomName) async {
+   Future<dynamic> createRoom(roomName,roomId) async {
     try {
       User user=await CustomSharedPreferences.getMyUser();
-      var body = jsonEncode({ "roomName":roomName, "createdBy":user.id, "createdAt":DateTime.now().microsecondsSinceEpoch});
+      var body = jsonEncode({ "roomName":roomName, "createdBy":user.id, "createdAt":DateTime.now().microsecondsSinceEpoch,"parent":roomId});
       var response = await http.post(
         MyUrls.ROOM,
         body: body,

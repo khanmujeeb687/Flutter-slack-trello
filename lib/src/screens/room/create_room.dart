@@ -6,7 +6,8 @@ import 'package:wively/src/widgets/text_field_with_button.dart';
 
 class CreateRoom extends StatefulWidget {
   static final String routeName = "/create_room";
-
+  String roomId;
+  CreateRoom({this.roomId});
   @override
   _CreateRoomState createState() => _CreateRoomState();
 }
@@ -33,7 +34,7 @@ class _CreateRoomState extends State<CreateRoom> {
         children: [
           TextFieldWithButton(context: context, textEditingController: _controller, onSubmit: (){
             if(_controller.text.isNotEmpty){
-              _roomRepository.createRoom(_controller.text);
+              _roomRepository.createRoom(_controller.text,widget.roomId);
               Navigator.pop(context);
             }
           },showEmojiKeyboard: false,)
