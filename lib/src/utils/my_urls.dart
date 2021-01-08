@@ -13,4 +13,7 @@ class MyUrls {
   static const String ADD_USER_TO_ROOM=serverUrl+'/room/user';
   static const String SEND_MESSAGE_TO_ROOM=serverUrl+'/room/message';
 
+
+  static const String ADD_TASK=serverUrl+'/task';
+
 }

@@ -20,6 +20,7 @@ class _TaskBoardViewState extends State<TaskBoardScreen> {
   @override
   void initState() {
     _taskBoardController=new TaskBoardController(context: context);
+    _taskBoardController.fetchBoard(widget.boardId);
     super.initState();
   }
 
@@ -46,13 +47,8 @@ class _TaskBoardViewState extends State<TaskBoardScreen> {
                       shape:RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)
                       ) ,
-                      child: Container(
-                        margin: EdgeInsets.all(10),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(10)
-                        ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: ListView.builder(
                           itemCount: 20,
                           itemBuilder: (context,index){
