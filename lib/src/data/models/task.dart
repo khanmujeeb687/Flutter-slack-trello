@@ -21,10 +21,23 @@ class Task{
     title=map['title'];
     status=map['status'];
     taskBoardId=map['taskBoardId'];
-    assignedTo=User.fromJson(map['assignedTo']);
+    if(!(map['assignedTo']==null))
+      assignedTo=User.fromJson(map['assignedTo']);
     createdBy=User.fromJson(map['createdBy']);
     deadline=map['deadline'];
     room=map['room'];
+  }
+
+  toJson(){
+    return {
+      'desc':desc,
+      'title':title,
+      'taskBoardId':taskBoardId,
+      'assignedTo':assignedTo,
+      'createdBy':createdBy,
+      'roomId':room,
+      'deadline':deadline
+    };
   }
 
 }

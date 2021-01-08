@@ -99,7 +99,7 @@ class _ContactScreenState extends State<ContactScreen> {
               ),
               actions: [
                 Hero(
-                  tag: _contactController.selectedChat.room.taskBoardId,
+                  tag: _contactController.selectedChat.room.id,
                   child: MaterialButton(
                     color: Colors.transparent,
                     child: IconButton(

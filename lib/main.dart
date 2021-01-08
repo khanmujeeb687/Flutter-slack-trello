@@ -9,6 +9,7 @@ import 'package:wively/src/screens/room/create_room.dart';
 import 'package:wively/src/screens/room/room_info.dart';
 import 'package:wively/src/screens/room/room_view.dart';
 import 'package:wively/src/screens/settings/settings_view.dart';
+import 'package:wively/src/screens/task_board/add_task_view.dart';
 import 'package:wively/src/screens/task_board/task_board_view.dart';
 import 'package:wively/src/widgets/custom_page_route.dart';
 import 'package:flutter/cupertino.dart';
@@ -81,6 +82,9 @@ class MyApp extends StatelessWidget {
             case '/TaskBoard':
               return CustomPageRoute.build(
                   builder: (_) => TaskBoardScreen(settings.arguments), settings: settings);
+            case '/add_task':
+              return CustomPageRoute.build(
+                  builder: (_) => AddTask(settings.arguments), settings: settings);
             default:
               return CustomPageRoute.build(
                   builder: (_) => AfterLaunchScreen(), settings: settings);

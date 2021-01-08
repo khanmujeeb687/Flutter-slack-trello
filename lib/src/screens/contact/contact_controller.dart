@@ -65,7 +65,7 @@ class ContactController extends StateControl {
   }
 
   void openBoard(){
-    Navigator.pushNamed(context, TaskBoardScreen.routeName,arguments: selectedChat.room.taskBoardId);
+    Navigator.pushNamed(context, TaskBoardScreen.routeName,arguments: selectedChat.room.id);
   }
 
   getMyUser() async {

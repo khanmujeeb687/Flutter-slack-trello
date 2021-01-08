@@ -66,4 +66,18 @@ class RoomRepository{
       return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
     }
   }
+
+  Future<dynamic> getAllMembers(String roomId)async{
+    try {
+      String url=MyUrls.GET_ALL_MEMBERS+'/'+roomId;
+      var response = await http.get(url);
+      final List<dynamic> roomJson = jsonDecode(response.body)['members'];
+      final List<User> users =
+      roomJson.map((user) => User.fromJson(user)).toList();
+      return users;
+    } catch (err) {
+      Fluttertoast.showToast(msg:err);
+      return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:wively/src/data/models/custom_error.dart';
 import 'package:wively/src/data/models/task.dart';
@@ -15,8 +16,7 @@ class TaskBoardRepository {
     try {
       Response response = await http.get('${MyUrls.ADD_TASK}/' + boardId);
       final List<dynamic> taskJson = jsonDecode(response.body)['tasks'];
-      final List<Task> tasks =
-      taskJson.map((user) => Task.fromJson(user)).toList();
+      final List<Task> tasks = taskJson.map((task) => Task.fromJson(task)).toList();
       return tasks;
 
     } catch (e) {
@@ -26,10 +26,13 @@ class TaskBoardRepository {
   }
 
 
-  Future<dynamic> createNewTask() async {
+  Future<dynamic> createNewTask(map) async {
     try {
-      Response response = await http.post(MyUrls.ADD_TASK);
+      var data = jsonEncode(map);
+      Response response = await http.post(MyUrls.ADD_TASK,body: data);
       final dynamic taskJson = jsonDecode(response.body)['task'];
+      Task task=Task.fromJson(taskJson);
+      return task;
     } catch (e) {
 
 
