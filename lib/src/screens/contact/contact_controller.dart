@@ -6,7 +6,10 @@ import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/data/repositories/chat_repository.dart';
+import 'package:wively/src/screens/room/create_room.dart';
 import 'package:wively/src/screens/room/room_info.dart';
+import 'package:wively/src/screens/room/room_view.dart';
+import 'package:wively/src/screens/task_board/add_task_view.dart';
 import 'package:wively/src/screens/task_board/task_board_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:wively/src/utils/dates.dart';
@@ -55,6 +58,10 @@ class ContactController extends StateControl {
     initMyUser();
   }
 
+  void addRoomScreen() async {
+    Navigator.of(context).pushNamed(RoomScreen.routeName,arguments: this.selectedChat.room.id);
+  }
+
   initMyUser() async {
     myUser = await getMyUser();
     notifyListeners();
@@ -98,6 +105,10 @@ class ContactController extends StateControl {
     await Provider.of<ChatsProvider>(context, listen: false).addMessageToChat(newMessage);
     await _chatRepository.sendMessageToRoom(message,user.id,selectedChat.id);
     
+  }
+
+  void createChildRoom() async{
+    Navigator.pushNamed(context, CreateRoom.routeName,arguments: selectedChat.room.id);
   }
 
   String getNumberOfUnreadChatsToString() {

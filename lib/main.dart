@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
                   builder: (_) => SettingsScreen(), settings: settings);
             case '/room':
               return CustomPageRoute.build(
-                  builder: (_) => RoomScreen(), settings: settings);
+                  builder: (_) => RoomScreen(parentId: settings.arguments), settings: settings);
             case '/create_room':
               return CustomPageRoute.build(
                   builder: (_) => CreateRoom(roomId: settings.arguments), settings: settings);

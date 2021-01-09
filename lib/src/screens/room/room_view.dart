@@ -14,6 +14,9 @@ import 'package:wively/src/widgets/user_card.dart';
 class RoomScreen extends StatefulWidget {
   static final String routeName = "/room";
 
+  String parentId;
+  RoomScreen({this.parentId});
+
   @override
   _RoomScreenState createState() => _RoomScreenState();
 }
@@ -25,7 +28,7 @@ class _RoomScreenState extends State<RoomScreen> {
   void initState() {
     super.initState();
     _roomController = RoomController(context: context);
-    _roomController.getRooms();
+    _roomController.getRooms(widget.parentId);
   }
 
   @override

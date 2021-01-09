@@ -100,7 +100,7 @@ class _ContactScreenState extends State<ContactScreen> {
               actions: [
                 Hero(
                   tag: _contactController.selectedChat.room.id,
-                  child: MaterialButton(
+                  child: Material(
                     color: Colors.transparent,
                     child: IconButton(
                       icon: Icon(Icons.dashboard),
@@ -108,7 +108,17 @@ class _ContactScreenState extends State<ContactScreen> {
                       ,
                     ),
                   ),
-                )
+                ),
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: _contactController.createChildRoom
+                  ,
+                ),
+                IconButton(
+                  icon: Icon(Icons.more_vert),
+                  onPressed: _contactController.addRoomScreen
+                  ,
+                ),
               ],
             ),
             body: SafeArea(

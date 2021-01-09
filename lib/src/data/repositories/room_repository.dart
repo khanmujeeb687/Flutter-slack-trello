@@ -29,14 +29,15 @@ class RoomRepository{
     }
   }
 
-   Future<dynamic> getRooms() async {
+   Future<dynamic> getRooms(parentId) async {
     try {
       User user=await CustomSharedPreferences.getMyUser();
-      var response = await http.get(MyUrls.ROOM+'/'+user.id);
+      var url=parentId==null?(MyUrls.ROOM+'/'+user.id):(MyUrls.ROOM+'/'+user.id+'/'+parentId);
+      var response = await http.get(url);
       final dynamic roomJson = jsonDecode(response.body)['rooms'];
       debugPrint(roomJson.toString());
       List<Room> rooms=[];
-      roomJson.forEach((room)=>rooms.add(Room.fromJson(room)));
+      roomJson?.forEach((room)=>rooms.add(Room.fromJson(room)));
       // final List<dynamic> rooms = roomJson.map((room) => Room.fromJson(room)).toList();
       return rooms;
     } catch (err) {
@@ -52,7 +53,7 @@ class RoomRepository{
       Room room =Room.fromJson(roomJson);
       return room;
     } catch (err) {
-      Fluttertoast.showToast(msg:err);
+      Fluttertoast.showToast(msg:err.toString());
       return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
     }
   }

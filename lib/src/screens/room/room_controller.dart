@@ -42,8 +42,8 @@ class RoomController extends StateControl with WidgetsBindingObserver {
   void init() {
   }
 
-  void getRooms() async {
-    dynamic response = await _roomRepository.getRooms();
+  void getRooms(parentId) async {
+    dynamic response = await _roomRepository.getRooms(parentId);
 
     if (response is CustomError) {
       _error = true;
