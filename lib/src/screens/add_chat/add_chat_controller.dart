@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/local_database/db_provider.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/custom_error.dart';
@@ -10,6 +11,7 @@ import 'package:wively/src/data/repositories/chat_repository.dart';
 import 'package:wively/src/data/repositories/room_repository.dart';
 import 'package:wively/src/data/repositories/user_repository.dart';
 import 'package:wively/src/screens/contact/contact_view.dart';
+import 'package:wively/src/utils/room_message_controller.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,12 +29,15 @@ class AddChatController extends StateControl {
   final BuildContext context;
 
   bool _loading = true;
+
   bool get loading => _loading;
 
   bool _error = false;
+
   bool get error => _error;
 
   List<User> _users = [];
+
   List<User> get users => _users;
 
   Chat _chat;
@@ -52,7 +57,7 @@ class AddChatController extends StateControl {
 
   void getUsers() async {
     dynamic response = await _userRepository.getUsers();
-    
+
     if (response is CustomError) {
       _error = true;
     }
@@ -101,29 +106,34 @@ class AddChatController extends StateControl {
     _progressDialog.show();
   }
 
-
-  void addToThisGroup(roomId,name,userId){
-
-    showModalBottomSheet(context: context,builder: (context){
-      return Container(
-        height: 100,
-        padding: EdgeInsets.all(20),
-        alignment:Alignment.center,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Add $name to this group?'),
-            RaisedButton(
-              child: Text('+Add'),
-              onPressed: ()async {
-                await _roomRepository.addNewMember(roomId, userId);
-                Navigator.pop(context);
-              },
-            )
-          ],
-        ),
-      );
-    });
+  void addToThisGroup(roomId, name, userId) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: 100,
+            padding: EdgeInsets.all(20),
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Add $name to this group?'),
+                RaisedButton(
+                  child: Text('+Add'),
+                  onPressed: () async {
+                    var data =
+                        await _roomRepository.addNewMember(roomId, userId);
+                    if (data is Map<String, dynamic>) {
+                      new RoomMessageController().informMe(context, data);
+                      Fluttertoast.showToast(msg: 'User added successfully');
+                    }
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ),
+          );
+        });
   }
 
   Future<bool> _dismissProgressDialog() {

@@ -62,8 +62,13 @@ class RoomRepository{
     try {
       var body = jsonEncode({ "roomId":roomId, "userId":userId});
       var response = await http.post(MyUrls.ADD_USER_TO_ROOM,body: body);
+      var resDecode=jsonDecode(response.body);
+      if(resDecode.containsKey('info')){
+        Map<String,dynamic> message= jsonDecode(response.body)['info']['message'];
+        return message;
+      }
+      return null;
     } catch (err) {
-      Fluttertoast.showToast(msg:err);
       return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
     }
   }

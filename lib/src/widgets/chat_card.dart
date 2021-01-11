@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+import 'package:wively/src/utils/room_message_controller.dart';
 
 class ChatCard extends StatelessWidget {
   final Chat chat;
@@ -91,7 +92,8 @@ class ChatCard extends StatelessWidget {
                                       height: 2,
                                     ),
                                     Text(
-                                      chat.messages[0].message,
+                                      //fix the second argument
+                                      RoomMessageController.isAddedMessage(chat.messages[0].message)?RoomMessageController.createAddedMessage(chat.messages[0].message, true): chat.messages[0].message,
                                       style: TextStyle(
                                         fontSize: 12,
                                       ),

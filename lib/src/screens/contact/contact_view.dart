@@ -4,6 +4,7 @@ import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/screens/contact/contact_controller.dart';
 import 'package:wively/src/utils/dates.dart';
+import 'package:wively/src/utils/room_message_controller.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
 import 'package:wively/src/widgets/text_field_with_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -174,7 +175,8 @@ class _ContactScreenState extends State<ContactScreen> {
     return Column(
       children: <Widget>[
         renderMessageSendAtDay(message, index),
-        Material(
+        getInfoLabel(message),
+        RoomMessageController.isAddedMessage(message.message)?Container(height: 0,width: 0,):Material(
           color: Colors.transparent,
           child: Row(
             mainAxisAlignment: message.from == _contactController.myUser.id
@@ -247,6 +249,7 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   Widget renderMessageSendAtDay(Message message, int index) {
+
     if (index == _contactController.selectedChat.messages.length - 1) {
       return getLabelDay(message.sendAt);
     }
@@ -288,5 +291,34 @@ class _ContactScreenState extends State<ContactScreen> {
         ),
       ],
     );
+  }
+
+  Widget getInfoLabel(Message message){
+    if(RoomMessageController.isAddedMessage(message.message)){
+    return Column(
+      children: <Widget>[
+        SizedBox(
+          height: 4,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Color(0xFFC0CBFF),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+            child: Text(
+              RoomMessageController.createAddedMessage(message.message, _contactController.myUser.id==message.from),
+              style: TextStyle(color: Colors.black, fontSize: 12),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 7,
+        ),
+      ],
+    );
+  }
+    return Container();
   }
 }
