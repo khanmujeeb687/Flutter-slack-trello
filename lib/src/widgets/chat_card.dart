@@ -52,15 +52,44 @@ class ChatCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                CircleAvatar(
-                  child: Text(
-                    chat.room.roomName[0].toUpperCase(),
-                    style: TextStyle(
-                      color: Colors.white,
+                // CircleAvatar(
+                //   child: Text(
+                //     chat.room.roomName[0].toUpperCase(),
+                //     style: TextStyle(
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                //   radius: 20,
+                //   backgroundColor: Colors.blue,
+                // ),
+                // ClipRRect(
+                //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                //   //add border radius here
+                //   child: Text(
+                //     chat.room.roomName[0].toUpperCase(),
+                //     style: TextStyle(
+                //       color: Colors.white,
+                //       backgroundColor: Colors.blue,
+                //     ),
+                //   ),//add image location here
+                // ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),//or 15.0
+                  child: Container(
+                    height: 40.0,
+                    width: 40.0,
+                    color: Colors.blue,
+                    child: Center(
+                      child: Text(
+                        chat.room.roomName[0].toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          backgroundColor: Colors.blue,
+                          fontSize: 20
+                        ),
+                      ),
                     ),
                   ),
-                  radius: 20,
-                  backgroundColor: Colors.blue,
                 ),
                 Expanded(
                   child: Padding(

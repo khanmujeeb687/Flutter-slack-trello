@@ -25,8 +25,8 @@ class _CreateRoomState extends State<CreateRoom> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("New Room"),
-            Text("Add subject",style: TextStyle(fontSize: 13),),
+            Text("New Room",style: TextStyle(color: Colors.white),),
+            Text("Add subject",style: TextStyle(fontSize: 13, color: Colors.white),),
           ],
         ),
       ),

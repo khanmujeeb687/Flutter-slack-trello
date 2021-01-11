@@ -43,16 +43,18 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, snapshot) {
         return Scaffold(
           appBar: CustomAppBar(
-            title: Text(_homeController.loading ? 'Connecting...' : 'Chats'),
+
+            title: Text(_homeController.loading ? 'Connecting...' : 'Chats',
+              style: TextStyle(color: Colors.white)),
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.settings),
+                icon: Icon(Icons.settings,color: Colors.white),
                 onPressed: () {
                   Navigator.of(context).pushNamed(SettingsScreen.routeName);
                 },
               ),
               IconButton(
-                icon: Icon(Icons.supervised_user_circle),
+                icon: Icon(Icons.supervised_user_circle ,color: Colors.white),
                 onPressed: () {
                   Navigator.of(context).pushNamed(CreateRoom.routeName);
                 },
@@ -64,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: _homeController.addRoomScreen,
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor:Color(0xFF4A154B),
             child: Icon(
               Icons.message,
               color: Theme.of(context).accentColor,
@@ -104,24 +106,29 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Text('You don\'t have conversations.'),
       );
     }
-    return ListView.builder(
-      itemCount: 1,
-      itemBuilder: (BuildContext context, int index) {
-        return Column(
-          children: _homeController.chats.map((chat) {
-            if (chat.messages.length == 0) {
-              return Container(height: 0, width: 0);
-            }
-            return Column(
-              children: <Widget>[
-                ChatCard(
-                  chat: chat,
-                ),
-              ],
-            );
-          }).toList(),
-        );
-      },
+    return Container(
+      color: Colors.grey,
+      child: ListView.builder(
+        itemCount: 1,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            child: Column(
+              children: _homeController.chats.map((chat) {
+                if (chat.messages.length == 0) {
+                  return Container(height: 0, width: 0);
+                }
+                return Column(
+                  children: <Widget>[
+                    ChatCard(
+                      chat: chat,
+                    ),
+                  ],
+                );
+              }).toList(),
+            ),
+          );
+        },
+      ),
     );
   }
 }

@@ -43,7 +43,7 @@ class _RoomScreenState extends State<RoomScreen> {
       builder: (context, snapshot) {
         return Scaffold(
           appBar: CustomAppBar(
-            title: Text(_roomController.loading ? 'loading...' : 'Rooms'),
+            title: Text(_roomController.loading ? 'loading...' : 'Rooms', style:TextStyle(color: Colors.white)),
           ),
           body: SafeArea(
             child: roomList(context),
@@ -66,17 +66,36 @@ class _RoomScreenState extends State<RoomScreen> {
         child: Text('There are no rooms available!'),
       );
     }
-    return ListView.builder(
-      itemCount: 1,
-      itemBuilder: (BuildContext context, int index) {
-        return Column(
-          children: _roomController.rooms.map((room) {
-            return RoomCard(
-              onPress:_roomController.newRoomChat,
-              room: room);
-          }).toList(),
-        );
-      },
+    return Container(
+      color :Colors.black26,
+      child: ListView.builder(
+        itemCount: 1,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+
+            child: Column(
+              children: _roomController.rooms.map((room) {
+                return Container(
+                  margin: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color :Colors.black26,
+                    // border: Border(
+                    //   left: BorderSide(
+                    //     color: Colors.green,
+                    //     width: 3,
+                    //   ),
+                    // ),
+                  ),
+                  child: RoomCard(
+                    onPress:_roomController.newRoomChat,
+                    room: room),
+                );
+              }).toList(),
+            ),
+          );
+        },
+      ),
     );
   }
 }

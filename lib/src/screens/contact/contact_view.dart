@@ -59,17 +59,35 @@ class _ContactScreenState extends State<ContactScreen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CircleAvatar(
-                      child: Text(
-                        _contactController.selectedChat.room.roomName[0]
-                            .toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
+                    // CircleAvatar(
+                    //   child: Text(
+                    //     _contactController.selectedChat.room.roomName[0]
+                    //         .toUpperCase(),
+                    //     style: TextStyle(
+                    //       color: Colors.white,
+                    //       fontSize: 14,
+                    //     ),
+                    //   ),
+                    //   radius: 16,
+                    //   backgroundColor: Colors.blue,
+                    // ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),//or 15.0
+                      child: Container(
+                        height: 30.0,
+                        width: 30.0,
+                        color: Colors.blue,
+                        child: Center(
+                          child: Text(
+                              _contactController.selectedChat.room.roomName[0].toUpperCase(),
+                            style: TextStyle(
+                                color: Colors.white,
+                                backgroundColor: Colors.blue,
+                                fontSize: 20
+                            ),
+                          ),
                         ),
                       ),
-                      radius: 16,
-                      backgroundColor: Colors.blue,
                     ),
                     SizedBox(
                       width: 7,
@@ -83,6 +101,7 @@ class _ContactScreenState extends State<ContactScreen> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
+                            color: Colors.white
                           ),
                         ),
                         Text(
@@ -103,19 +122,19 @@ class _ContactScreenState extends State<ContactScreen> {
                   child: Material(
                     color: Colors.transparent,
                     child: IconButton(
-                      icon: Icon(Icons.dashboard),
+                      icon: Icon(Icons.dashboard, color: Colors.white,),
                       onPressed: _contactController.openBoard
                       ,
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.add),
+                  icon: Icon(Icons.add, color: Colors.white,),
                   onPressed: _contactController.createChildRoom
                   ,
                 ),
                 IconButton(
-                  icon: Icon(Icons.more_vert),
+                  icon: Icon(Icons.more_vert, color: Colors.white,),
                   onPressed: _contactController.addRoomScreen
                   ,
                 ),
@@ -126,28 +145,31 @@ class _ContactScreenState extends State<ContactScreen> {
                 child: Column(
                   children: <Widget>[
                     Expanded(
-                      child: Scrollbar(
-                        child: ListView.builder(
-                          controller: _contactController.scrollController,
-                          padding: EdgeInsets.only(bottom: 5),
-                          reverse: true,
-                          itemCount:
-                              _contactController.selectedChat.messages.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                left: 10,
-                                right: 10,
-                                top: 5,
-                                bottom: 0,
-                              ),
-                              child: renderMessage(
-                                  context,
-                                  _contactController
-                                      .selectedChat.messages[index],
-                                  index),
-                            );
-                          },
+                      child: Container(
+                        color: Colors.grey,
+                        child: Scrollbar(
+                          child: ListView.builder(
+                            controller: _contactController.scrollController,
+                            padding: EdgeInsets.only(bottom: 5),
+                            reverse: true,
+                            itemCount:
+                                _contactController.selectedChat.messages.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  left: 10,
+                                  right: 10,
+                                  top: 5,
+                                  bottom: 0,
+                                ),
+                                child: renderMessage(
+                                    context,
+                                    _contactController
+                                        .selectedChat.messages[index],
+                                    index),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),

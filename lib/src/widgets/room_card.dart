@@ -9,8 +9,27 @@ class RoomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        child: Text(room.roomName[0]),
+      leading:
+      // CircleAvatar(
+      //   child: Text(),
+      // ),
+      ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),//or 15.0
+        child: Container(
+          height: 40.0,
+          width: 40.0,
+          color: Colors.blue,
+          child: Center(
+            child: Text(
+              room.roomName[0].toUpperCase(),
+              style: TextStyle(
+                  color: Colors.white,
+                  backgroundColor: Colors.blue,
+                  fontSize: 20
+              ),
+            ),
+          ),
+        ),
       ),
       title: Text(room.roomName),
       subtitle: Text('createdBy ~'+room.createdBy.name),
