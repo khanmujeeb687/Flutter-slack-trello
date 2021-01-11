@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:bubble/bubble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/message.dart';
@@ -47,6 +50,11 @@ class _ContactScreenState extends State<ContactScreen> {
   void didChangeDependencies() {
     _contactController.initProvider();
     super.didChangeDependencies();
+  }
+
+  shouldShowNip(int index){
+    if(index==_contactController.selectedChat.messages.length-1) return true;
+    return (_contactController.selectedChat.messages[index].from!=_contactController.selectedChat.messages[index+1].from || RoomMessageController.isAddedMessage(_contactController.selectedChat.messages[index+1].message));
   }
 
   @override
@@ -146,14 +154,15 @@ class _ContactScreenState extends State<ContactScreen> {
                               padding: EdgeInsets.only(
                                 left: 10,
                                 right: 10,
-                                top: 5,
                                 bottom: 0,
                               ),
                               child: renderMessage(
                                   context,
                                   _contactController
                                       .selectedChat.messages[index],
-                                  index),
+                                  index,
+                                shouldShowNip(index)
+                              ),
                             );
                           },
                         ),
@@ -177,74 +186,89 @@ class _ContactScreenState extends State<ContactScreen> {
         });
   }
 
-  Widget renderMessage(BuildContext context, Message message, int index) {
+  Widget renderMessage(BuildContext context, Message message, int index,bool showNip) {
     if (_contactController.myUser == null) return Container();
+    bool isMe=message.from == _contactController.myUser.id;
     return Column(
       children: <Widget>[
         renderMessageSendAtDay(message, index),
         getInfoLabel(message),
         RoomMessageController.isAddedMessage(message.message)?Container(height: 0,width: 0,):Material(
           color: Colors.transparent,
-          child: Row(
-            mainAxisAlignment: message.from == _contactController.myUser.id
-                ? MainAxisAlignment.end
-                : MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              renderMessageSendAt(message, MessagePosition.BEFORE),
-              Container(
-                constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.75),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: message.from == _contactController.myUser.id
-                      ? Colors.blue
-                      : Color(0xFFEEEEEE),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Text(
-                    message.message,
-                    style: TextStyle(
-                      color: message.from == _contactController.myUser.id
-                          ? Colors.white
-                          : Colors.black,
-                      fontSize: 14.5,
-                    ),
+          child: Bubble(
+            shadowColor: EColors.themeGrey,
+            margin: showNip?BubbleEdges.only(top: 0,left:isMe?50:0,right:!isMe?50:0 ):BubbleEdges.only(top: 10,left:isMe?50:0,right:!isMe?50:0 ),
+            alignment: isMe
+                   ? Alignment.topRight:Alignment.topLeft,
+            nip: showNip?(isMe
+                ? BubbleNip.rightTop:BubbleNip.leftTop):null,
+            color: EColors.themeGrey,
+            child: Column(
+              crossAxisAlignment:isMe ? CrossAxisAlignment.end:CrossAxisAlignment.start,
+              children: [
+                Text(
+                  message.message,
+                  style: TextStyle(
+                    color: EColors.themeMaroon,
+                    fontSize: 14.5,
                   ),
+                  textAlign: TextAlign.right,
                 ),
-              ),
-              renderMessageSendAt(message, MessagePosition.AFTER),
-            ],
+                renderMessageSendAt(message, MessagePosition.AFTER)
+              ],
+            ),
           ),
+
+          // child: Row(
+          //   mainAxisAlignment: message.from == _contactController.myUser.id
+          //       ? MainAxisAlignment.end
+          //       : MainAxisAlignment.start,
+          //   crossAxisAlignment: CrossAxisAlignment.center,
+          //   children: <Widget>[
+          //     renderMessageSendAt(message, MessagePosition.BEFORE),
+          //     Container(
+          //       constraints: BoxConstraints(
+          //           maxWidth: MediaQuery.of(context).size.width * 0.75),
+          //       decoration: BoxDecoration(
+          //         borderRadius: BorderRadius.circular(30),
+          //         color: message.from == _contactController.myUser.id
+          //             ? Colors.blue
+          //             : Color(0xFFEEEEEE),
+          //       ),
+          //       child: Padding(
+          //         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          //         child: Text(
+          //           message.message,
+          //           style: TextStyle(
+          //             color: message.from == _contactController.myUser.id
+          //                 ? Colors.white
+          //                 : Colors.black,
+          //             fontSize: 14.5,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //     renderMessageSendAt(message, MessagePosition.AFTER),
+          //   ],
+          // ),
         ),
       ],
     );
   }
 
   Widget renderMessageSendAt(Message message, MessagePosition position) {
-    if (message.from == _contactController.myUser.id &&
-        position == MessagePosition.AFTER) {
-      return Row(
-        children: <Widget>[
-          SizedBox(width: 6),
-          Text(
-            messageDate(message.sendAt),
-            style: TextStyle(color: Colors.grey, fontSize: 10),
-          ),
-        ],
+    if (message.from == _contactController.myUser.id ) {
+      return Text(
+        messageDate(message.sendAt),
+        style: TextStyle(color: EColors.themeBlack, fontSize: 10),
+        textAlign: TextAlign.right,
       );
     }
-    if (message.from != _contactController.myUser.id &&
-        position == MessagePosition.BEFORE) {
-      return Row(
-        children: <Widget>[
-          Text(
-            messageDate(message.sendAt),
-            style: TextStyle(color: Colors.grey, fontSize: 10),
-          ),
-          SizedBox(width: 6),
-        ],
+    if (message.from != _contactController.myUser.id ) {
+      return Text(
+        messageDate(message.sendAt),
+        style: TextStyle(color: EColors.themeMaroon, fontSize: 10),
+        textAlign: TextAlign.left,
       );
     }
     return Container(height: 0, width: 0);
@@ -283,13 +307,13 @@ class _ContactScreenState extends State<ContactScreen> {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            color: Color(0xFFC0CBFF),
+            color: EColors.themeMaroon.withOpacity(0.5),
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 3),
             child: Text(
               day,
-              style: TextStyle(color: Colors.black, fontSize: 12),
+              style: TextStyle(color: EColors.white, fontSize: 12),
             ),
           ),
         ),
@@ -307,16 +331,21 @@ class _ContactScreenState extends State<ContactScreen> {
         SizedBox(
           height: 4,
         ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: Color(0xFFC0CBFF),
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 3),
-            child: Text(
-              RoomMessageController.createAddedMessage(message.message, _contactController.myUser.id==message.from),
-              style: TextStyle(color: Colors.black, fontSize: 12),
+        ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 0.5,sigmaY: 0.5),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: EColors.blackTransparent,
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: Text(
+                  RoomMessageController.createAddedMessage(message.message, _contactController.myUser.id==message.from),
+                  style: TextStyle(color: EColors.white, fontSize: 12),
+                ),
+              ),
             ),
           ),
         ),
