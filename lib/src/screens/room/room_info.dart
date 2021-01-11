@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/screens/room/room_controller.dart';
 import 'package:wively/src/widgets/collapsible_scaffold.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
+import 'package:wively/src/widgets/lottie_loader.dart';
 
 
 class RoomInfoArguments{
@@ -38,7 +39,7 @@ class _RoomInfoState extends State<RoomInfo> {
         stream: _roomController.streamController.stream,
         builder: (context, snapshot) {
           if(_roomController.loading){
-           return Center(child: CupertinoActivityIndicator());
+           return Center(child: lottieLoader());
           }
          return  CollapsibleScaffold(
              _roomController.room.roomName,

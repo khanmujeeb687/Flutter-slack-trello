@@ -4,6 +4,7 @@ import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/task.dart';
 import 'package:wively/src/screens/task_board/task_board_controller.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
+import 'package:wively/src/widgets/lottie_loader.dart';
 
 
 
@@ -65,7 +66,7 @@ class _TaskBoardViewState extends State<TaskBoardScreen> {
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8,20,8,8),
-                              child: _taskBoardController.loading?Center(child: CupertinoActivityIndicator()):ListView.builder(
+                              child: _taskBoardController.loading?lottieLoader():ListView.builder(
                                 physics: ScrollPhysics(),
                                 shrinkWrap: true,
                                 itemCount: _taskBoardController.tasks.length,

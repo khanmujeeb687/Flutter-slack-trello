@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:emoji_picker/emoji_picker.dart';
+import 'package:wively/src/values/Colors.dart';
+import 'package:wively/src/values/constants.dart';
 
 class TextFieldWithButton extends StatelessWidget {
   final TextEditingController textEditingController;
@@ -25,14 +27,11 @@ class TextFieldWithButton extends StatelessWidget {
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(color: Color(0xFFDDDDDD)),
-            ),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
             child: Container(
-              child: Row(
+            child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   Expanded(
@@ -42,7 +41,7 @@ class TextFieldWithButton extends StatelessWidget {
                           : EdgeInsets.only(left: 10, right: 10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.0),
-                        color: Colors.white,
+                        color: EColors.themeMaroon.withOpacity(0.5),
                         border: Border.all(
                           width: 1,
                           color: Color(0xFFDDDDDD),
@@ -59,7 +58,7 @@ class TextFieldWithButton extends StatelessWidget {
                                   },
                                   child: Icon(
                                     Icons.insert_emoticon,
-                                    color: Colors.grey,
+                                    color: EColors.themeGrey,
                                   ),
                                 ),
                           Expanded(
@@ -73,6 +72,9 @@ class TextFieldWithButton extends StatelessWidget {
                                 textInputAction: TextInputAction.newline,
                                 cursorColor: Theme.of(context).primaryColor,
                                 controller: textEditingController,
+                                style: TextStyle(
+                                  color: EColors.white
+                                ),
                                 onSubmitted: (_) {
                                   onSubmit();
                                 },
@@ -88,10 +90,10 @@ class TextFieldWithButton extends StatelessWidget {
                                     horizontal: 10,
                                     vertical: 8,
                                   ),
-                                  hintText: 'Digite uma mensagem',
+                                  hintText: Constants.MESSAGE_HINT_TEXT,
                                   hintStyle: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey,
+                                    color: EColors.white,
                                   ),
                                   border: InputBorder.none,
                                 ),

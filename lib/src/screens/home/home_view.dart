@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // if (_homeController.loading) {
     //   return SliverFillRemaining(
     //     child: Center(
-    //       child: CupertinoActivityIndicator(),
+    //       child: lottieLoader(),
     //     ),
     //   );
     // }

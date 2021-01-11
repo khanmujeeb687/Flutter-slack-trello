@@ -4,6 +4,7 @@ import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/screens/task_board/task_board_controller.dart';
 import 'package:wively/src/widgets/SimpleTextFormField.dart';
 import 'package:wively/src/widgets/collapsible_scaffold.dart';
+import 'package:wively/src/widgets/lottie_loader.dart';
 import 'package:wively/src/widgets/select_member.dart';
 
 
@@ -46,7 +47,7 @@ class _AddTaskState extends State<AddTask> {
                       SimpleTextFormField(bigField: true,hint: 'Description',onChange: (a){
                        _taskBoardController.desc=a;
                       }),
-                      _taskBoardController.loading?Center(child: CupertinoActivityIndicator()):SelectMember(_taskBoardController.members,_taskBoardController.selectUser)
+                      _taskBoardController.loading?lottieLoader():SelectMember(_taskBoardController.members,_taskBoardController.selectUser)
                       ,CupertinoButton(
                         child: Text("create"),
                         onPressed: _taskBoardController.addNewTask,

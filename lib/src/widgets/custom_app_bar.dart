@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wively/src/values/Colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
@@ -13,11 +14,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Theme.of(context).accentColor,
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(1),
         child: Container(
-          color: Color(0xFFDDDDDD),
+          color: EColors.themeMaroon,
           height: 1,
         ),
       ),

@@ -19,6 +19,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:wively/src/widgets/lottie_loader.dart';
 import 'package:wively/src/widgets/my_button.dart';
 
 class AddChatController extends StateControl {
@@ -94,7 +95,7 @@ class AddChatController extends StateControl {
         message: 'Loading...',
         borderRadius: 10.0,
         backgroundColor: Colors.white,
-        progressWidget: CupertinoActivityIndicator(),
+        progressWidget: lottieLoader(),
         elevation: 10.0,
         insetAnimCurve: Curves.easeInOut,
         progress: 0.0,

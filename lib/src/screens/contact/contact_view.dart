@@ -5,6 +5,7 @@ import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/screens/contact/contact_controller.dart';
 import 'package:wively/src/utils/dates.dart';
 import 'package:wively/src/utils/room_message_controller.dart';
+import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
 import 'package:wively/src/widgets/text_field_with_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,17 +61,23 @@ class _ContactScreenState extends State<ContactScreen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CircleAvatar(
-                      child: Text(
-                        _contactController.selectedChat.room.roomName[0]
-                            .toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
+                    Hero(
+                      tag: _contactController.selectedChat.room.id+'profile',
+                      child: Material(
+                        color: EColors.transparent,
+                        child: CircleAvatar(
+                          child: Text(
+                            _contactController.selectedChat.room.roomName[0]
+                                .toUpperCase(),
+                            style: TextStyle(
+                              color: EColors.themeMaroon,
+                              fontSize: 14,
+                            ),
+                          ),
+                          radius: 16,
+                          backgroundColor: EColors.white,
                         ),
                       ),
-                      radius: 16,
-                      backgroundColor: Colors.blue,
                     ),
                     SizedBox(
                       width: 7,

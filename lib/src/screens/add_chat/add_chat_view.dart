@@ -2,6 +2,7 @@ import 'package:wively/src/screens/add_chat/add_chat_controller.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
 import 'package:wively/src/widgets/custom_cupertino_navigation_bar.dart';
 import 'package:wively/src/widgets/custom_cupertino_sliver_navigation_bar.dart';
+import 'package:wively/src/widgets/lottie_loader.dart';
 import 'package:wively/src/widgets/user_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _AddChatScreenState extends State<AddChatScreen> {
   Widget renderUsers() {
     if (_addChatController.loading) {
       return Center(
-        child: CupertinoActivityIndicator(),
+        child: lottieLoader(),
       );
     }
     if (_addChatController.error) {

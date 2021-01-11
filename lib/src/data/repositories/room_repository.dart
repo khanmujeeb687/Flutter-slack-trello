@@ -32,7 +32,6 @@ class RoomRepository{
       messageMap['from']={'_id':userData.id};
       messageMap['room']=roomJson;
       await RoomMessageController().informMe(context, messageMap);
-      Fluttertoast.showToast(msg: 'hehyeheye');
     } catch (err) {
       return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
     }

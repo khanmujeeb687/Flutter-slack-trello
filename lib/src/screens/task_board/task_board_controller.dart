@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:wively/src/widgets/loader_dialog.dart';
 import 'package:wively/src/widgets/task_status_dilaog.dart';
 
 class TaskBoardController extends StateControl {
@@ -88,6 +89,7 @@ class TaskBoardController extends StateControl {
 
   addNewTask()async{
     if(key.currentState.validate()){
+      LoaderDialogManager.showLoader(context);
       User user =await CustomSharedPreferences.getMyUser();
       var data =await _taskBoardRepository.createNewTask({
         'desc':desc,
@@ -102,6 +104,7 @@ class TaskBoardController extends StateControl {
       }else{
         Fluttertoast.showToast(msg: 'Some error occurred');
       }
+      LoaderDialogManager.hideLoader();
     }
   }
 

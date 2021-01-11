@@ -11,6 +11,7 @@ import 'package:wively/src/screens/room/room_view.dart';
 import 'package:wively/src/screens/settings/settings_view.dart';
 import 'package:wively/src/screens/task_board/add_task_view.dart';
 import 'package:wively/src/screens/task_board/task_board_view.dart';
+import 'package:wively/src/values/themes/DarkRegular.dart';
 import 'package:wively/src/widgets/custom_page_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,18 +35,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Talk to me',
-        theme: ThemeData(
-          primaryColor: Colors.blue,
-          accentColor: Colors.white,
-          scaffoldBackgroundColor: Colors.white,
-          cursorColor: Colors.blue,
-          appBarTheme: AppBarTheme().copyWith(
-            iconTheme: IconThemeData(color: Colors.black),
-            textTheme: TextTheme().copyWith(
-              title: Theme.of(context).primaryTextTheme.title.copyWith(color: Colors.black)
-            )
-          )
-        ),
+        theme: DarkRegular.getTheme(context),
         initialRoute: '/',
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {

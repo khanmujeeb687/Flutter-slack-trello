@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:wively/src/utils/room_message_controller.dart';
+import 'package:wively/src/values/Colors.dart';
 
 class ChatCard extends StatelessWidget {
   final Chat chat;
@@ -53,15 +54,21 @@ class ChatCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                CircleAvatar(
-                  child: Text(
-                    chat.room.roomName[0].toUpperCase(),
-                    style: TextStyle(
-                      color: Colors.white,
+                Hero(
+                  tag: chat.room.id+'profile',
+                  child: Material(
+                    color: EColors.transparent,
+                    child: CircleAvatar(
+                      child: Text(
+                        chat.room.roomName[0].toUpperCase(),
+                        style: TextStyle(
+                          color: EColors.themeMaroon,
+                        ),
+                      ),
+                      radius: 20,
+                      backgroundColor: EColors.white,
                     ),
                   ),
-                  radius: 20,
-                  backgroundColor: Colors.blue,
                 ),
                 Expanded(
                   child: Padding(
@@ -83,7 +90,7 @@ class ChatCard extends StatelessWidget {
                                     Text(
                                       chat.room.roomName,
                                       style: TextStyle(
-                                        color: Colors.black,
+                                        color: EColors.themeGrey,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -95,6 +102,7 @@ class ChatCard extends StatelessWidget {
                                       //fix the second argument
                                       RoomMessageController.isAddedMessage(chat.messages[0].message)?RoomMessageController.createAddedMessage(chat.messages[0].message, true): chat.messages[0].message,
                                       style: TextStyle(
+                                        color: EColors.themeGrey,
                                         fontSize: 12,
                                       ),
                                       maxLines: 2,
@@ -134,7 +142,7 @@ class ChatCard extends StatelessWidget {
                           Container(
                             width: double.infinity,
                             height: 1,
-                            color: Color(0xFFDDDDDD),
+                            color: EColors.themeMaroon,
                           ),
                         ],
                       ),
