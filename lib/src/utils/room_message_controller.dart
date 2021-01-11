@@ -6,7 +6,7 @@ import 'package:wively/src/data/models/message_types.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 
 class RoomMessageController{
-  Future<void> informMe(BuildContext context,Map<String, dynamic> message) async{
+  Future<void> informMe(BuildContext context,Map<String, dynamic> message,String username) async{
     final newMessage = Message(
       roomId: message['roomId'],
       from: message['from']['_id'],
@@ -14,6 +14,7 @@ class RoomMessageController{
       message: message['message'],
       sendAt: DateTime.now().millisecondsSinceEpoch,
       unreadByMe: false,
+      fromUser: username
     );
 
     Chat chat = Chat.fromJson({
@@ -56,7 +57,8 @@ class RoomMessageController{
 
 
   static createUserAddedMessage(String message,isMe){
-    return isMe?message.split(MessageTypes.SOMEONE_IS_ADDED_TO_GROUP)[0]+" was added by you":message.replaceAll(MessageTypes.SOMEONE_IS_ADDED_TO_GROUP, " was added by ");
+    List<String> chatMessage=message.split(MessageTypes.SOMEONE_IS_ADDED_TO_GROUP);
+    return chatMessage[0]+" was added by "+chatMessage[chatMessage.length-1];
   }
 
   static createGroupCreatedMessage(String message,isMe){

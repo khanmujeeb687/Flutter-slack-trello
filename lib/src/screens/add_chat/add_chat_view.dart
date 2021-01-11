@@ -1,4 +1,5 @@
 import 'package:wively/src/screens/add_chat/add_chat_controller.dart';
+import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
 import 'package:wively/src/widgets/custom_cupertino_navigation_bar.dart';
 import 'package:wively/src/widgets/custom_cupertino_sliver_navigation_bar.dart';
@@ -56,7 +57,7 @@ class _AddChatScreenState extends State<AddChatScreen> {
     }
     if (_addChatController.users.length == 0) {
       return Center(
-        child: Text('No users found'),
+        child: Text('No users found',style: TextStyle(color: EColors.white),),
       );
     }
     return ListView.builder(

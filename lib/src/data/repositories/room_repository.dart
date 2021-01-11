@@ -31,7 +31,7 @@ class RoomRepository{
       messageMap['message']=MessageTypes.CREATED_A_NEW_GROUP;
       messageMap['from']={'_id':userData.id};
       messageMap['room']=roomJson;
-      await RoomMessageController().informMe(context, messageMap);
+      await RoomMessageController().informMe(context, messageMap,user.username);
     } catch (err) {
       return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
     }

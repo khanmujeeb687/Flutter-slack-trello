@@ -1,4 +1,5 @@
 import 'package:wively/src/screens/login/login_controller.dart';
+import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/my_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Text(
                           'Login',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: EColors.white,
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
                           ),
@@ -56,12 +57,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           'To continue, fill in the fields below.',
                           style: TextStyle(
                             fontSize: 12,
+                            color: EColors.themeGrey
                           ),
                         ),
                         SizedBox(
                           height: 60,
                         ),
                         TextField(
+                          style: TextStyle(
+                              color: EColors.white
+                          ),
                           cursorColor: Theme.of(context).primaryColor,
                           controller: _loginController.usernameController,
                           decoration: InputDecoration(labelText: 'User name'),
@@ -70,6 +75,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 15,
                         ),
                         TextField(
+                          style: TextStyle(
+                            color: EColors.white
+                          ),
                           cursorColor: Theme.of(context).primaryColor,
                           controller: _loginController.passwordController,
                           decoration: InputDecoration(labelText: 'password'),

@@ -155,6 +155,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                 left: 10,
                                 right: 10,
                                 bottom: 0,
+                                top: 0
                               ),
                               child: renderMessage(
                                   context,
@@ -190,27 +191,30 @@ class _ContactScreenState extends State<ContactScreen> {
     if (_contactController.myUser == null) return Container();
     bool isMe=message.from == _contactController.myUser.id;
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         renderMessageSendAtDay(message, index),
         getInfoLabel(message),
         RoomMessageController.isAddedMessage(message.message)?Container(height: 0,width: 0,):Material(
           color: Colors.transparent,
           child: Bubble(
-            shadowColor: EColors.themeGrey,
-            margin: showNip?BubbleEdges.only(top: 0,left:isMe?50:0,right:!isMe?50:0 ):BubbleEdges.only(top: 10,left:isMe?50:0,right:!isMe?50:0 ),
+            radius: Radius.circular(15),
+            margin: showNip?BubbleEdges.only(top: 0,left:isMe?100:0,right:!isMe?100:0 ):BubbleEdges.only(top: 10,left:isMe?100:0,right:!isMe?100:0 ),
             alignment: isMe
                    ? Alignment.topRight:Alignment.topLeft,
             nip: showNip?(isMe
                 ? BubbleNip.rightTop:BubbleNip.leftTop):null,
-            color: EColors.themeGrey,
+            color: EColors.themePink.withOpacity(0.5),
             child: Column(
               crossAxisAlignment:isMe ? CrossAxisAlignment.end:CrossAxisAlignment.start,
               children: [
+                renderUserName(message,isMe),
                 Text(
                   message.message,
                   style: TextStyle(
-                    color: EColors.themeMaroon,
+                    color: EColors.white,
                     fontSize: 14.5,
+                    fontWeight: FontWeight.w400
                   ),
                   textAlign: TextAlign.right,
                 ),
@@ -260,14 +264,14 @@ class _ContactScreenState extends State<ContactScreen> {
     if (message.from == _contactController.myUser.id ) {
       return Text(
         messageDate(message.sendAt),
-        style: TextStyle(color: EColors.themeBlack, fontSize: 10),
+        style: TextStyle(color: EColors.themeGrey, fontSize: 8),
         textAlign: TextAlign.right,
       );
     }
     if (message.from != _contactController.myUser.id ) {
       return Text(
         messageDate(message.sendAt),
-        style: TextStyle(color: EColors.themeMaroon, fontSize: 10),
+        style: TextStyle(color: EColors.themeGrey, fontSize: 8),
         textAlign: TextAlign.left,
       );
     }
@@ -356,5 +360,13 @@ class _ContactScreenState extends State<ContactScreen> {
     );
   }
     return Container();
+  }
+
+  renderUserName(Message message,bool isMe) {
+    return Text(isMe?'You':message?.fromUser,style: TextStyle(
+      shadows:[Shadow(color: EColors.themeGrey)] ,
+      fontWeight: FontWeight.w400,
+      color: EColors.getRandomColorForUser(message.fromUser)
+    ),);
   }
 }

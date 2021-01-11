@@ -9,6 +9,7 @@ class MessageTable {
             _id text,
             room_id text not null,
             message text not null,
+            from_username text not null,
             from_user text not null,
             to_room text not null,
             send_at int not null,

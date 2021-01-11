@@ -1,5 +1,6 @@
 import 'package:wively/src/data/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:wively/src/values/Colors.dart';
 
 class UserCard extends StatelessWidget {
   final User user;
@@ -33,11 +34,11 @@ class UserCard extends StatelessWidget {
                   child: Text(
                     user.name[0].toUpperCase(),
                     style: TextStyle(
-                      color: Colors.white,
+                      color: EColors.themeMaroon,
                     ),
                   ),
                   radius: 20,
-                  backgroundColor: Colors.blue,
+                  backgroundColor: EColors.themeGrey,
                 ),
                 Expanded(
                   child: Padding(
@@ -52,7 +53,7 @@ class UserCard extends StatelessWidget {
                           Text(
                             this.user.name,
                             style: TextStyle(
-                              color: Colors.black,
+                              color: EColors.themeGrey,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -60,6 +61,7 @@ class UserCard extends StatelessWidget {
                           Text(
                             '@${this.user.username}',
                             style: TextStyle(
+                              color: EColors.themeGrey,
                               fontSize: 12,
                             ),
                           ),
@@ -69,7 +71,7 @@ class UserCard extends StatelessWidget {
                           Container(
                             width: double.infinity,
                             height: 1,
-                            color: Color(0xFFDDDDDD),
+                            color: EColors.blackTransparent,
                           ),
                         ],
                       ),

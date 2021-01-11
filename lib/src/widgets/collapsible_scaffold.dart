@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:wively/src/values/Colors.dart';
 
 
 class CollapsibleScaffold extends StatelessWidget {
@@ -70,7 +71,7 @@ class CollapsibleScaffold extends StatelessWidget {
                         );
                       },
                     ),
-                    background: Container(color: Colors.black,
+                    background: Container(color: EColors.themeMaroon,
                       child:preview==null?Container(height: 0,width: 0,):preview,
                     )
                 )

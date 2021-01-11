@@ -5,16 +5,20 @@ class DarkRegular{
 
   static getTheme(context){
     return ThemeData(
-        primaryColor: EColors.themeMaroon,
+      hintColor: EColors.themeGrey,
+        primaryColor: EColors.themePink,
         accentColor: EColors.themeGrey,
         scaffoldBackgroundColor: EColors.themeBlack,
         cursorColor: EColors.themeMaroon,
-        appBarTheme: AppBarTheme().copyWith(
-            color: EColors.themeMaroon,
-            iconTheme: IconThemeData(color: EColors.themeGrey),
-            textTheme: TextTheme().copyWith(
-                title: Theme.of(context).primaryTextTheme.title.copyWith(color: EColors.themeGrey)
+        appBarTheme: AppBarTheme(
+          iconTheme: IconThemeData(
+            color: EColors.themeGrey
+          ),color: EColors.themeMaroon,
+          textTheme: TextTheme(
+            title: TextStyle(
+              color: EColors.white
             )
+          )
         )
     );
   }

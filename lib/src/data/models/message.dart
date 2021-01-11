@@ -9,6 +9,7 @@ class Message {
   String to_room;
   int sendAt;
   bool unreadByMe;
+  String fromUser;
 
   Message({
     this.localId,
@@ -19,6 +20,7 @@ class Message {
     this.to_room,
     this.sendAt,
     this.unreadByMe,
+    this.fromUser
   });
 
   Message.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class Message {
     to_room = json['room']['_id'];
     unreadByMe = json['unreadByMe'] ?? true;
     sendAt = json['sendAt'];
+    fromUser = json['fromUserName'];
   }
 
   Map<String, dynamic> toJson() {
@@ -39,6 +42,7 @@ class Message {
     json['from'] = from;
     json['room'] = to_room;
     json['sendAt'] = sendAt;
+    json['fromUserName'] = fromUser;
     return json;
   }
 
@@ -48,6 +52,7 @@ class Message {
     roomId = json['room_id'];
     message = json['message'];
     from = json['from_user'];
+    fromUser = json['from_username'];
     to_room = json['to_room'];
     sendAt = json['send_at'];
     unreadByMe = json['unread_by_me'] == 1;
@@ -59,6 +64,7 @@ class Message {
     map['room_id'] = roomId;
     map['message'] = message;
     map['from_user'] = from;
+    map['from_username'] = fromUser;
     map['to_room'] = to_room;
     map['send_at'] = sendAt;
     map['unread_by_me'] = unreadByMe ?? false;
@@ -79,6 +85,7 @@ class Message {
       to_room: this.to_room,
       sendAt: this.sendAt,
       unreadByMe: unreadByMe ?? this.unreadByMe,
+      fromUser: this.fromUser
     );
   }
 

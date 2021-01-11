@@ -100,6 +100,7 @@ class ContactController extends StateControl {
       message: message,
       sendAt: DateTime.now().millisecondsSinceEpoch,
       unreadByMe: false,
+      fromUser: myUser.username
     );
     textController.text = "";
     await Provider.of<ChatsProvider>(context, listen: false).addMessageToChat(newMessage);

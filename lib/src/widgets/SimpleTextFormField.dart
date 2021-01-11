@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wively/src/values/Colors.dart';
 
 
 class SimpleTextFormField extends StatefulWidget {
@@ -17,9 +18,12 @@ class _SimpleTextFormFieldState extends State<SimpleTextFormField> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10,vertical: 20),
       child: TextFormField(
+        style: TextStyle(
+          color: EColors.white
+        ),
         maxLines: widget.bigField?null:1,
         decoration: InputDecoration(
-          hintText: widget.hint
+          hintText: widget.hint,
         ),
         onChanged: widget.onChange,
         enableInteractiveSelection: true,

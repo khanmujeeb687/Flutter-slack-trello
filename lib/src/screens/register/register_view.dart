@@ -1,4 +1,5 @@
 import 'package:wively/src/screens/register/register_controller.dart';
+import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/my_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Text(
                             'Register',
                             style: TextStyle(
-                              color: Colors.black,
+                              color: EColors.white,
                               fontSize: 26,
                               fontWeight: FontWeight.bold,
                             ),
@@ -62,12 +63,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             'Create a SecretChatApp account.',
                             style: TextStyle(
                               fontSize: 12,
+                              color: EColors.themeGrey
                             ),
                           ),
                           SizedBox(
                             height: 60,
                           ),
                           TextField(
+                            style: TextStyle(
+                                color: EColors.white
+                            ),
                             cursorColor: Theme.of(context).primaryColor,
                             controller: _registerController.nameController,
                             decoration:
@@ -77,6 +82,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 15,
                           ),
                           TextField(
+                            style: TextStyle(
+                                color: EColors.white
+                            ),
                             cursorColor: Theme.of(context).primaryColor,
                             controller: _registerController.usernameController,
                             decoration:
@@ -86,6 +94,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 15,
                           ),
                           TextField(
+                            style: TextStyle(
+                                color: EColors.white
+                            ),
                             cursorColor: Theme.of(context).primaryColor,
                             controller: _registerController.passwordController,
                             decoration: InputDecoration(labelText: 'password'),

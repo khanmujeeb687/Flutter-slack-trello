@@ -11,6 +11,7 @@ import 'package:wively/src/data/repositories/chat_repository.dart';
 import 'package:wively/src/data/repositories/room_repository.dart';
 import 'package:wively/src/data/repositories/user_repository.dart';
 import 'package:wively/src/screens/contact/contact_view.dart';
+import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:wively/src/utils/room_message_controller.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,8 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:wively/src/values/Colors.dart';
+import 'package:wively/src/widgets/loader_dialog.dart';
 import 'package:wively/src/widgets/lottie_loader.dart';
 import 'package:wively/src/widgets/my_button.dart';
 
@@ -113,21 +116,30 @@ class AddChatController extends StateControl {
         builder: (context) {
           return Container(
             height: 100,
+            color: EColors.themeMaroon,
             padding: EdgeInsets.all(20),
             alignment: Alignment.center,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Add $name to this group?'),
+                Text('Add $name to this group?',style: TextStyle(
+                  color: EColors.themeGrey
+                ),),
                 RaisedButton(
                   child: Text('+Add'),
                   onPressed: () async {
+                    LoaderDialogManager.showLoader(context);
                     var data =
                         await _roomRepository.addNewMember(roomId, userId);
                     if (data is Map<String, dynamic>) {
-                      new RoomMessageController().informMe(context, data);
+                      User user =await CustomSharedPreferences.getMyUser();
+                      new RoomMessageController().informMe(context, data,user.username);
                       Fluttertoast.showToast(msg: 'User added successfully');
                     }
+                    if(data==null){
+                      Fluttertoast.showToast(msg: 'User already added');
+                    }
+                    LoaderDialogManager.hideLoader();
                     Navigator.pop(context);
                   },
                 )

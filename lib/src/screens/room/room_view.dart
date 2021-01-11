@@ -6,6 +6,7 @@ import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/screens/contact/contact_view.dart';
 import 'package:wively/src/screens/room/room_controller.dart';
+import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
 import 'package:wively/src/widgets/lottie_loader.dart';
 import 'package:wively/src/widgets/room_card.dart';
@@ -64,7 +65,7 @@ class _RoomScreenState extends State<RoomScreen> {
     }
     if (_roomController.rooms.length == 0) {
       return Center(
-        child: Text('There are no rooms available!'),
+        child: Text('There are no rooms available!',style: TextStyle(color: EColors.white),),
       );
     }
     return ListView.builder(

@@ -137,6 +137,7 @@ class DBProvider {
              tb_message._id,
              tb_message.from_user,
              tb_message.to_room,
+             tb_message.from_username,
              tb_message.message,
              tb_message.send_at,
              tb_message.unread_by_me
@@ -168,6 +169,7 @@ class DBProvider {
       SELECT tb_message.id_message,
              tb_message._id,
              tb_message.from_user,
+             tb_message.from_username,
              tb_message.to_room,
              tb_message.message,
              tb_message.send_at,
@@ -214,6 +216,7 @@ class DBProvider {
              tb_message.id_message,
              tb_message._id as message_id,
              tb_message.from_user,
+             tb_message.from_username,
              tb_message.to_room,
              tb_message.message,
              tb_message.send_at,
@@ -236,6 +239,7 @@ class DBProvider {
         final message = Message.fromLocalDatabaseMap({
             "_id": map['message_id'],
             "from": map['from_user'],
+            "from_username": map['from_username'],
             "to": map['to_room'],
             "message": map['message'],
             "send_at": map['send_at'],

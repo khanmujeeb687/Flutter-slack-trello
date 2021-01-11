@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wively/src/data/models/user.dart';
+import 'package:wively/src/values/Colors.dart';
 
 
 class SelectMember extends StatefulWidget {
@@ -32,16 +33,17 @@ class _SelectMemberState extends State<SelectMember> {
             child: Column(
               children: [
                 CircleAvatar(
+                  backgroundColor: EColors.themeGrey,
                   radius: 30,
                   child: Stack(
                     children: [
-                      Text(widget.users[index].name[0].toUpperCase()),
+                      Center(child: Text(widget.users[index].name[0].toUpperCase(),style: TextStyle(color: EColors.themeMaroon),)),
                       if(selected== widget.users[index])
-                        Icon(Icons.check,color: Colors.white)
+                        Center(child: Icon(Icons.check,color: EColors.themeBlack))
                     ],
                   ),
                 ),
-                Text(widget.users[index].name)
+                Text(widget.users[index].name,style: TextStyle(color: EColors.white),)
               ],
             ),
           );
