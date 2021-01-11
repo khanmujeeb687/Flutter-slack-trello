@@ -4,17 +4,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/custom_error.dart';
 import 'package:wively/src/data/models/message.dart';
+import 'package:wively/src/data/models/message_types.dart';
 import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/utils/custom_http_client.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:wively/src/utils/my_urls.dart';
+import 'package:wively/src/utils/room_message_controller.dart';
 
 class RoomRepository{
    CustomHttpClient http = CustomHttpClient();
 
 
-   Future<dynamic> createRoom(roomName,roomId) async {
+   Future<dynamic> createRoom(roomName,roomId,context) async {
     try {
       User user=await CustomSharedPreferences.getMyUser();
       var body = jsonEncode({ "roomName":roomName, "createdBy":user.id, "createdAt":DateTime.now().microsecondsSinceEpoch,"parent":roomId});
@@ -23,7 +25,14 @@ class RoomRepository{
         body: body,
       );
       final dynamic roomJson = jsonDecode(response.body)['room'];
-
+      User userData =await CustomSharedPreferences.getMyUser();
+      Map<String ,dynamic> messageMap={};
+      messageMap['roomId']=roomJson['_id'];
+      messageMap['message']=MessageTypes.CREATED_A_NEW_GROUP;
+      messageMap['from']={'_id':userData.id};
+      messageMap['room']=roomJson;
+      await RoomMessageController().informMe(context, messageMap);
+      Fluttertoast.showToast(msg: 'hehyeheye');
     } catch (err) {
       return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
     }

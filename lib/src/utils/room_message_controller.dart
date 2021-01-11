@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/message.dart';
+import 'package:wively/src/data/models/message_types.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 
 class RoomMessageController{
-  informMe(BuildContext context,Map<String, dynamic> message) async{
+  Future<void> informMe(BuildContext context,Map<String, dynamic> message) async{
     final newMessage = Message(
       roomId: message['roomId'],
       from: message['from']['_id'],
@@ -13,14 +15,54 @@ class RoomMessageController{
       sendAt: DateTime.now().millisecondsSinceEpoch,
       unreadByMe: false,
     );
+
+    Chat chat = Chat.fromJson({
+      "_id": message['roomId'],
+      "room": message['room'],
+    });
+    Provider.of<ChatsProvider>(context, listen: false).createChatAndUserIfNotExists(chat);
     await Provider.of<ChatsProvider>(context, listen: false).addMessageToChat(newMessage);
   }
 
-  static createAddedMessage(String message,bool isMe){
-    return isMe?message.split("_IS_ADDED_BY_")[0]+" was added by you":message.replaceAll("_IS_ADDED_BY_", " was added by ");
-  }
+
+
+
+
+
+/// check added messages
   static bool isAddedMessage(String message){
-    return message.contains('_IS_ADDED_BY_');
+    return(
+    isNewUserAddedMessage(message) || isGroupCreatedMessages(message)
+    );
   }
+
+
+
+ static  isNewUserAddedMessage(String message){
+    return message.contains(MessageTypes.SOMEONE_IS_ADDED_TO_GROUP);
+  }
+
+  static  isGroupCreatedMessages(String message){
+    return message.contains(MessageTypes.CREATED_A_NEW_GROUP);
+  }
+  ///added messages  check ends here
+
+  ///generate added message
+
+  static createAddedMessage(String message,bool isMe){
+    if(isNewUserAddedMessage(message)) return createUserAddedMessage(message, isMe);
+    if(isGroupCreatedMessages(message)) return createGroupCreatedMessage(message, isMe);
+  }
+
+
+  static createUserAddedMessage(String message,isMe){
+    return isMe?message.split(MessageTypes.SOMEONE_IS_ADDED_TO_GROUP)[0]+" was added by you":message.replaceAll(MessageTypes.SOMEONE_IS_ADDED_TO_GROUP, " was added by ");
+  }
+
+  static createGroupCreatedMessage(String message,isMe){
+    return "You have created a group";
+  }
+
+
 
 }

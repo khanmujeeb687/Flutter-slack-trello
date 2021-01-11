@@ -32,9 +32,9 @@ class _CreateRoomState extends State<CreateRoom> {
       ),
       body: Column(
         children: [
-          TextFieldWithButton(context: context, textEditingController: _controller, onSubmit: (){
+          TextFieldWithButton(context: context, textEditingController: _controller, onSubmit: ()async{
             if(_controller.text.isNotEmpty){
-              _roomRepository.createRoom(_controller.text,widget.roomId);
+             await  _roomRepository.createRoom(_controller.text,widget.roomId,context);
               Navigator.pop(context);
             }
           },showEmojiKeyboard: false,)
