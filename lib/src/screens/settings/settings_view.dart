@@ -28,9 +28,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         stream: _settingsController.streamController.stream,
         builder: (context, snapshot) {
           return Scaffold(
-            backgroundColor: Color(0xFFEEEEEE),
             appBar: CustomAppBar(
-              title: Text('settings', style: TextStyle(color: Colors.black)),
+              title: Text('settings'),
             ),
             body: SafeArea(
               child: Container(

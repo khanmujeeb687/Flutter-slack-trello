@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wively/src/values/Colors.dart';
 
 class SettingsItem extends StatelessWidget {
   final Function onTap;
@@ -35,7 +36,7 @@ class SettingsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: EColors.themeBlack,
       child: InkWell(
         onTap: onTap,
         child: Padding(
@@ -72,7 +73,7 @@ class SettingsItem extends StatelessWidget {
                                 child: Text(
                                   title,
                                   style: TextStyle(
-                                    color: Colors.black,
+                                    color: EColors.themeGrey,
                                     fontSize: 16,
                                   ),
                                 ),
@@ -89,7 +90,7 @@ class SettingsItem extends StatelessWidget {
                           Container(
                             width: double.infinity,
                             height: border ? 1 : 0,
-                            color: Color(0xFFDDDDDD),
+                            color: EColors.transparent,
                           ),
                         ],
                       ),

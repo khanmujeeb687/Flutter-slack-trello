@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/task.dart';
 import 'package:wively/src/screens/task_board/task_board_controller.dart';
+import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
 import 'package:wively/src/widgets/lottie_loader.dart';
 
@@ -39,43 +42,60 @@ class _TaskBoardViewState extends State<TaskBoardScreen> {
             child: Hero(
               tag: widget.roomId,
               child: Scaffold(
-                backgroundColor: Color(0xFFEEEEEE),
                 appBar: CustomAppBar(
-                  title: Text('TaskBoard', style: TextStyle(color: Colors.black)),
+                  title: Text('TaskBoard', style: TextStyle(color: EColors.white)),
                 ),
                 body: SafeArea(
                   child: Container(
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.all(10),
-                    child: Card(
-                      shape:RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                      ) ,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                    child: ClipRRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: .5,sigmaY: .5),
+                        child: Card(
+                          color: EColors.white.withOpacity(0.1),
+                          shape:RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                          ) ,
+                          child: SingleChildScrollView(
+                            child: Column(
                               children: [
-                                IconButton(
-                                  icon: Icon(Icons.add),
-                                  onPressed: _taskBoardController.addTask,
-                                )
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.add,color: EColors.themeGrey,),
+                                      onPressed: _taskBoardController.addTask,
+                                    )
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(8,20,8,8),
+                                  child:(){
+                                    if(_taskBoardController.loading){
+                                      return lottieLoader();
+                                    }
+                                    if(_taskBoardController.tasks.length==0){
+                                      return Center(
+                                        child: Text("There are no Tasks on this board!",style: TextStyle(
+                                          color: EColors.themeGrey
+                                        ),)
+                                        );
+                                    }
+                                    return ListView.builder(
+                                      physics: ScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: _taskBoardController.tasks.length,
+                                      itemBuilder: (context,index){
+                                        return _card(_taskBoardController.tasks[index]);
+                                      },
+                                    );
+                                  }(),
+                                ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8,20,8,8),
-                              child: _taskBoardController.loading?lottieLoader():ListView.builder(
-                                physics: ScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: _taskBoardController.tasks.length,
-                                itemBuilder: (context,index){
-                                  return _card(_taskBoardController.tasks[index]);
-                                },
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
@@ -91,6 +111,11 @@ class _TaskBoardViewState extends State<TaskBoardScreen> {
 
   _card(Task task){
     return Card(
+      color: EColors.white.withOpacity(0.5),
+      clipBehavior: Clip.hardEdge,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15)
+      ),
       elevation: 2,
       child: Container(
         padding: EdgeInsets.all(10),
@@ -98,9 +123,11 @@ class _TaskBoardViewState extends State<TaskBoardScreen> {
         child: ListTile(
           onTap: ()=>_taskBoardController.changeStatus(task),
           leading: CircleAvatar(
-            child: Text(task.title[0]),
+            child: Text(task.title[0].toUpperCase()),
           ),
-          title: Text(task.title),
+          title: Text(task.title,style: TextStyle(
+            color: EColors.themeBlack
+          ),),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -114,7 +141,7 @@ class _TaskBoardViewState extends State<TaskBoardScreen> {
               if(task.assignedTo!=null)
                 CircleAvatar(
                 backgroundColor: Colors.redAccent,
-                child: Text(task.createdBy.name),
+                child: Text(task.createdBy.name[0].toUpperCase()),
               )
             ],
           ),

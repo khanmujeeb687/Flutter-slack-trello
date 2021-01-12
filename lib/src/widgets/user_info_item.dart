@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wively/src/values/Colors.dart';
 
 class UserInfoItem extends StatelessWidget {
   final String name;
@@ -13,27 +14,17 @@ class UserInfoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(
-            width: 1,
-            color: Color(0xFFDDDDDD),
-          ),
-          bottom: BorderSide(
-            width: 1,
-            color: Color(0xFFDDDDDD),
-          ),
-        ),
+        color: EColors.themeMaroon
       ),
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Row(
         children: <Widget>[
           CircleAvatar(
-            backgroundColor: Colors.blue,
+            backgroundColor: EColors.themeGrey,
             radius: 25,
             child: Text(
               name[0],
-              style: TextStyle(color: Colors.white, fontSize: 18),
+              style: TextStyle(color: EColors.themeMaroon, fontSize: 18),
             ),
           ),
           Expanded(
@@ -45,7 +36,7 @@ class UserInfoItem extends StatelessWidget {
                   Text(
                     name,
                     style: TextStyle(
-                      color: Colors.black,
+                      color: EColors.themeGrey,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
@@ -56,7 +47,7 @@ class UserInfoItem extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      color: Colors.black,
+                      color: EColors.themeGrey,
                       fontSize: 14,
                     ),
                   ),
