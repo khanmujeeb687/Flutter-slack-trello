@@ -94,7 +94,7 @@ class ContactController extends StateControl {
     final selectedChat = Provider.of<ChatsProvider>(context, listen: false).selectedChat;
     final to = selectedChat.room.id;
     final newMessage = Message(
-      roomId: selectedChat.id,
+      chatId: selectedChat.id,
       from: myId,
       to_room: to,
       message: message,
@@ -104,7 +104,7 @@ class ContactController extends StateControl {
     );
     textController.text = "";
     await Provider.of<ChatsProvider>(context, listen: false).addMessageToChat(newMessage);
-    await _chatRepository.sendMessageToRoom(message,user.id,selectedChat.id);
+    await _chatRepository.sendMessageToRoom(message,user.id,selectedChat.room.id);
     
   }
 

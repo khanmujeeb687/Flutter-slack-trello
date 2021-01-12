@@ -11,6 +11,7 @@ class Chat {
   String id;
   List<Message> messages;
   Room room;
+  User user;
   int unreadMessages;
   String lastMessage;
   int lastMessageSendAt;
@@ -18,6 +19,7 @@ class Chat {
   Chat({
     @required this.id,
     @required this.room,
+    @required this.user,
     this.messages = const [],
     this.unreadMessages,
     this.lastMessage,
@@ -27,6 +29,8 @@ class Chat {
   Chat.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     room = Room.fromJson(json['room']);
+    if(json.containsKey('user'))
+      user = User.fromJson(json['user']);
     messages = [];
   }
 
@@ -43,6 +47,11 @@ class Chat {
       'room_name': map['room_name'],
       'task_board_id':map['task_board_id']
     });
+    user = User.fromLocalDatabaseMap({
+      '_id': map['user_id'],
+      'name': map['name'],
+      'username': map['username'],
+    });
     messages = [];
     unreadMessages = map['unread_messages'];
     lastMessage = map['last_message'];
@@ -52,6 +61,9 @@ class Chat {
   Map<String, dynamic> toLocalDatabaseMap() {
     Map<String, dynamic> map = {};
     map['_id'] = id;
+    if(user!=null){
+      map['user_id'] = user.id;
+    }
     return map;
   }
 

@@ -12,7 +12,9 @@ class ChatTable {
     await db.execute('''
           create table tb_room_chat (
             id_chat integer primary key autoincrement,
-            _id text not null,
+            _id text,
+            user_id text,
+            constraint tb_room_chat_user_id_fk foreign key (user_id) references tb_user (_id),
             constraint tb_room_chat_id_fk foreign key (_id) references tb_room (_id))
           ''');
     await db.execute('''

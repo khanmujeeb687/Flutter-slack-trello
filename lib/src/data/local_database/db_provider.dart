@@ -118,7 +118,7 @@ class DBProvider {
       final db = await database;
       final room_chats = await db.rawQuery('''
         SELECT * FROM tb_room_chat
-        WHERE _id = '${chat.id}'
+        WHERE _id = '${chat.room.id}'
       ''');
       if (room_chats.length == 0) {
         await db.insert('tb_room_chat', chat.toLocalDatabaseMap());
@@ -130,7 +130,7 @@ class DBProvider {
     }
   }
 
-  Future<List<Message>> getChatMessages(String roomId) async {
+  Future<List<Message>> getChatMessages(String chatId) async {
     final db = await database;
     final maps = await db.rawQuery('''
       SELECT tb_message.id_message,
@@ -138,11 +138,12 @@ class DBProvider {
              tb_message.from_user,
              tb_message.to_room,
              tb_message.from_username,
+             tb_message.to_user,
              tb_message.message,
              tb_message.send_at,
              tb_message.unread_by_me
       FROM tb_message
-      WHERE tb_message.room_id = '$roomId'
+      WHERE tb_message.chat_id = '$chatId'
       ORDER BY tb_message.send_at DESC
       LIMIT 25
     ''');
@@ -159,11 +160,11 @@ class DBProvider {
     await db.rawQuery('''
       UPDATE tb_message
       SET unread_by_me = 0
-      WHERE room_id = '$id'
+      WHERE chat_id = '$id'
     ''');
   }
 
-  Future<List<Message>> getChatMessagesWithOffset(String roomId, int localMessageId) async {
+  Future<List<Message>> getChatMessagesWithOffset(String chatId, int localMessageId) async {
     final db = await database;
     final maps = await db.rawQuery('''
       SELECT tb_message.id_message,
@@ -171,11 +172,12 @@ class DBProvider {
              tb_message.from_user,
              tb_message.from_username,
              tb_message.to_room,
+             tb_message.to_user,
              tb_message.message,
              tb_message.send_at,
              tb_message.unread_by_me
       FROM tb_message
-      WHERE tb_message.room_id = '$roomId'
+      WHERE tb_message.chat_id = '$chatId'
       AND tb_message.id_message < $localMessageId
       ORDER BY tb_message.send_at DESC
       LIMIT 25
@@ -198,7 +200,7 @@ class DBProvider {
   void testAQuery()async{
     final db = await database;
     final maps=await db.rawQuery('''
-    SELECT * FROM tb_room
+    SELECT * FROM tb_room_chat
     ''');
     Fluttertoast.showToast(msg: maps.toString());
 
@@ -213,19 +215,25 @@ class DBProvider {
              tb_room._id as room_id,
              tb_room.room_name,
              tb_room.task_board_id,
+             tb_user._id as user_id,
+             tb_user.name,
+             tb_user.username,
              tb_message.id_message,
              tb_message._id as message_id,
              tb_message.from_user,
              tb_message.from_username,
              tb_message.to_room,
+             tb_message.to_user,
              tb_message.message,
              tb_message.send_at,
              tb_message.unread_by_me
       FROM tb_room_chat
       INNER JOIN tb_message
-        ON tb_room_chat._id = tb_message.room_id
-      INNER JOIN tb_room
+        ON tb_room_chat._id = tb_message.chat_id
+      LEFT OUTER JOIN tb_room
         ON tb_room_chat._id = tb_room._id
+      LEFT OUTER JOIN tb_user
+        ON tb_room_chat.user_id = tb_user._id
       ORDER BY tb_message.send_at DESC
     ''');
     if (maps.length > 0) {
@@ -241,6 +249,7 @@ class DBProvider {
             "from": map['from_user'],
             "from_username": map['from_username'],
             "to": map['to_room'],
+            "to": map['to_user'],
             "message": map['message'],
             "send_at": map['send_at'],
             "unread_by_me": map['unread_by_me'],

@@ -8,7 +8,7 @@ import 'package:wively/src/data/providers/chats_provider.dart';
 class RoomMessageController{
   Future<void> informMe(BuildContext context,Map<String, dynamic> message,String username) async{
     final newMessage = Message(
-      roomId: message['roomId'],
+      chatId: message['roomId'],
       from: message['from']['_id'],
       to_room:  message['roomId'],
       message: message['message'],

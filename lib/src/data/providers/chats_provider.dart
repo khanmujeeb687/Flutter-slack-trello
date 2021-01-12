@@ -79,7 +79,11 @@ class ChatsProvider with ChangeNotifier {
   }
 
   createChatAndUserIfNotExists(Chat chat) async {
-    await DBProvider.db.createRoomIfNotExists(chat);
+    if(chat.user==null){
+      await DBProvider.db.createRoomIfNotExists(chat);
+    }else{
+      await DBProvider.db.createUserIfNotExists(chat.user);
+    }
     await DBProvider.db.createChatIfNotExists(chat);
     updateChats();
   }

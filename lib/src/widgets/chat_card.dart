@@ -175,7 +175,7 @@ class ChatCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: Colors.blue,
+        color: EColors.themePink,
       ),
       child: Text(
         _unreadMessages.toString(),

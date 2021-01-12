@@ -3,10 +3,11 @@ class Message {
 
   int localId;
   String id;
-  String roomId;
+  String chatId;
   String message;
   String from;
   String to_room;
+  String to;
   int sendAt;
   bool unreadByMe;
   String fromUser;
@@ -14,10 +15,11 @@ class Message {
   Message({
     this.localId,
     this.id,
-    this.roomId,
+    this.chatId,
     this.message,
     this.from,
     this.to_room,
+    this.to,
     this.sendAt,
     this.unreadByMe,
     this.fromUser
@@ -25,10 +27,12 @@ class Message {
 
   Message.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
-    roomId = json['roomId'];
+    chatId = json['chatId'];
     message = json['message'];
     from = json['from']['_id'];
     to_room = json['room']['_id'];
+    if(json.containsKey('to'))
+      to = json['to']['_id'];
     unreadByMe = json['unreadByMe'] ?? true;
     sendAt = json['sendAt'];
     fromUser = json['fromUserName'];
@@ -37,10 +41,11 @@ class Message {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
     json['_id'] = id;
-    json['roomId'] = roomId;
+    json['chatId'] = chatId;
     json['message'] = message;
     json['from'] = from;
     json['room'] = to_room;
+    json['to'] = to;
     json['sendAt'] = sendAt;
     json['fromUserName'] = fromUser;
     return json;
@@ -49,9 +54,10 @@ class Message {
   Message.fromLocalDatabaseMap(Map<String, dynamic> json) {
     localId = json['id_message'];
     id = json['_id'];
-    roomId = json['room_id'];
+    chatId = json['chat_id'];
     message = json['message'];
     from = json['from_user'];
+    to = json['to_user'];
     fromUser = json['from_username'];
     to_room = json['to_room'];
     sendAt = json['send_at'];
@@ -61,9 +67,10 @@ class Message {
   Map<String, dynamic> toLocalDatabaseMap() {
     Map<String, dynamic> map = {};
     map['_id'] = id;
-    map['room_id'] = roomId;
+    map['chat_id'] = chatId;
     map['message'] = message;
     map['from_user'] = from;
+    map['to_user'] = to;
     map['from_username'] = fromUser;
     map['to_room'] = to_room;
     map['send_at'] = sendAt;
@@ -79,10 +86,11 @@ class Message {
     return Message(
       localId: localId ?? this.localId,
       id: id ?? this.id,
-      roomId: this.roomId,
+      chatId: this.chatId,
       message: this.message,
       from: this.from,
       to_room: this.to_room,
+      to: this.to,
       sendAt: this.sendAt,
       unreadByMe: unreadByMe ?? this.unreadByMe,
       fromUser: this.fromUser
