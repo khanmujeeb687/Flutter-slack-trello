@@ -7,7 +7,8 @@ class SimpleTextFormField extends StatefulWidget {
   Function(String a) onChange;
   Function(String a) validator;
   bool bigField;
-  SimpleTextFormField({this.hint,this.onChange,this.validator,this.bigField=false});
+  bool padded;
+  SimpleTextFormField({this.hint,this.onChange,this.validator,this.bigField=false,this.padded=true});
   @override
   _SimpleTextFormFieldState createState() => _SimpleTextFormFieldState();
 }
@@ -16,14 +17,16 @@ class _SimpleTextFormFieldState extends State<SimpleTextFormField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10,vertical: 20),
+      margin:widget.padded?EdgeInsets.symmetric(horizontal: 10,vertical: 20):EdgeInsets.all(0),
       child: TextFormField(
+        autofocus: false,
         style: TextStyle(
           color: EColors.white
         ),
         maxLines: widget.bigField?null:1,
         decoration: InputDecoration(
           hintText: widget.hint,
+          contentPadding: EdgeInsets.only(left: 10)
         ),
         onChanged: widget.onChange,
         enableInteractiveSelection: true,

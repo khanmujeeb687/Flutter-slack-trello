@@ -4,6 +4,7 @@ import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/repositories/chat_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:wively/src/utils/custom_shared_preferences.dart';
 
 class ChatsProvider with ChangeNotifier {
 
@@ -14,6 +15,11 @@ class ChatsProvider with ChangeNotifier {
 
   Chat _selectedChat;
   Chat get selectedChat => _selectedChat;
+
+  User _currentUser;
+  User get currentUser=>_currentUser;
+
+
 
   bool _noMoreSelectedChatMessages = false;
   bool get noMoreSelectedChatMessages => _noMoreSelectedChatMessages;
@@ -35,6 +41,11 @@ class ChatsProvider with ChangeNotifier {
       _readSelectedChatMessages();
     }
   }
+
+  getCurrentUser()async{
+    _currentUser =await CustomSharedPreferences.getMyUser();
+  }
+
 
   loadMoreSelectedChatMessages() async {
     if (!noMoreSelectedChatMessages && selectedChat.messages.length > 0 && !_loadingMoreMessages) {

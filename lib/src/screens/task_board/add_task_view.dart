@@ -50,7 +50,7 @@ class _AddTaskState extends State<AddTask> {
                       _taskBoardController.loading?lottieLoader():SelectMember(_taskBoardController.members,_taskBoardController.selectUser)
                       ,CupertinoButton(
                         child: Text("create"),
-                        onPressed: _taskBoardController.addNewTask,
+                        onPressed:()=> _taskBoardController.addNewTask(true),
                       )
                     ],
                   ),

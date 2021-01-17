@@ -10,6 +10,7 @@ import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wively/src/utils/screen_util.dart';
 
 class AfterLaunchScreen extends StatefulWidget {
   @override
@@ -41,6 +42,7 @@ class _AfterLaunchScreenState extends State<AfterLaunchScreen> {
   @override
   void didChangeDependencies() {
     Provider.of<ChatsProvider>(context).updateChats();
+    Provider.of<ChatsProvider>(context).getCurrentUser();
     super.didChangeDependencies();
   }
 

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/task.dart';
 import 'package:wively/src/data/models/user.dart';
+import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/data/repositories/room_repository.dart';
 import 'package:wively/src/data/repositories/task_board.repository.dart';
 import 'package:wively/src/screens/task_board/add_task_view.dart';
@@ -19,6 +22,9 @@ class TaskBoardController extends StateControl {
   final BuildContext context;
   final TaskBoardRepository _taskBoardRepository=new TaskBoardRepository();
   final RoomRepository _roomRepository=new RoomRepository();
+  ChatsProvider _provider;
+
+  ScrollController scrollController=new ScrollController();
 
   bool loading=true;
 
@@ -37,6 +43,7 @@ class TaskBoardController extends StateControl {
   TaskBoardController({
     @required this.context,
   }) {
+  _provider  = Provider.of<ChatsProvider>(context, listen: false);
     this.init();
   }
 
@@ -54,7 +61,7 @@ class TaskBoardController extends StateControl {
     }
   }
 
-  void fetchBoard(String roomId) async{
+  Future<void> fetchBoard(String roomId) async{
     if(room==null)
       await getRoom(roomId);
     var data=await _taskBoardRepository.getAllTasks(room.taskBoardId);
@@ -87,29 +94,49 @@ class TaskBoardController extends StateControl {
   }
 
 
-  addNewTask()async{
+  addTaskLocally(Map<String,dynamic> map)async{
+    map['createdBy']=_provider.currentUser.toJson();
+    map['status']='not_done';
+    tasks.add(Task.fromJson(map));
+    notifyListeners();
+    scrollToBottom();
+  }
+
+  scrollToBottom()=> scrollController.animateTo(scrollController.position.maxScrollExtent+100,duration: Duration(milliseconds: 300),curve: Curves.easeIn);
+
+
+  addNewTask(bool goBack)async{
     if(key.currentState.validate()){
-      LoaderDialogManager.showLoader(context);
+      key.currentState.reset();
+      if(goBack)
+        LoaderDialogManager.showLoader(context);
       User user =await CustomSharedPreferences.getMyUser();
-      var data =await _taskBoardRepository.createNewTask({
+      Map<String ,dynamic> newTaskData={
         'desc':desc,
         'title':title,
         'taskBoardId':room.taskBoardId,
         'assignedTo':selectedUser,
         'createdBy':user.id,
         'roomId':room.id,
-      });
+      };
+      addTaskLocally(newTaskData);
+      var data =await _taskBoardRepository.createNewTask(newTaskData);
       if(data is Task){
-        Navigator.pop(context);
+        if(goBack)
+          Navigator.pop(context);
+        else
+          fetchBoard(room.id);
       }else{
         Fluttertoast.showToast(msg: 'Some error occurred');
       }
-      LoaderDialogManager.hideLoader();
+      if(goBack)
+        LoaderDialogManager.hideLoader();
     }
   }
 
 
   updateTask(Task task,status) async{
+    if(task.id==null) return Navigator.pop(context);
     _taskBoardRepository.editTask(task.id,status);
     Navigator.pop(context);
     tasks.removeAt(tasks.indexOf(task));
