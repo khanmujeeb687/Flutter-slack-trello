@@ -63,6 +63,7 @@ dependencies:
 
   flutter_phoenix: ^0.1.0
 
+  flutter_uploader: ^1.2.1
 
 
 
