@@ -32,6 +32,8 @@ class ContactController extends StateControl {
 
   TextEditingController textController = TextEditingController();
 
+  Chat parentChat;
+
   User myUser;
 
   bool _error = false;
@@ -141,7 +143,7 @@ class ContactController extends StateControl {
   }
 
  Future<bool> willPop()async{
-   await _chatsProvider.setSelectedChat(null);
+   await _chatsProvider.setSelectedChat(parentChat);
     return true;
   }
 }

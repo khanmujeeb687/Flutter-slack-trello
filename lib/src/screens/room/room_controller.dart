@@ -62,10 +62,11 @@ class RoomController extends StateControl with WidgetsBindingObserver {
   void newRoomChat(Room room) async {
     final Chat chat = new Chat(id: room.id, room: room, isRoom: true);
     final _provider = Provider.of<ChatsProvider>(context, listen: false);
+    final Chat lastChat=_provider.selectedChat;
     _provider.createRoomIfNotExists(chat);
     _provider.createChatIfNotExists(chat);
     _provider.setSelectedChat(chat);
-    NavigationUtil.replace(context,ContactScreen());
+    NavigationUtil.replace(context,ContactScreen(parentChat: lastChat));
     _loading = false;
     notifyListeners();
   }

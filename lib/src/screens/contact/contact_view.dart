@@ -22,7 +22,8 @@ enum MessagePosition { BEFORE, AFTER }
 class ContactScreen extends StatefulWidget {
   static final String routeName = "/contact";
 
-  ContactScreen();
+  Chat parentChat;
+  ContactScreen({this.parentChat});
 
   @override
   _ContactScreenState createState() => _ContactScreenState();
@@ -38,6 +39,7 @@ class _ContactScreenState extends State<ContactScreen> {
     _contactController = ContactController(
       context: context,
     );
+    _contactController.parentChat=widget.parentChat;
   }
 
   @override
