@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/custom_error.dart';
 import 'package:wively/src/data/models/message.dart';
@@ -34,7 +35,6 @@ class ChatRepository {
     }
   }
 
-  //TODO
   Future<dynamic> sendMessage(String message, String to) async {
     try {
       var body = jsonEncode({'message': message, 'to': to});

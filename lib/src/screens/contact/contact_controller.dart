@@ -92,11 +92,12 @@ class ContactController extends StateControl {
     final user = await CustomSharedPreferences.getMyUser();
     final myId = user.id;
     final selectedChat = Provider.of<ChatsProvider>(context, listen: false).selectedChat;
-    final to = selectedChat.room.id;
+    final to = selectedChat.room==null?selectedChat.user.id:selectedChat.room.id;
     final newMessage = Message(
       chatId: selectedChat.id,
       from: myId,
-      to_room: to,
+      to: selectedChat.room!=null?null:to,
+      to_room:selectedChat.room==null?null:to,
       message: message,
       sendAt: DateTime.now().millisecondsSinceEpoch,
       unreadByMe: false,
@@ -104,7 +105,10 @@ class ContactController extends StateControl {
     );
     textController.text = "";
     await Provider.of<ChatsProvider>(context, listen: false).addMessageToChat(newMessage);
-    await _chatRepository.sendMessageToRoom(message,user.id,selectedChat.room.id);
+    if(!this.selectedChat.isRoom)
+      await _chatRepository.sendMessage(message, this.selectedChat.user.id);
+    else
+      await _chatRepository.sendMessageToRoom(message,user.id,selectedChat.room.id);
     
   }
 

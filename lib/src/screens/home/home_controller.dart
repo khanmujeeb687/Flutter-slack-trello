@@ -147,16 +147,21 @@ class HomeController extends StateControl with WidgetsBindingObserver {
       if(data['message']['from']['_id']==user.id) return;
       Map<String, dynamic> json = data['message'];
       Map<String, dynamic> roomJson = json['room'];
+      Map<String, dynamic> userJson = json['from'];
       Chat chat = Chat.fromJson({
         "_id": json['chatId'],
         "room": roomJson,
+        "user":userJson
       });
       Message message = Message.fromJson(json);
       Provider.of<ChatsProvider>(context, listen: false)
           .createChatAndUserIfNotExists(chat);
       Provider.of<ChatsProvider>(context, listen: false)
           .addMessageToChat(message);
-      await _chatRepository.deleteRoomMessage(message.id,user.id);
+      if(chat.room!=null)
+        await _chatRepository.deleteRoomMessage(message.id,user.id);
+      else
+        await _chatRepository.deleteMessage(message.id);
     });
   }
 

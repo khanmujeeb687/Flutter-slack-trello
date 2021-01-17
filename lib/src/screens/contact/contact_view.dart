@@ -70,12 +70,12 @@ class _ContactScreenState extends State<ContactScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Hero(
-                      tag: _contactController.selectedChat.room.id+'profile',
+                      tag: _contactController.selectedChat.id+'profile',
                       child: Material(
                         color: EColors.transparent,
                         child: CircleAvatar(
                           child: Text(
-                            _contactController.selectedChat.room.roomName[0]
+                            _contactController.selectedChat.room==null?_contactController.selectedChat.user.name[0]:_contactController.selectedChat.room.roomName[0]
                                 .toUpperCase(),
                             style: TextStyle(
                               color: EColors.themeMaroon,
@@ -95,14 +95,14 @@ class _ContactScreenState extends State<ContactScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          _contactController.selectedChat.room.roomName,
+                    _contactController.selectedChat.room==null?_contactController.selectedChat.user.name:_contactController.selectedChat.room.roomName,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
                         Text(
-                          "@${_contactController.selectedChat.room.roomName}",
+                          "@${ _contactController.selectedChat.room==null?_contactController.selectedChat.user.username:_contactController.selectedChat.room.roomName}",
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 10,
@@ -115,7 +115,7 @@ class _ContactScreenState extends State<ContactScreen> {
               ),
               actions: [
                 Hero(
-                  tag: _contactController.selectedChat.room.id,
+                  tag: _contactController.selectedChat.id,
                   child: Material(
                     color: Colors.transparent,
                     child: IconButton(

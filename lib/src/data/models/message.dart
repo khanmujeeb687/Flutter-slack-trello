@@ -30,12 +30,13 @@ class Message {
     chatId = json['chatId'];
     message = json['message'];
     from = json['from']['_id'];
-    to_room = json['room']['_id'];
+    if(json.containsKey('room'))
+      to_room = json['room']['_id'];
     if(json.containsKey('to'))
       to = json['to']['_id'];
     unreadByMe = json['unreadByMe'] ?? true;
     sendAt = json['sendAt'];
-    fromUser = json['fromUserName'];
+    fromUser = json['from']['username'];
   }
 
   Map<String, dynamic> toJson() {
@@ -89,7 +90,7 @@ class Message {
       chatId: this.chatId,
       message: this.message,
       from: this.from,
-      to_room: this.to_room,
+      to_room: this.to_room==null?this.to:this.to_room,
       to: this.to,
       sendAt: this.sendAt,
       unreadByMe: unreadByMe ?? this.unreadByMe,

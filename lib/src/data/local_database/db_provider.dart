@@ -118,7 +118,7 @@ class DBProvider {
       final db = await database;
       final room_chats = await db.rawQuery('''
         SELECT * FROM tb_room_chat
-        WHERE _id = '${chat.room.id}'
+        WHERE _id = '${chat.id}'
       ''');
       if (room_chats.length == 0) {
         await db.insert('tb_room_chat', chat.toLocalDatabaseMap());
@@ -206,6 +206,10 @@ class DBProvider {
 
 
   }
+  //bdb
+  //to 5ffd
+  //from 5ffc
+
 
 
   Future<List<Chat>> getChatsWithMessages() async {
@@ -248,7 +252,7 @@ class DBProvider {
             "_id": map['message_id'],
             "from": map['from_user'],
             "from_username": map['from_username'],
-            "to": map['to_room'],
+            "to_room": map['to_room'],
             "to": map['to_user'],
             "message": map['message'],
             "send_at": map['send_at'],

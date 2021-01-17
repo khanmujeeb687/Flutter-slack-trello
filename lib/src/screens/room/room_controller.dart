@@ -13,34 +13,34 @@ import 'package:wively/src/screens/contact/contact_view.dart';
 import 'package:wively/src/utils/state_control.dart';
 
 class RoomController extends StateControl with WidgetsBindingObserver {
-  RoomRepository _roomRepository =new RoomRepository();
+  RoomRepository _roomRepository = new RoomRepository();
 
   final BuildContext context;
 
   bool _loading = true;
+
   bool get loading => _loading;
 
   bool _error = false;
+
   bool get error => _error;
 
   List<Room> _rooms = [];
+
   List<Room> get rooms => _rooms;
 
-
   Room _room;
+
   Room get room => _room;
 
   ProgressDialog _progressDialog;
 
-  RoomController({
-    @required this.context
-  }) {
+  RoomController({@required this.context}) {
     this.init();
   }
 
   @override
-  void init() {
-  }
+  void init() {}
 
   void getRooms(parentId) async {
     dynamic response = await _roomRepository.getRooms(parentId);
@@ -55,10 +55,8 @@ class RoomController extends StateControl with WidgetsBindingObserver {
     notifyListeners();
   }
 
-
   void newRoomChat(Room room) async {
-
-    final Chat chat=new Chat(id: room.id, room: room);
+    final Chat chat = new Chat(id: room.id, room: room, isRoom: true);
     final _provider = Provider.of<ChatsProvider>(context, listen: false);
     _provider.createRoomIfNotExists(chat);
     _provider.createChatIfNotExists(chat);
@@ -68,24 +66,21 @@ class RoomController extends StateControl with WidgetsBindingObserver {
     notifyListeners();
   }
 
-  void getRoomData(String roomId)async{
-      var response =await _roomRepository.getRoomById(roomId);
-      if (response is CustomError) {
-        _error = true;
-      }
-      if (response is Room) {
-        _room = response;
-      }
-      _loading = false;
-      notifyListeners();
-
+  void getRoomData(String roomId) async {
+    var response = await _roomRepository.getRoomById(roomId);
+    if (response is CustomError) {
+      _error = true;
+    }
+    if (response is Room) {
+      _room = response;
+    }
+    _loading = false;
+    notifyListeners();
   }
 
-  void addNewMember(roomId){
-    Navigator.of(context).pushNamed(AddChatScreen.routeName,arguments: roomId);
+  void addNewMember(roomId) {
+    Navigator.of(context).pushNamed(AddChatScreen.routeName, arguments: roomId);
   }
-
-
 
   Future<bool> _dismissProgressDialog() {
     return _progressDialog.hide();

@@ -13,7 +13,7 @@ class AddChatScreen extends StatefulWidget {
   static final String routeName = '/add-chat';
 
   String roomId;
-  AddChatScreen(this.roomId);
+  AddChatScreen({this.roomId});
 
   @override
   _AddChatScreenState createState() => _AddChatScreenState();
@@ -69,7 +69,12 @@ class _AddChatScreenState extends State<AddChatScreen> {
               children: <Widget>[
                 UserCard(
                   user: user,
-                  onTap:(a)=>{_addChatController.addToThisGroup(widget.roomId,user.name,user.id)},
+                  onTap:(a){
+                    if(widget.roomId!=null)
+                        _addChatController.addToThisGroup(widget.roomId,user.name,user.id);
+                    else
+                      _addChatController.newChat(user);
+                    },
                 ),
               ],
             );

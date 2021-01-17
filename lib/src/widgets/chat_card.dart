@@ -55,12 +55,12 @@ class ChatCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Hero(
-                  tag: chat.room.id+'profile',
+                  tag: chat.id+'profile',
                   child: Material(
                     color: EColors.transparent,
                     child: CircleAvatar(
-                      child: Text(
-                        chat.room.roomName[0].toUpperCase(),
+                      child: chat.isRoom?Icon(Icons.people):Text(
+                        chat.isRoom?chat.room.roomName[0].toUpperCase():chat.user.username[0].toUpperCase(),
                         style: TextStyle(
                           color: EColors.themeMaroon,
                         ),
@@ -88,7 +88,7 @@ class ChatCard extends StatelessWidget {
                                       CrossAxisAlignment.stretch,
                                   children: <Widget>[
                                     Text(
-                                      chat.room.roomName,
+                                      !chat.isRoom?chat.user.name:chat.room.roomName,
                                       style: TextStyle(
                                         color: EColors.themeGrey,
                                         fontSize: 16,

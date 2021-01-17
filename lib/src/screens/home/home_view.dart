@@ -1,3 +1,4 @@
+import 'package:wively/src/screens/add_chat/add_chat_view.dart';
 import 'package:wively/src/screens/home/home_controller.dart';
 import 'package:wively/src/screens/room/create_room.dart';
 import 'package:wively/src/screens/settings/settings_view.dart';
@@ -56,6 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   Navigator.of(context).pushNamed(CreateRoom.routeName);
                 },
+              ),
+              IconButton(
+                icon: Icon(Icons.account_circle),
+                onPressed: _homeController.openAddChatScreen,
               ),
             ],
           ),
