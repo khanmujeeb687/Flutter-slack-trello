@@ -63,130 +63,133 @@ class _ContactScreenState extends State<ContactScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Object>(
-        stream: _contactController.streamController.stream,
-        builder: (context, snapshot) {
-          return Scaffold(
-            appBar: CustomAppBar(
-              title: GestureDetector(
-                onTap: () => _contactController
-                    .openRoom(_contactController.selectedChat.room.id),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Hero(
-                      tag: _contactController.selectedChat.id + 'profile',
-                      child: Material(
-                        color: EColors.transparent,
-                        child: CircleAvatar(
-                          child: Text(
+    return WillPopScope(
+      onWillPop: _contactController.willPop,
+      child: StreamBuilder<Object>(
+          stream: _contactController.streamController.stream,
+          builder: (context, snapshot) {
+            return Scaffold(
+              appBar: CustomAppBar(
+                title: GestureDetector(
+                  onTap: () => _contactController
+                      .openRoom(_contactController.selectedChat.room.id),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Hero(
+                        tag: _contactController.selectedChat.id + 'profile',
+                        child: Material(
+                          color: EColors.transparent,
+                          child: CircleAvatar(
+                            child: Text(
+                              _contactController.selectedChat.room == null
+                                  ? _contactController.selectedChat.user.name[0]
+                                  : _contactController
+                                      .selectedChat.room.roomName[0]
+                                      .toUpperCase(),
+                              style: TextStyle(
+                                color: EColors.themeMaroon,
+                                fontSize: 14,
+                              ),
+                            ),
+                            radius: 16,
+                            backgroundColor: EColors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 7,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
                             _contactController.selectedChat.room == null
-                                ? _contactController.selectedChat.user.name[0]
-                                : _contactController
-                                    .selectedChat.room.roomName[0]
-                                    .toUpperCase(),
+                                ? _contactController.selectedChat.user.name
+                                : _contactController.selectedChat.room.roomName,
                             style: TextStyle(
-                              color: EColors.themeMaroon,
-                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                             ),
                           ),
-                          radius: 16,
-                          backgroundColor: EColors.white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 7,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          _contactController.selectedChat.room == null
-                              ? _contactController.selectedChat.user.name
-                              : _contactController.selectedChat.room.roomName,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                          Text(
+                            "@${_contactController.selectedChat.room == null ? _contactController.selectedChat.user.username : _contactController.selectedChat.room.roomName}",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 10,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "@${_contactController.selectedChat.room == null ? _contactController.selectedChat.user.username : _contactController.selectedChat.room.roomName}",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 10,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              actions:_contactController.selectedChat.isRoom? [
-                  Hero(
-                    tag: _contactController.selectedChat.id,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: IconButton(
-                        icon: Icon(Icons.dashboard),
-                        onPressed: _contactController.openBoard,
+                        ],
                       ),
-                    ),
+                    ],
                   ),
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: _contactController.createChildRoom,
                 ),
-                IconButton(
-                  icon: Icon(Icons.more_vert),
-                  onPressed: _contactController.addRoomScreen,
-                ),
-              ]:[],
-            ),
-            body: SafeArea(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: Scrollbar(
-                        child: ListView.builder(
-                          controller: _contactController.scrollController,
-                          padding: EdgeInsets.only(bottom: 5),
-                          reverse: true,
-                          itemCount:
-                              _contactController.selectedChat.messages.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  left: 10, right: 10, bottom: 0, top: 0),
-                              child: renderMessage(
-                                  context,
-                                  _contactController
-                                      .selectedChat.messages[index],
-                                  index,
-                                  shouldShowNip(index)),
-                            );
-                          },
+                actions:_contactController.selectedChat.isRoom? [
+                    Hero(
+                      tag: _contactController.selectedChat.id,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: IconButton(
+                          icon: Icon(Icons.dashboard),
+                          onPressed: _contactController.openBoard,
                         ),
                       ),
                     ),
-                    TextFieldWithButton(
-                      onSubmit: _contactController.sendMessage,
-                      textEditingController: _contactController.textController,
-                      onEmojiTap: (bool showEmojiKeyboard) {
-                        _contactController.showEmojiKeyboard =
-                            !showEmojiKeyboard;
-                      },
-                      showEmojiKeyboard: _contactController.showEmojiKeyboard,
-                      context: context,
-                    ),
-                  ],
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: _contactController.createChildRoom,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.more_vert),
+                    onPressed: _contactController.addRoomScreen,
+                  ),
+                ]:[],
+              ),
+              body: SafeArea(
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: Scrollbar(
+                          child: ListView.builder(
+                            controller: _contactController.scrollController,
+                            padding: EdgeInsets.only(bottom: 5),
+                            reverse: true,
+                            itemCount:
+                                _contactController.selectedChat.messages.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                    left: 10, right: 10, bottom: 0, top: 0),
+                                child: renderMessage(
+                                    context,
+                                    _contactController
+                                        .selectedChat.messages[index],
+                                    index,
+                                    shouldShowNip(index)),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      TextFieldWithButton(
+                        onSubmit: _contactController.sendMessage,
+                        textEditingController: _contactController.textController,
+                        onEmojiTap: (bool showEmojiKeyboard) {
+                          _contactController.showEmojiKeyboard =
+                              !showEmojiKeyboard;
+                        },
+                        showEmojiKeyboard: _contactController.showEmojiKeyboard,
+                        context: context,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        });
+            );
+          }),
+    );
   }
 
   Widget renderMessage(
@@ -207,9 +210,9 @@ class _ContactScreenState extends State<ContactScreen> {
                 color: Colors.transparent,
                 child: Bubble(
                   radius: Radius.circular(15),
-                  margin: showNip
+                  margin: !showNip
                       ? BubbleEdges.only(
-                          top: 0, left: isMe ? 100 : 0, right: !isMe ? 100 : 0)
+                          top: 2, left: isMe ? 100 : 0, right: !isMe ? 100 : 0)
                       : BubbleEdges.only(
                           top: 10,
                           left: isMe ? 100 : 0,

@@ -136,8 +136,12 @@ class ContactController extends StateControl {
   void dispose() {
     super.dispose();
     textController.dispose();
-    _chatsProvider.setSelectedChat(null);
     scrollController.removeListener(_scrollListener);
     scrollController.dispose();
+  }
+
+ Future<bool> willPop()async{
+   await _chatsProvider.setSelectedChat(null);
+    return true;
   }
 }

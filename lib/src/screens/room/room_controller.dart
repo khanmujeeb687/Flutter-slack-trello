@@ -32,6 +32,8 @@ class RoomController extends StateControl with WidgetsBindingObserver {
 
   Room _room;
 
+  String parentId;
+
   Room get room => _room;
 
   ProgressDialog _progressDialog;
@@ -44,6 +46,7 @@ class RoomController extends StateControl with WidgetsBindingObserver {
   void init() {}
 
   void getRooms(parentId) async {
+    this.parentId=parentId;
     dynamic response = await _roomRepository.getRooms(parentId);
 
     if (response is CustomError) {

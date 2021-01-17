@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/local_database/db_provider.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/screens/home/home_view.dart';
@@ -19,6 +20,7 @@ class AfterLaunchScreen extends StatefulWidget {
 }
 
 class _AfterLaunchScreenState extends State<AfterLaunchScreen> {
+  static bool isInitialized=false;
   void verifyUserLoggedInAndRedirect() async {
     Widget destination = HomeScreen();
     String token = await CustomSharedPreferences.get('token');
@@ -42,7 +44,10 @@ class _AfterLaunchScreenState extends State<AfterLaunchScreen> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<ChatsProvider>(context).updateChats();
+    if(!isInitialized){
+      isInitialized=true;
+      Provider.of<ChatsProvider>(context).updateChats();
+    }
     super.didChangeDependencies();
   }
 
