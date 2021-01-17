@@ -113,7 +113,7 @@ class TaskBoardController extends StateControl {
     tasks.add(prepareTask(map,localId));
     scrollToBottom();
     if(tasks.length>1)
-      listKey.currentState.insertItem(tasks.length-1,duration: Duration(milliseconds: 500));
+      listKey.currentState.insertItem(tasks.length-1,duration: Duration(milliseconds: 300));
     else
       notifyListeners();
   }
