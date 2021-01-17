@@ -2,6 +2,7 @@ import 'package:wively/src/screens/add_chat/add_chat_view.dart';
 import 'package:wively/src/screens/home/home_controller.dart';
 import 'package:wively/src/screens/room/create_room.dart';
 import 'package:wively/src/screens/settings/settings_view.dart';
+import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/widgets/chat_card.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
 import 'package:wively/src/widgets/custom_cupertino_sliver_navigation_bar.dart';
@@ -49,13 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(SettingsScreen.routeName);
+                  NavigationUtil.navigate(context,SettingsScreen());
                 },
               ),
               IconButton(
                 icon: Icon(Icons.supervised_user_circle),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(CreateRoom.routeName);
+                  NavigationUtil.navigate(context,CreateRoom());
                 },
               ),
               IconButton(

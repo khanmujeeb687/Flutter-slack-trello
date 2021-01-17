@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:wively/src/data/models/custom_error.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/repositories/register_repository.dart';
 import 'package:wively/src/screens/home/home_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
+import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +64,7 @@ class RegisterController extends StateControl {
       showAlertDialog(loginResponse.errorMessage);
     } else if (loginResponse is User) {
       await CustomSharedPreferences.setString('user', loginResponse.toString());
-      Navigator.of(context).pushNamedAndRemoveUntil(HomeScreen.routeName, (_) => false);
+      Phoenix.rebirth(context);
     }
     _formSubmitting = false;
     notifyListeners();

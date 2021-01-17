@@ -10,6 +10,7 @@ import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/screen_util.dart';
 
 class AfterLaunchScreen extends StatefulWidget {
@@ -19,16 +20,16 @@ class AfterLaunchScreen extends StatefulWidget {
 
 class _AfterLaunchScreenState extends State<AfterLaunchScreen> {
   void verifyUserLoggedInAndRedirect() async {
-    String routeName = HomeScreen.routeName;
+    Widget destination = HomeScreen();
     String token = await CustomSharedPreferences.get('token');
     if (token == null) {
-      routeName = LoginScreen.routeName;
+      destination = LoginScreen();
     }
     await Firebase.initializeApp();
     Timer.run(() {
       // In case user is already logged in, go to home_screen
       // otherwise, go to login_screen
-      Navigator.of(context).pushReplacementNamed(routeName);
+      NavigationUtil.replace(context, destination);
     });
   }
 
@@ -42,7 +43,6 @@ class _AfterLaunchScreenState extends State<AfterLaunchScreen> {
   @override
   void didChangeDependencies() {
     Provider.of<ChatsProvider>(context).updateChats();
-    Provider.of<ChatsProvider>(context).getCurrentUser();
     super.didChangeDependencies();
   }
 

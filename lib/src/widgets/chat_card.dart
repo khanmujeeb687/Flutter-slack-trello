@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/room_message_controller.dart';
 import 'package:wively/src/values/Colors.dart';
 
@@ -42,7 +43,7 @@ class ChatCard extends StatelessWidget {
           ChatsProvider _chatsProvider =
               Provider.of<ChatsProvider>(context, listen: false);
           _chatsProvider.setSelectedChat(chat);
-          Navigator.of(context).pushNamed(ContactScreen.routeName);
+          NavigationUtil.navigate(context,ContactScreen());
         },
         child: Padding(
           padding: EdgeInsets.only(

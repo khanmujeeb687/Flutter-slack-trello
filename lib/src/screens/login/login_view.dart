@@ -1,4 +1,6 @@
 import 'package:wively/src/screens/login/login_controller.dart';
+import 'package:wively/src/screens/register/register_view.dart';
+import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/my_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -102,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.of(context).pushNamed('/register');
+                            NavigationUtil.navigate(context,RegisterScreen());
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(10),

@@ -13,6 +13,7 @@ import 'package:wively/src/screens/task_board/add_task_view.dart';
 import 'package:wively/src/screens/task_board/task_board_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:wively/src/utils/dates.dart';
+import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -59,7 +60,7 @@ class ContactController extends StateControl {
   }
 
   void addRoomScreen() async {
-    Navigator.of(context).pushNamed(RoomScreen.routeName,arguments: this.selectedChat.room.id);
+    NavigationUtil.navigate(context,RoomScreen(parentId:this.selectedChat.room.id));
   }
 
   initMyUser() async {
@@ -72,7 +73,7 @@ class ContactController extends StateControl {
   }
 
   void openBoard(){
-    Navigator.pushNamed(context, TaskBoardScreen.routeName,arguments: selectedChat.room.id);
+    NavigationUtil.navigate(context,TaskBoardScreen(selectedChat.room.id));
   }
 
   getMyUser() async {
@@ -82,7 +83,7 @@ class ContactController extends StateControl {
   }
   
   openRoom(roomId){
-    Navigator.of(context).pushNamed(RoomInfo.routeName,arguments: RoomInfoArguments(roomId));
+    NavigationUtil.navigate(context,RoomInfo(RoomInfoArguments(roomId)));
   }
 
   sendMessage() async {
@@ -113,7 +114,7 @@ class ContactController extends StateControl {
   }
 
   void createChildRoom() async{
-    Navigator.pushNamed(context, CreateRoom.routeName,arguments: selectedChat.room.id);
+    NavigationUtil.navigate(context,CreateRoom(roomId:selectedChat.room.id));
   }
 
   String getNumberOfUnreadChatsToString() {

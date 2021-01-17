@@ -5,6 +5,7 @@ import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/repositories/login_repository.dart';
 import 'package:wively/src/screens/home/home_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
+import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class LoginController extends StateControl {
     if (loginResponse is CustomError) {
       showAlertDialog(loginResponse.errorMessage);
     } else if (loginResponse is User) {
-      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+      NavigationUtil.replace(context, HomeScreen());
     }
     _formSubmitting = false;
     notifyListeners();

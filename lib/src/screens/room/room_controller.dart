@@ -10,6 +10,7 @@ import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/data/repositories/room_repository.dart';
 import 'package:wively/src/screens/add_chat/add_chat_view.dart';
 import 'package:wively/src/screens/contact/contact_view.dart';
+import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/state_control.dart';
 
 class RoomController extends StateControl with WidgetsBindingObserver {
@@ -61,7 +62,7 @@ class RoomController extends StateControl with WidgetsBindingObserver {
     _provider.createRoomIfNotExists(chat);
     _provider.createChatIfNotExists(chat);
     _provider.setSelectedChat(chat);
-    Navigator.of(context).popAndPushNamed(ContactScreen.routeName);
+    NavigationUtil.replace(context,ContactScreen());
     _loading = false;
     notifyListeners();
   }
@@ -79,7 +80,7 @@ class RoomController extends StateControl with WidgetsBindingObserver {
   }
 
   void addNewMember(roomId) {
-    Navigator.of(context).pushNamed(AddChatScreen.routeName, arguments: roomId);
+    NavigationUtil.navigate(context,AddChatScreen(roomId:roomId));
   }
 
   Future<bool> _dismissProgressDialog() {

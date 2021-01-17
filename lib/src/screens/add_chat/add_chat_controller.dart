@@ -12,6 +12,7 @@ import 'package:wively/src/data/repositories/room_repository.dart';
 import 'package:wively/src/data/repositories/user_repository.dart';
 import 'package:wively/src/screens/contact/contact_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
+import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/room_message_controller.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/cupertino.dart';
@@ -74,7 +75,6 @@ class AddChatController extends StateControl {
 
   void newChat(User user) async {
 
-    _showProgressDialog();
 
     final Chat chat = Chat(
       id: user.chatId,
@@ -85,8 +85,7 @@ class AddChatController extends StateControl {
     _provider.createUserIfNotExists(chat.user);
     _provider.createChatIfNotExists(chat);
     _provider.setSelectedChat(chat);
-    Navigator.of(context).popAndPushNamed(ContactScreen.routeName);
-    _dismissProgressDialog();
+    NavigationUtil.replace(context,ContactScreen());
     Provider.of<ChatsProvider>(context, listen: false).setSelectedChat(chat);
     _loading = false;
     notifyListeners();

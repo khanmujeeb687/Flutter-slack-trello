@@ -170,10 +170,8 @@ class _TaskBoardViewState extends State<TaskBoardScreen> {
                                                   AnimatedContainer(
                                                     width: _buttonWidth,
                                                     duration: Duration(milliseconds: 300),
-                                                    child: ESquareButton("Add",onPressed: (){
-                                                      _taskBoardController.addNewTask(false);
-                                                    }),
-                                                  )
+                                                    child: ESquareButton("Add",onPressed:_taskBoardController.addNewTask)
+                                                    ),
                                                 ],
                                               ),
                                             ),

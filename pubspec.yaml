@@ -61,6 +61,8 @@ dependencies:
 
   objectid: ^1.1.1
 
+  flutter_phoenix: ^0.1.0
+
 
 
 

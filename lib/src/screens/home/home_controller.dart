@@ -14,7 +14,9 @@ import 'package:wively/src/screens/add_chat/add_chat_view.dart';
 import 'package:wively/src/screens/contact/contact_view.dart';
 import 'package:wively/src/screens/login/login_view.dart';
 import 'package:wively/src/screens/room/room_view.dart';
+import 'package:wively/src/screens/settings/settings_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
+import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/socket_controller.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/material.dart';
@@ -202,18 +204,19 @@ class HomeController extends StateControl with WidgetsBindingObserver {
 
   void initProvider() {
     _chatsProvider = Provider.of<ChatsProvider>(context);
+    _chatsProvider.getCurrentUser();
   }
 
   void openAddChatScreen() async {
-    Navigator.of(context).pushNamed(AddChatScreen.routeName);
+    NavigationUtil.navigate(context,AddChatScreen());
   }
 
   void addRoomScreen() async {
-    Navigator.of(context).pushNamed(RoomScreen.routeName);
+    NavigationUtil.navigate(context,RoomScreen());
   }
 
   void openSettings() async {
-    Navigator.of(context).pushNamed('/settings');
+    NavigationUtil.navigate(context,SettingsScreen());
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:wively/src/data/models/custom_error.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
@@ -9,6 +10,7 @@ import 'package:wively/src/data/repositories/user_repository.dart';
 import 'package:wively/src/screens/home/home_view.dart';
 import 'package:wively/src/screens/login/login_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
+import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/socket_controller.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/cupertino.dart';
@@ -138,9 +140,8 @@ class SettingsController extends StateControl {
     _userRepository.saveUserFcmToken(null);
     await CustomSharedPreferences.remove('user');
     await CustomSharedPreferences.remove('token');
-    Provider.of<ChatsProvider>(context, listen: false).clearDatabase();
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(LoginScreen.routeName, (_) => false);
+    await  Provider.of<ChatsProvider>(context, listen: false).clearDatabase();
+    Phoenix.rebirth(context);
   }
 
   @override

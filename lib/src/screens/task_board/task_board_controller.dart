@@ -10,6 +10,7 @@ import 'package:wively/src/data/repositories/room_repository.dart';
 import 'package:wively/src/data/repositories/task_board.repository.dart';
 import 'package:wively/src/screens/task_board/add_task_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
+import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/screen_util.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/cupertino.dart';
@@ -88,8 +89,11 @@ class TaskBoardController extends StateControl {
   }
 
   addTask()async{
-   await Navigator.pushNamed(context, AddTask.routeName,arguments: room);
-   this.fetchBoard(room.id);
+   Map<String ,dynamic>data =await  NavigationUtil.navigate(context,AddTask(room));
+    if(data==null){
+  }else{
+    addNewTask(passedData: data);
+  }
   }
 
 
@@ -108,40 +112,34 @@ class TaskBoardController extends StateControl {
   addTaskLocally(Map<String,dynamic> map,String localId)async{
     tasks.add(prepareTask(map,localId));
     scrollToBottom();
-    listKey.currentState.insertItem(tasks.length-1,duration: Duration(milliseconds: 500));
+    if(tasks.length>1)
+      listKey.currentState.insertItem(tasks.length-1,duration: Duration(milliseconds: 500));
+    else
+      notifyListeners();
   }
 
   scrollToBottom()=> scrollController.animateTo(scrollController.position.maxScrollExtent+100,duration: Duration(milliseconds: 300),curve: Curves.easeIn);
 
 
-  addNewTask(bool goBack)async{
-    if(key.currentState.validate()){
+  addNewTask({Map<String ,dynamic> passedData})async{
+    if(key.currentState.validate() || passedData!=null){
       key.currentState.reset();
-      if(goBack)
-        LoaderDialogManager.showLoader(context);
-      User user =await CustomSharedPreferences.getMyUser();
-      Map<String ,dynamic> newTaskData={
+      Map<String ,dynamic> newTaskData=passedData==null?{
         'desc':desc,
         'title':title,
         'taskBoardId':room.taskBoardId,
         'assignedTo':selectedUser,
-        'createdBy':user.id,
+        'createdBy':_provider.currentUser.id,
         'roomId':room.id,
-      };
+      }:passedData;
       String localObjectId=getLocalIdForLocaltask();
-      if(!goBack)
-        addTaskLocally(newTaskData,localObjectId);
+      addTaskLocally(newTaskData,localObjectId);
       var data =await _taskBoardRepository.createNewTask(newTaskData);
       if(data is Task){
-        if(goBack)
-          Navigator.pop(context);
-        else
           addIdToNewTask(data,localObjectId);
       }else{
         Fluttertoast.showToast(msg: 'Some error occurred');
       }
-      if(goBack)
-        LoaderDialogManager.hideLoader();
     }
   }
 
@@ -186,4 +184,19 @@ class TaskBoardController extends StateControl {
   bool isLocalObjectId(String id){
     return id.contains('__wively');
   }
+
+
+  void backWithTask(){
+    if(key.currentState.validate()){
+      Navigator.pop(context,{
+        'desc':desc,
+        'title':title,
+        'taskBoardId':room.taskBoardId,
+        'assignedTo':selectedUser,
+        'createdBy':_provider.currentUser.id,
+        'roomId':room.id,
+      });
+    }
+    }
+
 }
