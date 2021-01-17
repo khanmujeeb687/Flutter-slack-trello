@@ -101,12 +101,19 @@ class _TaskBoardViewState extends State<TaskBoardScreen> {
                                                       ),)
                                                   );
                                                 }
-                                                return ListView.builder(
-                                                  physics: ScrollPhysics(),
+                                               return AnimatedList(
+                                                 key: _taskBoardController.listKey,
+                                                 initialItemCount: _taskBoardController.tasks.length,
                                                   shrinkWrap: true,
-                                                  itemCount: _taskBoardController.tasks.length,
-                                                  itemBuilder: (context,index){
-                                                    return _card(_taskBoardController.tasks[index]);
+                                                  physics: ScrollPhysics(),
+                                                  itemBuilder: (context,index,animation){
+                                                    return SlideTransition(
+                                                      position: animation.drive(new Tween(
+                                                        begin: const Offset(-1,0),
+                                                        end: Offset.zero,
+                                                      )),
+                                                      child: _card(_taskBoardController.tasks[index])
+                                                    );
                                                   },
                                                 );
                                               }(),

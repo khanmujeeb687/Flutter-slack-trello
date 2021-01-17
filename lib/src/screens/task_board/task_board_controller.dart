@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:objectid/objectid.dart';
 import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/task.dart';
 import 'package:wively/src/data/models/user.dart';
@@ -9,6 +10,7 @@ import 'package:wively/src/data/repositories/room_repository.dart';
 import 'package:wively/src/data/repositories/task_board.repository.dart';
 import 'package:wively/src/screens/task_board/add_task_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
+import 'package:wively/src/utils/screen_util.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,8 @@ class TaskBoardController extends StateControl {
   ChatsProvider _provider;
 
   ScrollController scrollController=new ScrollController();
+  GlobalKey<AnimatedListState> listKey=new GlobalKey<AnimatedListState>();
+
 
   bool loading=true;
 
@@ -66,7 +70,8 @@ class TaskBoardController extends StateControl {
       await getRoom(roomId);
     var data=await _taskBoardRepository.getAllTasks(room.taskBoardId);
     if(data is List<Task>){
-      tasks=data;
+      tasks.clear();
+      tasks.addAll(data);
     }
     loading=false;
     notifyListeners();
@@ -93,13 +98,17 @@ class TaskBoardController extends StateControl {
    notifyListeners();
   }
 
-
-  addTaskLocally(Map<String,dynamic> map)async{
+  Task prepareTask(Map<String,dynamic> map,localId){
     map['createdBy']=_provider.currentUser.toJson();
     map['status']='not_done';
-    tasks.add(Task.fromJson(map));
-    notifyListeners();
+    map['_id']=localId;
+    return Task.fromJson(map);
+  }
+
+  addTaskLocally(Map<String,dynamic> map,String localId)async{
+    tasks.add(prepareTask(map,localId));
     scrollToBottom();
+    listKey.currentState.insertItem(tasks.length-1,duration: Duration(milliseconds: 500));
   }
 
   scrollToBottom()=> scrollController.animateTo(scrollController.position.maxScrollExtent+100,duration: Duration(milliseconds: 300),curve: Curves.easeIn);
@@ -119,13 +128,15 @@ class TaskBoardController extends StateControl {
         'createdBy':user.id,
         'roomId':room.id,
       };
-      addTaskLocally(newTaskData);
+      String localObjectId=getLocalIdForLocaltask();
+      if(!goBack)
+        addTaskLocally(newTaskData,localObjectId);
       var data =await _taskBoardRepository.createNewTask(newTaskData);
       if(data is Task){
         if(goBack)
           Navigator.pop(context);
         else
-          fetchBoard(room.id);
+          addIdToNewTask(data,localObjectId);
       }else{
         Fluttertoast.showToast(msg: 'Some error occurred');
       }
@@ -136,16 +147,16 @@ class TaskBoardController extends StateControl {
 
 
   updateTask(Task task,status) async{
-    if(task.id==null) return Navigator.pop(context);
+    if(isLocalObjectId(task.id)) return Navigator.pop(context);
     _taskBoardRepository.editTask(task.id,status);
     Navigator.pop(context);
-    tasks.removeAt(tasks.indexOf(task));
-    task.status=status;
-    tasks.insert(0, task);
+    int index=tasks.indexOf(task);
+    tasks[index].status=status;
     notifyListeners();
   }
 
   changeStatus(Task task){
+    ScreenUtil.dismissKeyBoard();
     showDialog(
       context: context,
       builder: (context){
@@ -161,5 +172,18 @@ class TaskBoardController extends StateControl {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void addIdToNewTask(Task data,String id) {
+    int index = tasks.indexOf(tasks.where((element) => element.id==id).first);
+    tasks[index].id=data.id;
+  }
+
+  String getLocalIdForLocaltask(){
+    return  ObjectId().hexString+'__wively';
+  }
+
+  bool isLocalObjectId(String id){
+    return id.contains('__wively');
   }
 }

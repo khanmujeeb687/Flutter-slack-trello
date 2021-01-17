@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 
 class ScreenUtil{
@@ -13,4 +14,8 @@ class ScreenUtil{
   static taskBoardListHeight(BuildContext context){
    return ScreenUtil.height(context)-ScreenUtil.appBarHeight-200;
   }
+
+
+  static void dismissKeyBoard()=>   SystemChannels.textInput.invokeMethod('TextInput.hide');
+
 }
