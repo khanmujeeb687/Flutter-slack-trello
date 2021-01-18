@@ -9,19 +9,19 @@ import 'package:flutter_uploader/flutter_uploader.dart';
 enum MediaType { Image, Video, Document }
 
 class UploadService {
-  File file;
-  MediaType fileType;
+  File _file;
+  MediaType _fileType;
 
-  String filename;
-  String savedDir;
-  String tag;
+  String _filename;
+  String _savedDir;
+  String _tag;
 
   UploadService(File file, String tag, MediaType mediaType) {
-    this.file = file;
-    this.filename = basename(file.path);
-    this.savedDir = dirname(file.path);
-    this.fileType = mediaType;
-    this.tag = tag;
+    this._file = file;
+    this._filename = basename(file.path);
+    this._savedDir = dirname(file.path);
+    this._fileType = mediaType;
+    this._tag = tag;
   }
 
   FlutterUploader _uploader = FlutterUploader();
@@ -36,7 +36,7 @@ class UploadService {
     return "https://foodsfiesta.com/darwdawguploads/uploadfile.php";
   }
 
-  Future<void> getStarted(
+  Future<void> _getStarted(
       Function(String error) taskFailed,
       Function(String fileUrl) taskSuccess,
       Function(UploadTaskProgress progress) onProgress) async {
@@ -46,7 +46,7 @@ class UploadService {
     });
     _resultSubscription = _uploader.result.listen((result) {
       if (result.status.value == 3) {
-        taskSuccess(_getFileUrl(filename));
+        taskSuccess(_getFileUrl(_filename));
       } else if (result.status.value == 5 || result.status.value == 4) {
         taskFailed('Upload failed');
       }
@@ -60,19 +60,19 @@ class UploadService {
       Function(String error) taskFailed,
       Function(String fileUrl) taskSuccess,
       Function(UploadTaskProgress progress) onProgress) async {
-    await getStarted(taskFailed,taskSuccess,onProgress);
+    await _getStarted(taskFailed,taskSuccess,onProgress);
     var url = _uploadUrl();
     var fileItem = FileItem(
-      filename: filename,
-      savedDir: savedDir,
-      fieldname: fileType.toString(),
+      filename: _filename,
+      savedDir: _savedDir,
+      fieldname: 'video',
     );
     var taskId = await _uploader.enqueue(
       url: url,
       data: {"name": "john"},
       files: [fileItem],
       method: UploadMethod.POST,
-      tag: tag,
+      tag: _tag,
       showNotification: true,
     );
     return taskId;
