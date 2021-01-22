@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:emoji_picker/emoji_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/values/constants.dart';
 
 class TextFieldWithButton extends StatelessWidget {
   final TextEditingController textEditingController;
   final Function onSubmit;
+  final Function onFileSelectPress;
   final Function onEmojiTap;
   final bool showEmojiKeyboard;
   final BuildContext context;
@@ -16,9 +18,11 @@ class TextFieldWithButton extends StatelessWidget {
     @required this.context,
     @required this.textEditingController,
     @required this.onSubmit,
+    @required this.onFileSelectPress,
     this.onEmojiTap,
     this.showEmojiKeyboard = false,
   });
+
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +102,13 @@ class TextFieldWithButton extends StatelessWidget {
                                   border: InputBorder.none,
                                 ),
                               ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: onFileSelectPress,
+                            child: Icon(
+                              Icons.attach_file,
+                              color: EColors.themeGrey,
                             ),
                           ),
                         ],

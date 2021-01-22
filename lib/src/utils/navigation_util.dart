@@ -26,4 +26,9 @@ class NavigationUtil{
   static goBack(context)async{
     return Navigator.pop(context);
   }
+
+
+  static openImageEditor(context) {
+    // return NavigationUtil.navigate(context, ImageEditorPro());
+  }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/models/room.dart';
@@ -13,10 +14,12 @@ import 'package:wively/src/screens/task_board/add_task_view.dart';
 import 'package:wively/src/screens/task_board/task_board_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:wively/src/utils/dates.dart';
+import 'package:wively/src/utils/file_util.dart';
 import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:wively/src/widgets/select_file_sheet.dart';
 
 class ContactController extends StateControl {
   BuildContext context;
@@ -28,6 +31,7 @@ class ContactController extends StateControl {
   ChatsProvider _chatsProvider;
 
   Chat get selectedChat => _chatsProvider.selectedChat;
+
   List<Chat> get chats => _chatsProvider.chats;
 
   TextEditingController textController = TextEditingController();
@@ -37,12 +41,15 @@ class ContactController extends StateControl {
   User myUser;
 
   bool _error = false;
+
   bool get error => _error;
 
   bool _loading = true;
+
   bool get loading => _loading;
-  
+
   bool _showEmojiKeyboard = false;
+
   bool get showEmojiKeyboard => _showEmojiKeyboard;
 
   set showEmojiKeyboard(bool showEmojiKeyboard) {
@@ -62,7 +69,8 @@ class ContactController extends StateControl {
   }
 
   void addRoomScreen() async {
-    NavigationUtil.navigate(context,RoomScreen(parentId:this.selectedChat.room.id));
+    NavigationUtil.navigate(
+        context, RoomScreen(parentId: this.selectedChat.room.id));
   }
 
   initMyUser() async {
@@ -74,8 +82,8 @@ class ContactController extends StateControl {
     _chatsProvider = Provider.of<ChatsProvider>(context);
   }
 
-  void openBoard(){
-    NavigationUtil.navigate(context,TaskBoardScreen(selectedChat.room.id));
+  void openBoard() {
+    NavigationUtil.navigate(context, TaskBoardScreen(selectedChat.room.id));
   }
 
   getMyUser() async {
@@ -83,9 +91,9 @@ class ContactController extends StateControl {
     final userJson = jsonDecode(userString);
     return User.fromJson(userJson);
   }
-  
-  openRoom(roomId){
-    NavigationUtil.navigate(context,RoomInfo(RoomInfoArguments(roomId)));
+
+  openRoom(roomId) {
+    NavigationUtil.navigate(context, RoomInfo(RoomInfoArguments(roomId)));
   }
 
   sendMessage() async {
@@ -94,29 +102,31 @@ class ContactController extends StateControl {
     if (message.length == 0) return;
     final user = await CustomSharedPreferences.getMyUser();
     final myId = user.id;
-    final selectedChat = Provider.of<ChatsProvider>(context, listen: false).selectedChat;
-    final to = selectedChat.room==null?selectedChat.user.id:selectedChat.room.id;
+    final selectedChat =
+        Provider.of<ChatsProvider>(context, listen: false).selectedChat;
+    final to =
+        selectedChat.room == null ? selectedChat.user.id : selectedChat.room.id;
     final newMessage = Message(
-      chatId: selectedChat.id,
-      from: myId,
-      to: selectedChat.room!=null?null:to,
-      to_room:selectedChat.room==null?null:to,
-      message: message,
-      sendAt: DateTime.now().millisecondsSinceEpoch,
-      unreadByMe: false,
-      fromUser: myUser.username
-    );
+        chatId: selectedChat.id,
+        from: myId,
+        to: selectedChat.room != null ? null : to,
+        to_room: selectedChat.room == null ? null : to,
+        message: message,
+        sendAt: DateTime.now().millisecondsSinceEpoch,
+        unreadByMe: false,
+        fromUser: myUser.username);
     textController.text = "";
-    await Provider.of<ChatsProvider>(context, listen: false).addMessageToChat(newMessage);
-    if(!this.selectedChat.isRoom)
+    await Provider.of<ChatsProvider>(context, listen: false)
+        .addMessageToChat(newMessage);
+    if (!this.selectedChat.isRoom)
       await _chatRepository.sendMessage(message, this.selectedChat.user.id);
     else
-      await _chatRepository.sendMessageToRoom(message,user.id,selectedChat.room.id);
-    
+      await _chatRepository.sendMessageToRoom(
+          message, user.id, selectedChat.room.id);
   }
 
-  void createChildRoom() async{
-    NavigationUtil.navigate(context,CreateRoom(roomId:selectedChat.room.id));
+  void createChildRoom() async {
+    NavigationUtil.navigate(context, CreateRoom(roomId: selectedChat.room.id));
   }
 
   String getNumberOfUnreadChatsToString() {
@@ -142,8 +152,27 @@ class ContactController extends StateControl {
     scrollController.dispose();
   }
 
- Future<bool> willPop()async{
-   await _chatsProvider.setSelectedChat(parentChat);
+  Future<bool> willPop() async {
+    await _chatsProvider.setSelectedChat(parentChat);
     return true;
+  }
+
+  showSelectFile() async {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(26), topLeft: Radius.circular(26)),
+        ),
+        context: context,
+        isDismissible: false,
+        isScrollControlled: true,
+        builder: (context) {
+          return SelectFile(onSelectFilePress);
+        });
+  }
+
+  onSelectFilePress(int index) async{
+    NavigationUtil.goBack(context);
+    NavigationUtil.openImageEditor(context);
   }
 }

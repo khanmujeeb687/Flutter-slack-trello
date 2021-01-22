@@ -11,6 +11,8 @@ class Message {
   int sendAt;
   bool unreadByMe;
   String fromUser;
+  String fileUrls;
+  String fileUploadState;
 
   Message({
     this.localId,
@@ -22,7 +24,9 @@ class Message {
     this.to,
     this.sendAt,
     this.unreadByMe,
-    this.fromUser
+    this.fromUser,
+    this.fileUrls,
+    this.fileUploadState
   });
 
   Message.fromJson(Map<String, dynamic> json) {
@@ -37,6 +41,7 @@ class Message {
     unreadByMe = json['unreadByMe'] ?? true;
     sendAt = json['sendAt'];
     fromUser = json['from']['username'];
+    fileUrls = json['fileUrls'];
   }
 
   Map<String, dynamic> toJson() {
@@ -49,6 +54,7 @@ class Message {
     json['to'] = to;
     json['sendAt'] = sendAt;
     json['fromUserName'] = fromUser;
+    json['fileUrls'] = fileUrls;
     return json;
   }
 
@@ -63,6 +69,8 @@ class Message {
     to_room = json['to_room'];
     sendAt = json['send_at'];
     unreadByMe = json['unread_by_me'] == 1;
+    fileUrls = json['file_urls'];
+    fileUploadState = json['file_upload_state'];
   }
 
   Map<String, dynamic> toLocalDatabaseMap() {
@@ -76,6 +84,8 @@ class Message {
     map['to_room'] = to_room;
     map['send_at'] = sendAt;
     map['unread_by_me'] = unreadByMe ?? false;
+    map['file_urls'] = fileUrls;
+    map['file_upload_state'] = fileUploadState;
     return map;
   }
 
@@ -94,7 +104,9 @@ class Message {
       to: this.to,
       sendAt: this.sendAt,
       unreadByMe: unreadByMe ?? this.unreadByMe,
-      fromUser: this.fromUser
+      fromUser: this.fromUser,
+      fileUrls: this.fileUrls,
+      fileUploadState: this.fileUploadState
     );
   }
 

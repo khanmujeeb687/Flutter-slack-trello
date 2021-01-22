@@ -136,6 +136,8 @@ class DBProvider {
       SELECT tb_message.id_message,
              tb_message._id,
              tb_message.from_user,
+             tb_message.file_urls,
+             tb_message.file_upload_state,
              tb_message.to_room,
              tb_message.from_username,
              tb_message.to_user,
@@ -173,6 +175,8 @@ class DBProvider {
              tb_message.from_username,
              tb_message.to_room,
              tb_message.to_user,
+             tb_message.file_urls,
+             tb_message.file_upload_state,
              tb_message.message,
              tb_message.send_at,
              tb_message.unread_by_me
@@ -225,6 +229,8 @@ class DBProvider {
              tb_message.id_message,
              tb_message._id as message_id,
              tb_message.from_user,
+             tb_message.file_urls,
+             tb_message.file_upload_state,
              tb_message.from_username,
              tb_message.to_room,
              tb_message.to_user,
@@ -257,6 +263,8 @@ class DBProvider {
             "message": map['message'],
             "send_at": map['send_at'],
             "unread_by_me": map['unread_by_me'],
+            "file_urls": map['file_urls'],
+            "file_upload_state": map['file_upload_state'],
           });
           chat.messages.add(message);
 

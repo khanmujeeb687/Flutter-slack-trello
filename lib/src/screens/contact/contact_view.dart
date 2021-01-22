@@ -10,6 +10,7 @@ import 'package:wively/src/utils/dates.dart';
 import 'package:wively/src/utils/room_message_controller.dart';
 import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
+import 'package:wively/src/widgets/image_message.dart';
 import 'package:wively/src/widgets/text_field_with_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -176,6 +177,7 @@ class _ContactScreenState extends State<ContactScreen> {
                         ),
                       ),
                       TextFieldWithButton(
+                        onFileSelectPress: _contactController.showSelectFile,
                         onSubmit: _contactController.sendMessage,
                         textEditingController: _contactController.textController,
                         onEmojiTap: (bool showEmojiKeyboard) {
@@ -224,12 +226,13 @@ class _ContactScreenState extends State<ContactScreen> {
                       ? (isMe ? BubbleNip.rightTop : BubbleNip.leftTop)
                       : null,
                   color: EColors.themePink.withOpacity(0.5),
-                  child: Column(
+                  child:Column(
                     crossAxisAlignment: isMe
                         ? CrossAxisAlignment.end
                         : CrossAxisAlignment.start,
                     children: [
                       renderUserName(message, isMe),
+                      ImageMessage(message),
                       Text(
                         message.message,
                         style: TextStyle(
@@ -242,39 +245,6 @@ class _ContactScreenState extends State<ContactScreen> {
                     ],
                   ),
                 ),
-
-                // child: Row(
-                //   mainAxisAlignment: message.from == _contactController.myUser.id
-                //       ? MainAxisAlignment.end
-                //       : MainAxisAlignment.start,
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   children: <Widget>[
-                //     renderMessageSendAt(message, MessagePosition.BEFORE),
-                //     Container(
-                //       constraints: BoxConstraints(
-                //           maxWidth: MediaQuery.of(context).size.width * 0.75),
-                //       decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(30),
-                //         color: message.from == _contactController.myUser.id
-                //             ? Colors.blue
-                //             : Color(0xFFEEEEEE),
-                //       ),
-                //       child: Padding(
-                //         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                //         child: Text(
-                //           message.message,
-                //           style: TextStyle(
-                //             color: message.from == _contactController.myUser.id
-                //                 ? Colors.white
-                //                 : Colors.black,
-                //             fontSize: 14.5,
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //     renderMessageSendAt(message, MessagePosition.AFTER),
-                //   ],
-                // ),
               ),
       ],
     );

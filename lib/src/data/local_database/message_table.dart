@@ -13,6 +13,8 @@ class MessageTable {
             from_user text not null,
             to_room text,
             to_user text,
+            file_urls text,
+            file_upload_state text,
             send_at int not null,
             unread_by_me bool default 1,
             constraint tb_message_chat_id_fk foreign key (chat_id) references tb_room_chat (_id),

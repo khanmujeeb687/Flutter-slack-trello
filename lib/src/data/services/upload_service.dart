@@ -16,6 +16,8 @@ class UploadService {
   String _savedDir;
   String _tag;
 
+
+
   UploadService(File file, String tag, MediaType mediaType) {
     this._file = file;
     this._filename = basename(file.path);
@@ -24,17 +26,29 @@ class UploadService {
     this._tag = tag;
   }
 
+
+
+
   FlutterUploader _uploader = FlutterUploader();
   StreamSubscription _progressSubscription;
   StreamSubscription _resultSubscription;
+
+
+
 
   String _getFileUrl(filename) {
     return "https://foodsfiesta.com/darwdawguploads/uploads/" + filename;
   }
 
+
+
+
   String _uploadUrl() {
     return "https://foodsfiesta.com/darwdawguploads/uploadfile.php";
   }
+
+
+
 
   Future<void> _getStarted(
       Function(String error) taskFailed,
@@ -55,6 +69,9 @@ class UploadService {
       taskFailed(exp.toString());
     });
   }
+
+
+
 
   Future<String> uploadFile(
       Function(String error) taskFailed,
@@ -78,9 +95,12 @@ class UploadService {
     return taskId;
   }
 
+
+
   Future cancelUpload(String id) async {
     await _uploader.cancel(taskId: id);
   }
+
 
   removeSubscriptions() {
     _progressSubscription?.cancel();
