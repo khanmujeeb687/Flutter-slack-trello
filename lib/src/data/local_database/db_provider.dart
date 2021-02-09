@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/local_database/message_table.dart';
 import 'package:wively/src/data/local_database/room_table.dart';
 import 'package:wively/src/data/local_database/user_table.dart';
 import 'package:wively/src/data/models/chat.dart';
+import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/user.dart';
@@ -16,6 +18,7 @@ import 'chat_table.dart';
 
 class DBProvider {
   DBProvider._();
+
   static final DBProvider db = DBProvider._();
 
   static Database _database;
@@ -27,7 +30,6 @@ class DBProvider {
     _database = await _open();
     return _database;
   }
-  
 
   Future _open() async {
     print("creating db");
@@ -86,6 +88,7 @@ class DBProvider {
       return user;
     }
   }
+
   Future<Room> createRoom(Room room) async {
     try {
       final db = await database;
@@ -166,7 +169,8 @@ class DBProvider {
     ''');
   }
 
-  Future<List<Message>> getChatMessagesWithOffset(String chatId, int localMessageId) async {
+  Future<List<Message>> getChatMessagesWithOffset(
+      String chatId, int localMessageId) async {
     final db = await database;
     final maps = await db.rawQuery('''
       SELECT tb_message.id_message,
@@ -200,21 +204,17 @@ class DBProvider {
     return id;
   }
 
-
-  void testAQuery()async{
+  void testAQuery() async {
     final db = await database;
-    final maps=await db.rawQuery('''
+    final maps = await db.rawQuery('''
     SELECT * FROM tb_room_chat
     ''');
     Fluttertoast.showToast(msg: maps.toString());
-
-
   }
+
   //bdb
   //to 5ffd
   //from 5ffc
-
-
 
   Future<List<Chat>> getChatsWithMessages() async {
     final db = await database;
@@ -255,25 +255,41 @@ class DBProvider {
         }
         final chat = chats.firstWhere((chat) => chat.id == map['_id']);
         final message = Message.fromLocalDatabaseMap({
-            "_id": map['message_id'],
-            "from": map['from_user'],
-            "from_username": map['from_username'],
-            "to_room": map['to_room'],
-            "to": map['to_user'],
-            "message": map['message'],
-            "send_at": map['send_at'],
-            "unread_by_me": map['unread_by_me'],
-            "file_urls": map['file_urls'],
-            "file_upload_state": map['file_upload_state'],
-          });
-          chat.messages.add(message);
-
+          "_id": map['message_id'],
+          "from": map['from_user'],
+          "from_username": map['from_username'],
+          "to_room": map['to_room'],
+          "to": map['to_user'],
+          "message": map['message'],
+          "send_at": map['send_at'],
+          "unread_by_me": map['unread_by_me'],
+          "file_urls": map['file_urls'],
+          "file_upload_state": map['file_upload_state'],
+        });
+        chat.messages.add(message);
       });
 
       return chats;
     }
 
     return [];
+  }
+
+  Future<void> changeMessageStatus(int messageId, EFileState fileState) async {
+    final db = await database;
+   await db.rawQuery('''
+    UPDATE tb_message
+     SET file_upload_state= ?
+      WHERE id_message= ?
+        ''',[EnumToString.convertToString(fileState, camelCase: true),messageId]);
+  }
+
+
+  Future<void> setAllUnSentFiles() async {
+    final db = await database;
+   await db.rawQuery('''
+     UPDATE tb_message SET file_upload_state = ? WHERE file_upload_state = ?
+        ''',[EnumToString.convertToString(EFileState.unsent, camelCase: true),EnumToString.convertToString(EFileState.sending,camelCase: true)]);
   }
 
   Future<void> clearDatabase() async {
@@ -283,5 +299,4 @@ class DBProvider {
     await db.rawQuery("DELETE FROM tb_user");
     await db.rawQuery("DELETE FROM tb_room");
   }
-
 }

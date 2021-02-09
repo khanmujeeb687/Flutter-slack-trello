@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/utils/screen_util.dart';
 import 'package:wively/src/values/Colors.dart';
 
 
 
 class SelectFile extends StatefulWidget {
-  Function(int index) onPress;
+  Function(ESelectedFileType selectedFileType) onPress;
   SelectFile(this.onPress);
   @override
   _SelectFileState createState() => _SelectFileState();
@@ -27,39 +28,45 @@ class _SelectFileState extends State<SelectFile> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              IconButton(
-                color: EColors.themePink,
-                icon: Icon(Icons.image,size: 50),
-                onPressed: ()=>onPress(0),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    child: Icon(Icons.image,size: 50,color: EColors.themePink),
+                    onTap: ()=>onPress(ESelectedFileType.Image),
+                  ),
+                  Text("Image",style:TextStyle(color:EColors.themeGrey))
+                ],
               ),
-              SizedBox(width: 50,),
-              IconButton(
-                color: EColors.themePink,
-                icon: Icon(Icons.video_collection,size: 50,),
-                onPressed: ()=>onPress(1),
-              ),
+              // SizedBox(width: 50,),
+              // IconButton(
+              //   color: EColors.themePink,
+              //   icon: Icon(Icons.video_collection,size: 50,),
+              //   onPressed: ()=>onPress(1),
+              // ),
             ],
           ),
-          SizedBox(height: 50,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-
-            children: [
-              IconButton(
-                color: EColors.themePink,
-                icon: Icon(Icons.file_copy_sharp,size: 50,),
-                onPressed: ()=>onPress(2),
-              ),
-              SizedBox(width: 50,),
-              IconButton(
-                color: EColors.themePink,
-                icon: Icon(Icons.contacts,size: 50,),
-                onPressed: ()=>onPress(3),
-              ),
-            ],
-          ),
+          // SizedBox(height: 50,),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //
+          //   children: [
+          //     IconButton(
+          //       color: EColors.themePink,
+          //       icon: Icon(Icons.file_copy_sharp,size: 50,),
+          //       onPressed: ()=>onPress(2),
+          //     ),
+          //     SizedBox(width: 50,),
+          //     IconButton(
+          //       color: EColors.themePink,
+          //       icon: Icon(Icons.contacts,size: 50,),
+          //       onPressed: ()=>onPress(3),
+          //     ),
+          //   ],
+          // ),
 
 
         ],
@@ -67,7 +74,7 @@ class _SelectFileState extends State<SelectFile> {
     );
   }
 
-  void onPress(int index) {
-    widget.onPress(index);
+  void onPress(ESelectedFileType selectedFileType) {
+    widget.onPress(selectedFileType);
   }
 }

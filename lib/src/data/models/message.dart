@@ -1,4 +1,7 @@
 
+import 'package:enum_to_string/enum_to_string.dart';
+import 'package:wively/src/data/models/file_models.dart';
+
 class Message {
 
   int localId;
@@ -12,7 +15,7 @@ class Message {
   bool unreadByMe;
   String fromUser;
   String fileUrls;
-  String fileUploadState;
+  EFileState fileUploadState;
 
   Message({
     this.localId,
@@ -70,7 +73,7 @@ class Message {
     sendAt = json['send_at'];
     unreadByMe = json['unread_by_me'] == 1;
     fileUrls = json['file_urls'];
-    fileUploadState = json['file_upload_state'];
+    fileUploadState = EnumToString.fromString(EFileState.values, json['file_upload_state']);
   }
 
   Map<String, dynamic> toLocalDatabaseMap() {
@@ -85,7 +88,7 @@ class Message {
     map['send_at'] = sendAt;
     map['unread_by_me'] = unreadByMe ?? false;
     map['file_urls'] = fileUrls;
-    map['file_upload_state'] = fileUploadState;
+    map['file_upload_state'] = EnumToString.convertToString(fileUploadState,camelCase: true);
     return map;
   }
 
@@ -94,6 +97,7 @@ class Message {
     String id,
     bool unreadByMe,
   }) {
+    //make sure to_room is correct
     return Message(
       localId: localId ?? this.localId,
       id: id ?? this.id,

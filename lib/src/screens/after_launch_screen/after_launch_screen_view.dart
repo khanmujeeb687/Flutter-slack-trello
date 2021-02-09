@@ -46,7 +46,7 @@ class _AfterLaunchScreenState extends State<AfterLaunchScreen> {
   void didChangeDependencies() {
     if(!isInitialized){
       isInitialized=true;
-      Provider.of<ChatsProvider>(context).updateChats();
+      Provider.of<ChatsProvider>(context).setAllUnSentMessages();
     }
     super.didChangeDependencies();
   }

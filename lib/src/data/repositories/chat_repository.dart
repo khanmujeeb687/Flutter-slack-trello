@@ -35,9 +35,9 @@ class ChatRepository {
     }
   }
 
-  Future<dynamic> sendMessage(String message, String to) async {
+  Future<dynamic> sendMessage(String message, String to,{String filesUri=''}) async {
     try {
-      var body = jsonEncode({'message': message, 'to': to});
+      var body = jsonEncode({'message': message, 'to': to,'filesUri':filesUri});
       var response = await http.post(
         '${MyUrls.serverUrl}/message',
         body: body,
@@ -50,9 +50,9 @@ class ChatRepository {
     }
   }
 
-  Future<dynamic> sendMessageToRoom(String message, String from,String roomId) async {
+  Future<dynamic> sendMessageToRoom(String message, String from,String roomId,{String filesUri=''}) async {
     try {
-      var body = jsonEncode({'message': message, 'roomId': roomId, 'from': from});
+      var body = jsonEncode({'message': message, 'roomId': roomId, 'from': from ,'filesUri':filesUri});
       var response = await http.post(
         '${MyUrls.serverUrl}/room/message',
         body: body,

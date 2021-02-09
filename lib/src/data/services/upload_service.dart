@@ -15,6 +15,7 @@ class UploadService {
   String _filename;
   String _savedDir;
   String _tag;
+  String taskId;
 
 
 
@@ -92,6 +93,7 @@ class UploadService {
       tag: _tag,
       showNotification: true,
     );
+    this.taskId=taskId;
     return taskId;
   }
 

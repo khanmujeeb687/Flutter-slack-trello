@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:wively/src/data/models/chat.dart';
+import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/user.dart';
@@ -96,10 +97,10 @@ class ContactController extends StateControl {
     NavigationUtil.navigate(context, RoomInfo(RoomInfoArguments(roomId)));
   }
 
-  sendMessage() async {
+  sendMessage({String filePaths=''}) async {
     UtilDates.getTodayMidnight();
     final message = textController.text.trim();
-    if (message.length == 0) return;
+    if (message.length == 0 && filePaths.length==0) return;
     final user = await CustomSharedPreferences.getMyUser();
     final myId = user.id;
     final selectedChat =
@@ -107,6 +108,8 @@ class ContactController extends StateControl {
     final to =
         selectedChat.room == null ? selectedChat.user.id : selectedChat.room.id;
     final newMessage = Message(
+        fileUrls:filePaths,
+        fileUploadState: EFileState.sending,
         chatId: selectedChat.id,
         from: myId,
         to: selectedChat.room != null ? null : to,
@@ -118,11 +121,12 @@ class ContactController extends StateControl {
     textController.text = "";
     await Provider.of<ChatsProvider>(context, listen: false)
         .addMessageToChat(newMessage);
-    if (!this.selectedChat.isRoom)
+    if (!this.selectedChat.isRoom){
       await _chatRepository.sendMessage(message, this.selectedChat.user.id);
-    else
+    }else if(filePaths.length==0){
       await _chatRepository.sendMessageToRoom(
           message, user.id, selectedChat.room.id);
+    }
   }
 
   void createChildRoom() async {
@@ -164,15 +168,19 @@ class ContactController extends StateControl {
               topRight: Radius.circular(26), topLeft: Radius.circular(26)),
         ),
         context: context,
-        isDismissible: false,
+        // isDismissible: false,
         isScrollControlled: true,
         builder: (context) {
           return SelectFile(onSelectFilePress);
         });
   }
 
-  onSelectFilePress(int index) async{
+  onSelectFilePress(ESelectedFileType selectedFileType) async{
     NavigationUtil.goBack(context);
-    NavigationUtil.openImageEditor(context);
+    String filePath=await NavigationUtil.openImageEditor(context);
+    if(filePath!=null){
+      sendMessage(filePaths: filePath);
+    }
   }
+
 }

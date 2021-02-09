@@ -232,7 +232,7 @@ class _ContactScreenState extends State<ContactScreen> {
                         : CrossAxisAlignment.start,
                     children: [
                       renderUserName(message, isMe),
-                      ImageMessage(message),
+                      message.fileUrls==null || message.fileUrls?.length==0 ? Container(width:0,height:0):ImageMessage(message),
                       Text(
                         message.message,
                         style: TextStyle(

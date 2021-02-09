@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wively/src/utils/file_util.dart';
 
 class NavigationUtil{
 
@@ -28,7 +29,7 @@ class NavigationUtil{
   }
 
 
-  static openImageEditor(context) {
-    // return NavigationUtil.navigate(context, ImageEditorPro());
+  static Future<String> openImageEditor(context) async{
+    return await FileUtil.selectImageFromDevice();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:wively/src/data/local_database/db_provider.dart';
 import 'package:wively/src/data/models/chat.dart';
+import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/repositories/chat_repository.dart';
@@ -103,6 +104,16 @@ class ChatsProvider with ChangeNotifier {
     await DBProvider.db.addMessage(message);
     updateChats();
     setSelectedChat(selectedChat);
+  }
+
+  Future<void> setAllUnSentMessages()async{
+    await DBProvider.db.setAllUnSentFiles();
+    updateChats();
+  }
+
+  Future<void> updateMessageState(int id,EFileState fileState) async{
+    await DBProvider.db.changeMessageStatus(id, fileState);
+    updateChats();
   }
 
   Future<void> clearDatabase() async {
