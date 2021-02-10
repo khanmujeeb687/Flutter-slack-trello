@@ -61,6 +61,7 @@ class UploadService {
     });
     _resultSubscription = _uploader.result.listen((result) {
       if (result.status.value == 3) {
+        removeSubscriptions();
         taskSuccess(_getFileUrl(_filename));
       } else if (result.status.value == 5 || result.status.value == 4) {
         taskFailed('Upload failed');
