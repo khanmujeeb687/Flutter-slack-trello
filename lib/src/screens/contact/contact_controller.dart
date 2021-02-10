@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
@@ -121,7 +122,7 @@ class ContactController extends StateControl {
     textController.text = "";
     await Provider.of<ChatsProvider>(context, listen: false)
         .addMessageToChat(newMessage);
-    if (!this.selectedChat.isRoom){
+    if (!this.selectedChat.isRoom && filePaths.length==0){
       await _chatRepository.sendMessage(message, this.selectedChat.user.id);
     }else if(filePaths.length==0){
       await _chatRepository.sendMessageToRoom(

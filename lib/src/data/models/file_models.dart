@@ -11,3 +11,8 @@ enum EFileState{
   sent,
   unsent
 }
+
+enum EOrigin{
+  remote,
+  local
+}

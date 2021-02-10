@@ -9,6 +9,7 @@ import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/data/services/upload_service.dart';
+import 'package:wively/src/utils/file_util.dart';
 import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/cache_image.dart';
 
@@ -46,7 +47,13 @@ class _ImageMessageState extends State<ImageMessage> {
         children: [
           ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: Image.file(File(widget.message.fileUrls))),
+              child: (){
+                if(FileUtil.fileType(widget.message.fileUrls)==EOrigin.local){
+                  return Image.file(File(widget.message.fileUrls));
+                }else{
+                  return Image.network(widget.message.fileUrls);
+                }
+              }()),
           Positioned(
             top: 0,
             bottom: 0,
@@ -129,9 +136,6 @@ class _ImageMessageState extends State<ImageMessage> {
   onSuccess(String fileUrl) {
     updateLocalStatus(EFileState.sent);
     _messageController.sendMessage(widget.message,filesUri:fileUrl);
-    print("Success MKTECHMAN");
   }
-
-
 
 }

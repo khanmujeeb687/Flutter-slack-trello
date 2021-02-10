@@ -44,7 +44,7 @@ class Message {
     unreadByMe = json['unreadByMe'] ?? true;
     sendAt = json['sendAt'];
     fromUser = json['from']['username'];
-    fileUrls = json['fileUrls'];
+    fileUrls = json['filesUri'];
   }
 
   Map<String, dynamic> toJson() {
@@ -57,7 +57,7 @@ class Message {
     json['to'] = to;
     json['sendAt'] = sendAt;
     json['fromUserName'] = fromUser;
-    json['fileUrls'] = fileUrls;
+    json['filesUri'] = fileUrls;
     return json;
   }
 
