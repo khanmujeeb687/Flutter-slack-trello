@@ -12,6 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/room_message_controller.dart';
 import 'package:wively/src/values/Colors.dart';
+import 'package:wively/src/widgets/image_with_edit.dart';
+import 'package:wively/src/widgets/image_with_placeholder.dart';
 
 class ChatCard extends StatelessWidget {
   final Chat chat;
@@ -59,16 +61,17 @@ class ChatCard extends StatelessWidget {
                   tag: chat.id+'profile',
                   child: Material(
                     color: EColors.transparent,
-                    child: CircleAvatar(
-                      child: chat.isRoom?Icon(Icons.people):Text(
-                        chat.isRoom?chat.room.roomName[0].toUpperCase():chat.user.username[0].toUpperCase(),
-                        style: TextStyle(
-                          color: EColors.themeMaroon,
-                        ),
-                      ),
-                      radius: 20,
-                      backgroundColor: EColors.white,
-                    ),
+                    child: ImageWithPlaceholder(chat.room==null?chat.user.profileUrl:chat.room.profileUrl,placeholderType: this.chat.room==null?EPlaceholderType.user:EPlaceholderType.room),
+                    // child: CircleAvatar(
+                    //   child: chat.isRoom?Icon(Icons.people):Text(
+                    //     chat.isRoom?chat.room.roomName[0].toUpperCase():chat.user.username[0].toUpperCase(),
+                    //     style: TextStyle(
+                    //       color: EColors.themeMaroon,
+                    //     ),
+                    //   ),
+                    //   radius: 20,
+                    //   backgroundColor: EColors.white,
+                    // ),
                   ),
                 ),
                 Expanded(

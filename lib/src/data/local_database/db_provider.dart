@@ -53,6 +53,7 @@ class DBProvider {
     final users = await db.rawQuery('''
       SELECT tb_user._id,
              tb_user.name,
+             tb_user.profile_url,
              tb_user.username
       FROM tb_user
       WHERE tb_user._id = '$id'
@@ -68,6 +69,7 @@ class DBProvider {
     final rooms = await db.rawQuery('''
       SELECT tb_room._id,
              tb_room.room_name,
+             tb_room.profile_url,
              tb_room.task_board_id
       FROM tb_room
       WHERE tb_room._id = '$id'
@@ -222,9 +224,11 @@ class DBProvider {
       SELECT tb_room_chat._id,
              tb_room._id as room_id,
              tb_room.room_name,
+             tb_room.profile_url,
              tb_room.task_board_id,
              tb_user._id as user_id,
              tb_user.name,
+             tb_user.profile_url,
              tb_user.username,
              tb_message.id_message,
              tb_message._id as message_id,

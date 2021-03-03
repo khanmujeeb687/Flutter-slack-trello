@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wively/src/values/Colors.dart';
+import 'package:wively/src/widgets/image_with_edit.dart';
 
 class UserInfoItem extends StatelessWidget {
   final String name;
@@ -19,17 +20,18 @@ class UserInfoItem extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Row(
         children: <Widget>[
-          CircleAvatar(
-            backgroundColor: EColors.themeGrey,
-            radius: 25,
-            child: Text(
-              name[0],
-              style: TextStyle(color: EColors.themeMaroon, fontSize: 18),
-            ),
-          ),
+          ImageWithEdit(),
+          // CircleAvatar(
+          //   backgroundColor: EColors.themeGrey,
+          //   radius: 25,
+          //   child: Text(
+          //     name[0],
+          //     style: TextStyle(color: EColors.themeMaroon, fontSize: 18),
+          //   ),
+          // ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 15),
+              padding: const EdgeInsets.only(left: 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[

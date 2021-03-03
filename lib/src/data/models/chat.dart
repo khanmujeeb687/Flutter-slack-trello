@@ -53,6 +53,7 @@ class Chat {
         '_id': map['user_id'],
         'name': map['name'],
         'username': map['username'],
+        'profile_url': map['profile_url']
       });
       isRoom = false;
     }
@@ -60,7 +61,8 @@ class Chat {
       room = Room.fromLocalDatabaseMap({
         '_id': map['room_id'],
         'room_name': map['room_name'],
-        'task_board_id': map['task_board_id']
+        'task_board_id': map['task_board_id'],
+        'profile_url': map['profile_url']
       });
       isRoom = true;
     }

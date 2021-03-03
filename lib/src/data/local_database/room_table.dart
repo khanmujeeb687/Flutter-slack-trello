@@ -15,6 +15,7 @@ class RoomTable {
             id_room integer primary key autoincrement, 
             _id text not null,
             task_board_id text not null,
+            profile_url text,
             room_name text not null
             )
           ''');

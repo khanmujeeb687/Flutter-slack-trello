@@ -14,6 +14,7 @@ class Room {
   List<User> members=[];
   int createdAt;
   String taskBoardId;
+  String profileUrl;
   // Room parent;
 
   Room({
@@ -23,6 +24,7 @@ class Room {
     this.createdAt,
     this.members,
     this.admins,
+    this.profileUrl
   });
 
   Room.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class Room {
     roomName = json['roomName'];
     createdAt = json['createdAt'];
     taskBoardId=json['taskBoardId'];
+    profileUrl=json['profileUrl'];
     if(!(json['createdBy'] is String)){
       createdBy = User.fromJson(json['createdBy']);
       json['members'].forEach((member)=>members.add(User.fromJson(member)));
@@ -44,6 +47,7 @@ class Room {
     map['_id'] = id;
     map['room_name'] = roomName;
     map['task_board_id']=taskBoardId;
+    map['profile_url']=profileUrl;
     return map;
   }
 
@@ -51,6 +55,7 @@ class Room {
     id = json['_id'];
     roomName = json['room_name'];
     taskBoardId=json['task_board_id'];
+    profileUrl=json['profile_url'];
   }
 
 
