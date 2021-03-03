@@ -75,7 +75,7 @@ class _ContactScreenState extends State<ContactScreen> {
               appBar: CustomAppBar(
                 title: GestureDetector(
                   onTap: () => _contactController
-                      .openRoom(_contactController.selectedChat.room.id),
+                      .openRoom(_contactController?.selectedChat?.room?.id),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[

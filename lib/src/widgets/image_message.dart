@@ -13,7 +13,6 @@ import 'package:wively/src/utils/file_util.dart';
 import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/screen_util.dart';
 import 'package:wively/src/values/Colors.dart';
-import 'package:wively/src/widgets/cache_image.dart';
 import 'package:wively/src/widgets/full_image.dart';
 
 class ImageMessage extends StatefulWidget {
@@ -47,7 +46,9 @@ class _ImageMessageState extends State<ImageMessage> {
         child: Material(
           color: EColors.transparent,
           child: Container(
-            height: ScreenUtil.height(context)/3,
+            constraints: BoxConstraints(
+              maxHeight: ScreenUtil.height(context)/3,
+          ),
             margin: EdgeInsets.only(bottom: 10),
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
