@@ -110,7 +110,7 @@ class ContactController extends StateControl {
         selectedChat.room == null ? selectedChat.user.id : selectedChat.room.id;
     final newMessage = Message(
         fileUrls:filePaths,
-        fileUploadState: EFileState.sending,
+        fileUploadState: EFileState.unsent,
         chatId: selectedChat.id,
         from: myId,
         to: selectedChat.room != null ? null : to,

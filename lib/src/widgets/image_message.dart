@@ -29,13 +29,6 @@ class _ImageMessageState extends State<ImageMessage> {
   MessageController _messageController=new MessageController();
 
   @override
-  void initState() {
-    if(widget.message.fileUploadState==EFileState.sending){
-      uploadImage();
-    }
-    super.initState();
-  }
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
@@ -119,6 +112,7 @@ class _ImageMessageState extends State<ImageMessage> {
   }
 
   void uploadImage() async{
+    updateLocalStatus(EFileState.sending);
      await stopUpload();
      await updateLocalStatus(EFileState.sending);
     _uploadService=new UploadService(File(widget.message.fileUrls), 'sending file to Mujeeb khan', MediaType.Image);
