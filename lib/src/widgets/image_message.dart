@@ -42,8 +42,7 @@ class _ImageMessageState extends State<ImageMessage> {
             constraints: BoxConstraints(
               maxHeight: ScreenUtil.height(context)/3,
           ),
-            margin: EdgeInsets.only(bottom: 10),
-            padding: EdgeInsets.all(5),
+            padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
             ),

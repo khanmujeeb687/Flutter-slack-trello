@@ -4,6 +4,7 @@ import 'package:bubble/bubble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/message.dart';
+import 'package:wively/src/data/models/message_types.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/screens/contact/contact_controller.dart';
 import 'package:wively/src/utils/dates.dart';
@@ -236,13 +237,14 @@ class _ContactScreenState extends State<ContactScreen> {
                       if(showNip)
                         renderUserName(message, isMe),
                       message.fileUrls==null || message.fileUrls?.length==0 ? Container(width:0,height:0):ImageMessage(message),
-                      Text(
+                      if(message.message!=MessageTypes.IMAGE_MESSAGE)
+                        Text(
                         message.message,
                         style: TextStyle(
                             color: EColors.white,
                             fontSize: 14.5,
                             fontWeight: FontWeight.w400),
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.left,
                       ),
                       renderMessageSendAt(message, MessagePosition.AFTER)
                     ],
