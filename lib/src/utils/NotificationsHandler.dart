@@ -146,8 +146,8 @@ class NotificationsHandler {
   }
 
   static Future<void> _showBigTextNotification(Map<String, dynamic> message) async {
-    var largeIconPath = await _downloadAndSaveFile(
-        message['data']['image'], 'largeIcon');
+    // var largeIconPath = await _downloadAndSaveFile(
+    //     message['data']['image'], 'largeIcon');
     var bigTextStyleInformation = BigTextStyleInformation(
       '${message['data']['body']}',
       htmlFormatBigText: true,
@@ -162,7 +162,7 @@ class NotificationsHandler {
       enableLights: true,
       // color: Color(int.parse(message['data']['mainColor'], radix: 16) + 0xFF000000),
       color: Colors.blue,
-      largeIcon: FilePathAndroidBitmap(largeIconPath),
+      // largeIcon: FilePathAndroidBitmap(largeIconPath),
       ledOnMs: 1000,
       ledOffMs: 500,
       importance: Importance.high,
@@ -172,10 +172,11 @@ class NotificationsHandler {
       ticker: 'ticker',
       styleInformation: bigTextStyleInformation,
     );
-    var iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(attachments: [IOSNotificationAttachment(largeIconPath)]);
+    // var iOSPlatformChannelSpecifics =
+    // IOSNotificationDetails(attachments: [IOSNotificationAttachment(largeIconPath)]);
     var platformChannelSpecifics =
-    NotificationDetails(android:androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+    // NotificationDetails(android:androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+    NotificationDetails(android:androidPlatformChannelSpecifics);
     await FlutterLocalNotificationsPlugin().show(
         0, '${message['data']['title']}', '${message['data']['body']}', platformChannelSpecifics, payload: message['data']['callback']);
   }
