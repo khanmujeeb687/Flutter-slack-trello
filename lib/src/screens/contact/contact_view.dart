@@ -213,6 +213,7 @@ class _ContactScreenState extends State<ContactScreen> {
             : Material(
                 color: Colors.transparent,
                 child: Bubble(
+                  shadowColor: EColors.transparent,
                   radius: Radius.circular(15),
                   margin: !showNip
                       ? BubbleEdges.only(
@@ -225,13 +226,14 @@ class _ContactScreenState extends State<ContactScreen> {
                   nip: showNip
                       ? (isMe ? BubbleNip.rightTop : BubbleNip.leftTop)
                       : null,
-                  color: EColors.themePink.withOpacity(0.5),
+                  color: message.fileUrls==null || message.fileUrls?.length==0 ? EColors.themePink.withOpacity(0.5): EColors.transparent,
                   child:Column(
                     crossAxisAlignment: isMe
                         ? CrossAxisAlignment.end
                         : CrossAxisAlignment.start,
                     children: [
-                      renderUserName(message, isMe),
+                      if(showNip)
+                        renderUserName(message, isMe),
                       message.fileUrls==null || message.fileUrls?.length==0 ? Container(width:0,height:0):ImageMessage(message),
                       Text(
                         message.message,

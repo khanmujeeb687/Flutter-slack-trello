@@ -65,7 +65,7 @@ dependencies:
 
   flutter_uploader: ^1.2.1
 
-  image_picker: ^0.6.7+21
+  multi_image_picker: ^4.7.15
 
   cached_network_image: ^2.5.0
 
@@ -76,6 +76,8 @@ dependencies:
   flutter_local_notifications: ^4.0.1+1
 
   rxdart: ^0.25.0
+
+  photo_view: ^0.10.3
 
 
 

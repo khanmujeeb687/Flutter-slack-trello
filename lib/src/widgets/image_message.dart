@@ -10,8 +10,11 @@ import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/data/services/upload_service.dart';
 import 'package:wively/src/utils/file_util.dart';
+import 'package:wively/src/utils/navigation_util.dart';
+import 'package:wively/src/utils/screen_util.dart';
 import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/cache_image.dart';
+import 'package:wively/src/widgets/full_image.dart';
 
 class ImageMessage extends StatefulWidget {
   Message message;
@@ -35,63 +38,74 @@ class _ImageMessageState extends State<ImageMessage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      padding: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: EColors.themeMaroon,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      alignment: Alignment.center,
-      child: Stack(
-        children: [
-          ClipRRect(
+    return GestureDetector(
+      onTap: (){
+        NavigationUtil.navigate(context, FullImage(widget.message.fileUrls));
+      },
+      child: Hero(
+        tag: widget.message.fileUrls,
+        child: Material(
+          color: EColors.transparent,
+          child: Container(
+            height: ScreenUtil.height(context)/3,
+            margin: EdgeInsets.only(bottom: 10),
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              child: (){
-                if(FileUtil.fileType(widget.message.fileUrls)==EOrigin.local){
-                  return Image.file(File(widget.message.fileUrls));
-                }else{
-                  return Image.network(widget.message.fileUrls);
-                }
-              }()),
-          Positioned(
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-            child: Center(
-              child: (){
-                if(widget.message.fileUploadState==EFileState.sending) {
-                  return CircularProgressIndicator();
-                }
-                else if (widget.message.fileUploadState==EFileState.unsent){
-                  return IconButton(
-                    onPressed: uploadImage,
-                    icon: Icon(Icons.upload_outlined,color: EColors.white,size: 40,),
-                  );
-                }
-                return Container(width: 0,height: 0);
-              }(),
+            ),
+            // alignment: Alignment.center,
+            child: Stack(
+              children: [
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: (){
+                      if(FileUtil.fileOriginType(widget.message.fileUrls)==EOrigin.local){
+                        return Image.file(File(widget.message.fileUrls),fit: BoxFit.cover,width: ScreenUtil.height(context)/3);
+                      }else{
+                        return Image.network(widget.message.fileUrls,fit: BoxFit.cover,width: ScreenUtil.height(context)/3);
+                      }
+                    }()),
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  child: Center(
+                    child: (){
+                      if(widget.message.fileUploadState==EFileState.sending) {
+                        return CircularProgressIndicator();
+                      }
+                      else if (widget.message.fileUploadState==EFileState.unsent){
+                        return IconButton(
+                          onPressed: uploadImage,
+                          icon: Icon(Icons.upload_outlined,color: EColors.white,size: 40,),
+                        );
+                      }
+                      return Container(width: 0,height: 0);
+                    }(),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  child: Center(
+                    child: (){
+                      if(widget.message.fileUploadState==EFileState.sending){
+                        return IconButton(
+                          onPressed: stopUpload,
+                          icon: Icon(Icons.close,color: EColors.white,),
+                        );
+                      }
+                      return Container(height: 0,width: 0,);
+                    }()
+                  ),
+                )
+              ],
             ),
           ),
-          Positioned(
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-            child: Center(
-              child: (){
-                if(widget.message.fileUploadState==EFileState.sending){
-                  return IconButton(
-                    onPressed: stopUpload,
-                    icon: Icon(Icons.close,color: EColors.white,),
-                  );
-                }
-                return Container(height: 0,width: 0,);
-              }()
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
