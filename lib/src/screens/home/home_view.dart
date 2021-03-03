@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // }
     if (_homeController.chats.length == 0) {
       return Center(
-        child: Text('You have no conversations.'),
+        child: Text('You have no conversations.',style: TextStyle(color: Colors.white),),
       );
     }
     bool theresChatsWithMessages = _homeController.chats.where((chat) {
