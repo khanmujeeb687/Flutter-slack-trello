@@ -26,6 +26,9 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import '../../utils/NotificationsHandler.dart';
+import '../../utils/NotificationsHandler.dart';
+
 class HomeController extends StateControl with WidgetsBindingObserver {
   ChatRepository _chatRepository = ChatRepository();
 
@@ -36,6 +39,7 @@ class HomeController extends StateControl with WidgetsBindingObserver {
   IO.Socket socket = SocketController.socket;
 
   FirebaseMessaging _firebaseMessaging;
+
 
   final BuildContext context;
 
@@ -115,7 +119,6 @@ class HomeController extends StateControl with WidgetsBindingObserver {
   void init() {
     _firebaseMessaging = FirebaseMessaging();
     requestPushNotificationPermission();
-    configureFirebaseMessaging();
     connectSocket();
     WidgetsBinding.instance.addObserver(this);
     getMyUser();
@@ -183,24 +186,7 @@ class HomeController extends StateControl with WidgetsBindingObserver {
     }
   }
 
-  void configureFirebaseMessaging() {
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-      },
-    );
-    _firebaseMessaging.getToken().then((token) {
-      if (token != null) {
-        _userRepository.saveUserFcmToken(token);
-      }
-    });
-  }
+
 
   void initProvider() {
     _chatsProvider = Provider.of<ChatsProvider>(context);

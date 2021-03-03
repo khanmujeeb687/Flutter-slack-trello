@@ -14,6 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/screen_util.dart';
 
+import '../../utils/NotificationsHandler.dart';
+
 class AfterLaunchScreen extends StatefulWidget {
   @override
   _AfterLaunchScreenState createState() => _AfterLaunchScreenState();
@@ -21,7 +23,10 @@ class AfterLaunchScreen extends StatefulWidget {
 
 class _AfterLaunchScreenState extends State<AfterLaunchScreen> {
   static bool isInitialized=false;
+  static NotificationsHandler notificationsHandler=new NotificationsHandler();
+
   void verifyUserLoggedInAndRedirect() async {
+    notificationsHandler.initializeFcmNotification(context);
     Widget destination = HomeScreen();
     String token = await CustomSharedPreferences.get('token');
     if (token == null) {
