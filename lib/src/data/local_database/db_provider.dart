@@ -281,19 +281,36 @@ class DBProvider {
 
   Future<void> changeMessageStatus(int messageId, EFileState fileState) async {
     final db = await database;
-   await db.rawQuery('''
+    await db.rawQuery('''
     UPDATE tb_message
      SET file_upload_state= ?
       WHERE id_message= ?
-        ''',[EnumToString.convertToString(fileState, camelCase: true),messageId]);
+        ''',
+        [EnumToString.convertToString(fileState, camelCase: true), messageId]);
   }
-
 
   Future<void> setAllUnSentFiles() async {
     final db = await database;
-   await db.rawQuery('''
+    await db.rawQuery('''
      UPDATE tb_message SET file_upload_state = ? WHERE file_upload_state = ?
-        ''',[EnumToString.convertToString(EFileState.unsent, camelCase: true),EnumToString.convertToString(EFileState.sending,camelCase: true)]);
+        ''', [
+      EnumToString.convertToString(EFileState.unsent, camelCase: true),
+      EnumToString.convertToString(EFileState.sending, camelCase: true)
+    ]);
+  }
+
+  getAllUserIds() async {
+    final db = await database;
+    return await db.rawQuery('''
+     SELECT _id FROM tb_user
+        ''');
+  }
+
+  updateUser(User user) async {
+    final db = await database;
+    return await db.rawQuery('''
+     UPDATE tb_user SET _id = ?, username = ?, name = ?, profile_url = ? WHERE _id = ?
+        ''',[user.id,user.username,user.name,user.profileUrl.toString(),user.id]);
   }
 
   Future<void> clearDatabase() async {

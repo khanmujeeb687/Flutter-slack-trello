@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:wively/src/data/models/chat.dart';
+import 'package:wively/src/data/models/message_types.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/screens/contact/contact_view.dart';
 import 'package:wively/src/utils/dates.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/room_message_controller.dart';
 import 'package:wively/src/values/Colors.dart';
+import 'package:wively/src/widgets/cache_image.dart';
 import 'package:wively/src/widgets/image_with_edit.dart';
 import 'package:wively/src/widgets/image_with_placeholder.dart';
 
@@ -62,16 +64,6 @@ class ChatCard extends StatelessWidget {
                   child: Material(
                     color: EColors.transparent,
                     child: ImageWithPlaceholder(chat.room==null?chat.user.profileUrl:chat.room.profileUrl,placeholderType: this.chat.room==null?EPlaceholderType.user:EPlaceholderType.room),
-                    // child: CircleAvatar(
-                    //   child: chat.isRoom?Icon(Icons.people):Text(
-                    //     chat.isRoom?chat.room.roomName[0].toUpperCase():chat.user.username[0].toUpperCase(),
-                    //     style: TextStyle(
-                    //       color: EColors.themeMaroon,
-                    //     ),
-                    //   ),
-                    //   radius: 20,
-                    //   backgroundColor: EColors.white,
-                    // ),
                   ),
                 ),
                 Expanded(
@@ -102,15 +94,29 @@ class ChatCard extends StatelessWidget {
                                     SizedBox(
                                       height: 2,
                                     ),
-                                    Text(
+
+                                    if(chat.messages[0].message!=MessageTypes.IMAGE_MESSAGE)
+                                      Text(
                                       //fix the second argument
-                                      RoomMessageController.isAddedMessage(chat.messages[0].message)?RoomMessageController.createAddedMessage(chat.messages[0].message, true): chat.messages[0].message,
+                                        (){
+                                          if( RoomMessageController.isAddedMessage(chat.messages[0].message)){
+                                            return RoomMessageController.createAddedMessage(chat.messages[0].message, true);
+                                          }
+                                          return  chat.messages[0].message;
+                                        }(),
                                       style: TextStyle(
                                         color: EColors.themeGrey,
                                         fontSize: 12,
                                       ),
                                       maxLines: 2,
                                     ),
+                                    if(chat.messages[0].message==MessageTypes.IMAGE_MESSAGE && chat.messages[0].fileUrls!=null && chat.messages[0].fileUrls!='null' && chat.messages[0].fileUrls!='')
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                          height: 20,
+                                          width: 30,
+                                          child: CacheImage(chat.messages[0].fileUrls))
+                                    ,
                                     SizedBox(
                                       height: 15,
                                     ),

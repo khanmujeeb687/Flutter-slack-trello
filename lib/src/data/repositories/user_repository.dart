@@ -44,4 +44,17 @@ class UserRepository {
       print("error $err");
     }
   }
+
+
+  fetchUsersByIds(List<String> data) async{
+    try {
+      var response = await http.put('${MyUrls.serverUrl}/fetch-users',body: jsonEncode({'ids':data}));
+      final List<dynamic> usersResponse = jsonDecode(response.body)['users'];
+      final List<User> users =
+      usersResponse.map((user) => User.fromJson(user)).toList();
+      return users;
+    } catch (err) {
+      return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
+    }
+  }
 }

@@ -14,43 +14,39 @@ class ImageWithPlaceholder extends StatelessWidget {
   EPlaceholderType placeholderType;
   double size;
   ImageWithPlaceholder(this.uri,{this.placeholderType=EPlaceholderType.user,this.size=25});
+
+  hasUri(){
+    return uri!=null && uri!="null" && uri!='';
+  }
+
   @override
   Widget build(BuildContext context) {
     if(size==25){
-      return CircleAvatar(
-        radius: size,
-        backgroundColor: EColors.themeMaroon,
-        child: uri==null || uri==''?Icon(placeholderType==EPlaceholderType.room?Icons.supervised_user_circle:Icons.account_circle,color: EColors.white,):ClipRRect(
-            clipBehavior: Clip.hardEdge,
-            borderRadius: BorderRadius.circular(size),
-            child: CacheImage(this.uri)),
+      return  CircleAvatar(
+        radius: 20,
+        backgroundImage: !hasUri()?null:NetworkImage(this.uri),
+        backgroundColor: EColors.themePink,
+        child: !hasUri()?Icon(placeholderType==EPlaceholderType.room?Icons.supervised_user_circle:Icons.account_circle,color: EColors.white,):
+        null,
       );
     }
-    return Card(
-      color: EColors.transparent,
-      shadowColor: EColors.themeGrey,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(size),
-      ),
-      elevation: 10,
-      child: InkWell(
-        onTap: (){
-          if(uri!=null && uri!=''){
-            NavigationUtil.navigate(context, FullImage(uri));
-          }
-        },
-        child: Hero(
-          tag: uri,
-          child: Material(
-            clipBehavior: Clip.hardEdge,
-            color: EColors.transparent,
-            child: CircleAvatar(
-              radius: size,
-              backgroundImage: NetworkImage(this.uri),
-              backgroundColor: EColors.themePink,
-              child: uri==null || uri==''?Icon(placeholderType==EPlaceholderType.room?Icons.supervised_user_circle:Icons.account_circle,color: EColors.white,):
-              null,
-            ),
+    return InkWell(
+      onTap: (){
+        if(hasUri()){
+          NavigationUtil.navigate(context, FullImage(uri));
+        }
+      },
+      child: Hero(
+        tag:  hasUri()?uri:UniqueKey().toString(),
+        child: Material(
+          clipBehavior: Clip.hardEdge,
+          color: EColors.transparent,
+          child: CircleAvatar(
+            radius: size,
+            backgroundImage: !hasUri()?null:NetworkImage(this.uri),
+            backgroundColor: EColors.themePink,
+            child: !hasUri()?Icon(placeholderType==EPlaceholderType.room?Icons.supervised_user_circle:Icons.account_circle,color: EColors.white,):
+            null,
           ),
         ),
       ),

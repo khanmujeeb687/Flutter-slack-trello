@@ -1,4 +1,5 @@
 import 'package:wively/src/data/local_database/db_provider.dart';
+import 'package:wively/src/data/local_database/db_update.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
@@ -20,7 +21,7 @@ class ChatsProvider with ChangeNotifier {
   User _currentUser;
   User get currentUser=>_currentUser;
 
-
+  DBUpdate _dbUpdate=new DBUpdate();
 
   bool _noMoreSelectedChatMessages = false;
   bool get noMoreSelectedChatMessages => _noMoreSelectedChatMessages;
@@ -126,4 +127,8 @@ class ChatsProvider with ChangeNotifier {
     updateChats();
   }
 
+  updateUserDataBase() async{
+   await _dbUpdate.updateUserDatabase();
+    updateChats();
+  }
 }
