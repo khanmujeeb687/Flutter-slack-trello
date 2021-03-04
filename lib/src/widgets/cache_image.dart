@@ -14,6 +14,7 @@ class _CacheImageState extends State<CacheImage> {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: widget.url,
+      fit: BoxFit.fill,
       progressIndicatorBuilder: (context, url, downloadProgress) =>
           CircularProgressIndicator(value: downloadProgress.progress),
       errorWidget: (context, url, error) => Icon(Icons.error),

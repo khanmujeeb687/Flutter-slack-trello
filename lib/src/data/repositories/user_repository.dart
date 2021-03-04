@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/custom_error.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/utils/custom_http_client.dart';
@@ -15,6 +16,21 @@ class UserRepository {
       final List<User> users =
           usersResponse.map((user) => User.fromJson(user)).toList();
       return users;
+    } catch (err) {
+      return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
+    }
+  }
+
+
+  Future<dynamic> editUser(Map<String, dynamic> data) async {
+    try {
+      var body=jsonEncode(data);
+      var response = await http.put('${MyUrls.serverUrl}/user',body: body);
+      final dynamic usersResponse = jsonDecode(response.body)['data'];
+      if(usersResponse['ok']==1){
+        return true;
+      }
+      return false;
     } catch (err) {
       return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
     }

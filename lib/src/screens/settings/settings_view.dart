@@ -66,10 +66,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget renderMyUserCard() {
     if (_settingsController.myUser != null) {
-      return UserInfoItem(
-        name: _settingsController.myUser.name,
-        subtitle: "@${_settingsController.myUser.username}",
-      );
+      return UserInfoItem();
     }
     return Container();
   }

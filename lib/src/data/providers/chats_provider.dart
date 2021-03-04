@@ -47,6 +47,11 @@ class ChatsProvider with ChangeNotifier {
     _currentUser =await CustomSharedPreferences.getMyUser();
   }
 
+  updateCurrentUser(User user) async{
+    await CustomSharedPreferences.setString('user', user.toString());
+    notifyListeners();
+  }
+
 
   loadMoreSelectedChatMessages() async {
     if (!noMoreSelectedChatMessages && selectedChat.messages.length > 0 && !_loadingMoreMessages) {
