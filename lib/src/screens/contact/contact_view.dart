@@ -158,7 +158,7 @@ class _ContactScreenState extends State<ContactScreen> {
                         child: Scrollbar(
                           child: ListView.builder(
                             cacheExtent:1000 ,
-                            physics: BouncingScrollPhysics(),
+                            physics: ClampingScrollPhysics(),
                             controller: _contactController.scrollController,
                             padding: EdgeInsets.only(bottom: 5),
                             reverse: true,

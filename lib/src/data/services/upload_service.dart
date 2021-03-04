@@ -92,7 +92,7 @@ class UploadService {
       files: [fileItem],
       method: UploadMethod.POST,
       tag: _tag,
-      showNotification: true,
+      showNotification: false,
     );
     this.taskId=taskId;
     return taskId;

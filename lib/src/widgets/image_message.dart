@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:wively/src/controller/file_upload_controller.dart';
 import 'package:wively/src/controller/message_controller.dart';
 import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
@@ -25,8 +26,7 @@ class ImageMessage extends StatefulWidget {
 }
 
 class _ImageMessageState extends State<ImageMessage> {
-  UploadService _uploadService;
-  MessageController _messageController=new MessageController();
+  FileUploadController _fileUploadController;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,7 @@ class _ImageMessageState extends State<ImageMessage> {
                     child: (){
                       if(widget.message.fileUploadState==EFileState.sending){
                         return IconButton(
-                          onPressed: stopUpload,
+                          onPressed: _fileUploadController?.stopUpload,
                           icon: Icon(Icons.close,color: EColors.white,),
                         );
                       }
@@ -110,40 +110,17 @@ class _ImageMessageState extends State<ImageMessage> {
     });
   }
 
+
   void uploadImage() async{
-    updateLocalStatus(EFileState.sending);
-     await stopUpload();
-     await updateLocalStatus(EFileState.sending);
-    _uploadService=new UploadService(File(widget.message.fileUrls), 'sending file to Mujeeb khan', MediaType.Image);
-    _uploadService.uploadFile(onError,onSuccess,onProgress);
+    _fileUploadController=new FileUploadController(MediaType.Image, widget.message);
+    _fileUploadController.startUpload(updateLocalStatus);
   }
 
   @override
   void dispose() {
-    _uploadService?.removeSubscriptions();
+    _fileUploadController?.dispose();
     super.dispose();
   }
 
-  Future<void> stopUpload() async{
-    _uploadService?.removeSubscriptions();
-   await _uploadService?.cancelUpload(_uploadService?.taskId);
-   await updateLocalStatus(EFileState.unsent);
-  }
-
-  onProgress(UploadTaskProgress progress) {
-    print("Progress is : ${progress.progress}");
-  }
-
-  onError(String error) {
-    Fluttertoast.showToast(msg: 'Error sending file');
-    stopUpload();
-    updateLocalStatus(EFileState.unsent);
-    print("Error is ${error}");
-  }
-
-  onSuccess(String fileUrl) {
-    updateLocalStatus(EFileState.sent);
-    _messageController.sendMessage(widget.message,filesUri:fileUrl);
-  }
 
 }
