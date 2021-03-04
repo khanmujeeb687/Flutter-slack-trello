@@ -8,21 +8,27 @@ import 'package:wively/src/values/constants.dart';
 
 class FileUtil {
   static selectImageFromDevice() async {
-    // PickedFile file = await ImagePicker.platform.pickImage(source: ImageSource.gallery, imageQuality: 15);
-    List<Asset> files=await MultiImagePicker.pickImages(maxImages: 1,materialOptions:
-    MaterialOptions(
-      actionBarColor: 'black',
-      statusBarColor: 'black',
-    ));
 
-    String paths='';
+    try{
+      // PickedFile file = await ImagePicker.platform.pickImage(source: ImageSource.gallery, imageQuality: 15);
+      List<Asset> files=await MultiImagePicker.pickImages(maxImages: 1,materialOptions:
+      MaterialOptions(
+        actionBarColor: 'black',
+        statusBarColor: 'black',
+      ));
 
-    for(int i =0;i<files.length;i++){
-      String newFilePath=await writeToFile(await files[i].getByteData(quality: 10));
-      paths+="|"+newFilePath;
+      String paths='';
+
+      for(int i =0;i<files.length;i++){
+        String newFilePath=await writeToFile(await files[i].getByteData(quality: 10));
+        paths+="|"+newFilePath;
+      }
+
+      return paths.length>0?paths.substring(1):null;
+    }catch(e){
+      return null;
     }
 
-    return paths.length>0?paths.substring(1):null;
   }
 
   static Future<String> createPhotoDirectory() async{

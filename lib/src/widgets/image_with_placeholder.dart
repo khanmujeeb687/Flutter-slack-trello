@@ -42,6 +42,7 @@ class ImageWithPlaceholder extends StatelessWidget {
         child: Hero(
           tag: uri,
           child: Material(
+            clipBehavior: Clip.hardEdge,
             color: EColors.transparent,
             child: CircleAvatar(
               radius: size,
