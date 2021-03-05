@@ -109,7 +109,7 @@ class FileUtil {
 
   static getRemoteExtension(String path){
     var data=path.split('.');
-    return data[data.length-1];
+    return '.'+data[data.length-1];
   }
 
 

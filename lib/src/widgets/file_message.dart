@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
 import 'package:wively/src/controller/file_upload_controller.dart';
 import 'package:wively/src/data/models/file_models.dart';
@@ -34,78 +35,82 @@ class _FileMessageState extends State<FileMessage> {
 
   @override
   Widget build(BuildContext context) {
-    return Bubble(
-      shadowColor: EColors.transparent,
-      radius: Radius.circular(15),
-      alignment: widget.isMe ? Alignment.topRight : Alignment.topLeft,
-      nip: widget.showNip
-          ? (widget.isMe ? BubbleNip.rightTop : BubbleNip.leftTop)
-          : null,
-      color: EColors.themePink.withOpacity(0.5),
-      child: Container(
-        padding: EdgeInsets.all(6),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Icon(Icons.file_copy_rounded, color: EColors.themeBlack),
-            SizedBox(width: 6,),
-            Expanded(
-                child: Text(
-                  FileUtil.getFileName(widget.message.fileUrls),
-                  style: TextStyle(color: EColors.white, fontSize: 12),
-                )),
-                () {
-              if (widget.message.fileUploadState == EFileState.sending) {
-                return Stack(
-                  children: [
-                    lottieLoader(radius: 15),
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      top: 0,
-                      bottom: 0,
-                      child: GestureDetector(
-                        onTap: () {
-                          _fileUploadController?.stopUpload();
-                        },
-                        child: Icon(
-                          Icons.close,
-                          color: EColors.white,
+    return GestureDetector(
+      onTap: (){
+        if(widget.message.fileUploadState==EFileState.downloaded){
+          OpenFile.open(widget.message.fileUrls);
+        }
+      },
+      child: Bubble(
+        shadowColor: EColors.transparent,
+        radius: Radius.circular(15),
+        alignment: widget.isMe ? Alignment.topRight : Alignment.topLeft,
+        color: EColors.themePink.withOpacity(0.5),
+        child: Container(
+          padding: EdgeInsets.all(6),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(Icons.file_copy_rounded, color: EColors.themeBlack),
+              SizedBox(width: 6,),
+              Expanded(
+                  child: Text(
+                    FileUtil.getFileName(widget.message.fileUrls),
+                    style: TextStyle(color: EColors.white, fontSize: 12),
+                  )),
+                  () {
+                if (widget.message.fileUploadState == EFileState.sending) {
+                  return Stack(
+                    children: [
+                      lottieLoader(radius: 15),
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            _fileUploadController?.stopUpload();
+                          },
+                          child: Icon(
+                            Icons.close,
+                            color: EColors.white,
+                          ),
                         ),
                       ),
+                    ],
+                  );
+                }
+                else if (widget.message.fileUploadState == EFileState.unsent) {
+                  return GestureDetector(
+                    onTap: uploadImage,
+                    child: Icon(
+                      Icons.upload_outlined,
+                      color: EColors.white,
                     ),
-                  ],
+                  );
+                }
+                else
+                if (widget.message.fileUploadState == EFileState.notdownloaded) {
+                  return GestureDetector(
+                    onTap: downloadFile,
+                    child: Icon(
+                      Icons.download_rounded,
+                      color: EColors.white,
+                    ),
+                  );
+                }
+                else
+                if (widget.message.fileUploadState == EFileState.downloading) {
+                  return lottieLoader(radius: 15);
+                }
+                return SizedBox(height: 0,width: 0
+                ,
                 );
-              }
-              else if (widget.message.fileUploadState == EFileState.unsent) {
-                return GestureDetector(
-                  onTap: uploadImage,
-                  child: Icon(
-                    Icons.upload_outlined,
-                    color: EColors.white,
-                  ),
-                );
-              }
-              else
-              if (widget.message.fileUploadState == EFileState.notdownloaded) {
-                return GestureDetector(
-                  onTap: downloadFile,
-                  child: Icon(
-                    Icons.download_rounded,
-                    color: EColors.white,
-                  ),
-                );
-              }
-              else
-              if (widget.message.fileUploadState == EFileState.downloading) {
-                return lottieLoader(radius: 15);
-              }
-              return SizedBox(height: 0,width: 0
-              ,
-              );
-            }()
+              }()
 
-          ],
+            ],
+          ),
         ),
       ),
     );

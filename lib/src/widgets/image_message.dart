@@ -33,7 +33,9 @@ class _ImageMessageState extends State<ImageMessage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        NavigationUtil.navigateSlow(context, FullImage(widget.message.fileUrls));
+        if(widget.message.fileUploadState==EFileState.downloaded){
+          NavigationUtil.navigateSlow(context, FullImage(widget.message.fileUrls));
+        }
       },
       child: Hero(
         tag: widget.message.fileUrls,
