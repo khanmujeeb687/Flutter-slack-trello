@@ -33,7 +33,7 @@ class ImageWithPlaceholder extends StatelessWidget {
     return InkWell(
       onTap: (){
         if(hasUri()){
-          NavigationUtil.navigate(context, FullImage(uri));
+          NavigationUtil.navigateSlow(context, FullImage(uri));
         }
       },
       child: Hero(

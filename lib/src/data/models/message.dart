@@ -1,5 +1,6 @@
 
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/file_models.dart';
 
 class Message {
@@ -45,6 +46,7 @@ class Message {
     sendAt = json['sendAt'];
     fromUser = json['from']['username'];
     fileUrls = json['filesUri'];
+    fileUploadState=EFileState.notdownloaded;
   }
 
   Map<String, dynamic> toJson() {

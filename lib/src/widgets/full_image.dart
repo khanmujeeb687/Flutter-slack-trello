@@ -18,6 +18,9 @@ class _FullImageState extends State<FullImage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+      ),
       backgroundColor:EColors.themeBlack,
       body: Hero(
         tag: widget.url,

@@ -11,8 +11,21 @@ class NavigationUtil{
     return await Navigator.push(context, new MaterialPageRoute(
       builder: (context){
         return destination;
-      }
+      },
     ));
+  }
+
+
+  static navigateSlow(context,Widget destination)async{
+    return await Navigator.push(
+      context,
+      PageRouteBuilder(
+        opaque: false,
+        transitionDuration: Duration(milliseconds: 700),
+        reverseTransitionDuration: Duration(milliseconds: 700),
+        pageBuilder: (_, __, ___) => destination,
+      ),
+    );
   }
 
 

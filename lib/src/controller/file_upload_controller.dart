@@ -4,7 +4,10 @@ import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
+import 'package:wively/src/data/models/message_types.dart';
 import 'package:wively/src/data/services/upload_service.dart';
+import 'package:wively/src/utils/file_util.dart';
+import 'package:wively/src/utils/message_utils.dart';
 
 import 'message_controller.dart';
 
@@ -27,7 +30,8 @@ class FileUploadController{
   FileUploadController(MediaType mediaType,Message message){
     this.message=message;
     this.mediaType=mediaType;
-    this.file=File(message.fileUrls);
+    this.file=File(mediaType==MediaType.Image?
+    FileUtil.getThumbPath(message.fileUrls):message.fileUrls);
     _uploadService= new UploadService(this.file, '', mediaType);
   }
 
@@ -60,6 +64,12 @@ class FileUploadController{
   onSuccess(String fileUrl) {
      updateLocalStatus(EFileState.sent);
     _messageController.sendMessage(message,filesUri:fileUrl);
+
+    if(mediaType==MediaType.Image){
+      this.file=File(message.fileUrls);
+      _uploadService= new UploadService(this.file, '', mediaType);
+      _uploadService.uploadFile((error) => null, (fileUrl) => null, (progress) => null);
+    }
   }
 
 

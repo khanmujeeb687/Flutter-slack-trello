@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:wively/src/data/models/chat.dart';
+import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message_types.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/screens/contact/contact_view.dart';
@@ -10,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+import 'package:wively/src/utils/file_util.dart';
+import 'package:wively/src/utils/message_utils.dart';
 import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/room_message_controller.dart';
 import 'package:wively/src/values/Colors.dart';
@@ -95,7 +99,7 @@ class ChatCard extends StatelessWidget {
                                       height: 2,
                                     ),
 
-                                    if(chat.messages[0].message!=MessageTypes.IMAGE_MESSAGE)
+                                    if(MessageUtil.isTextMessage(chat.messages[0].message))
                                       Text(
                                       //fix the second argument
                                         (){
@@ -110,13 +114,40 @@ class ChatCard extends StatelessWidget {
                                       ),
                                       maxLines: 2,
                                     ),
-                                    if(chat.messages[0].message==MessageTypes.IMAGE_MESSAGE && chat.messages[0].fileUrls!=null && chat.messages[0].fileUrls!='null' && chat.messages[0].fileUrls!='')
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                          height: 20,
-                                          width: 30,
-                                          child: CacheImage(chat.messages[0].fileUrls))
-                                    ,
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: (){
+                                        if(chat.messages[0].fileUrls!=null
+                                            && chat.messages[0].fileUrls!='null'
+                                            && chat.messages[0].fileUrls!=''){
+                                          String messageType=MessageUtil.getTypeFromUrl(chat.messages[0].fileUrls);
+                                          switch(messageType){
+                                            case MessageTypes.IMAGE_MESSAGE:
+                                              return Row(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 20,
+                                                    width: 60,
+                                                    child:FileUtil.fileOriginType(chat.messages[0].fileUrls)==EOrigin.remote?
+                                                    CacheImage(chat.messages[0].fileUrls):
+                                                    Image.file(File(chat.messages[0].fileUrls))
+                                                  ),
+                                                  Text("Image",style: TextStyle(color: EColors.themeGrey),)
+                                                ],
+                                              );
+                                            case MessageTypes.DOC_MESSAGE:
+                                              return Row(
+                                                children: [
+                                                  Icon(Icons.file_copy_sharp,size: 15,color: EColors.themeGrey,),
+                                                  SizedBox(width: 10,),
+                                                  Text("Document",style: TextStyle(color: EColors.themeGrey),)
+                                                ],
+                                              );
+                                          }
+                                        }
+                                        return SizedBox(height: 0,width: 0,);
+                                      }(),
+                                    ),
                                     SizedBox(
                                       height: 15,
                                     ),

@@ -47,12 +47,12 @@ class _ImageWithEditState extends State<ImageWithEdit> {
               child: ImageWithPlaceholder(widget.room!=null?widget.room?.profileUrl:widget.user?.profileUrl,size:size))),
           if(widget.loading)
             Positioned(left: 0,right: 0,top: 0,bottom: 0,child: lottieLoader(radius:13)),
-          Positioned(child: IconButton(icon: Icon(Icons.edit,color: EColors.white,size: 30,),onPressed: () async{
+          Positioned(child: GestureDetector(child: Icon(Icons.edit,color: EColors.white,size: 30,),onTap: () async{
             String path=await FileUtil.selectImageFromDevice();
             if(path!=null){
               widget.callback(path);
             }
-          },),bottom: -10,right: -15,)
+          },),bottom: 0,right: 0,)
         ],
       ),
     );

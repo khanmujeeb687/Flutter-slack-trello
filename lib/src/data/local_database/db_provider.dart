@@ -289,13 +289,24 @@ class DBProvider {
         [EnumToString.convertToString(fileState, camelCase: true), messageId]);
   }
 
-  Future<void> setAllUnSentFiles() async {
+
+  Future<void> updateMessageFilePath(int messageId, String filePath) async {
+    final db = await database;
+    await db.rawQuery('''
+    UPDATE tb_message
+     SET file_urls= ?
+      WHERE id_message= ?
+        ''',
+        [filePath, messageId]);
+  }
+
+  Future<void> setAllUnSentFiles(EFileState first, EFileState second) async {
     final db = await database;
     await db.rawQuery('''
      UPDATE tb_message SET file_upload_state = ? WHERE file_upload_state = ?
         ''', [
-      EnumToString.convertToString(EFileState.unsent, camelCase: true),
-      EnumToString.convertToString(EFileState.sending, camelCase: true)
+      EnumToString.convertToString(first, camelCase: true),
+      EnumToString.convertToString(second, camelCase: true)
     ]);
   }
 

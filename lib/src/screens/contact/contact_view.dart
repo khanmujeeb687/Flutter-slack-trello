@@ -8,9 +8,12 @@ import 'package:wively/src/data/models/message_types.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/screens/contact/contact_controller.dart';
 import 'package:wively/src/utils/dates.dart';
+import 'package:wively/src/utils/file_util.dart';
+import 'package:wively/src/utils/message_utils.dart';
 import 'package:wively/src/utils/room_message_controller.dart';
 import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
+import 'package:wively/src/widgets/file_message.dart';
 import 'package:wively/src/widgets/image_message.dart';
 import 'package:wively/src/widgets/text_field_with_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -229,7 +232,8 @@ class _ContactScreenState extends State<ContactScreen> {
                   nip: showNip
                       ? (isMe ? BubbleNip.rightTop : BubbleNip.leftTop)
                       : null,
-                  color: message.fileUrls==null || message.fileUrls?.length==0 ? EColors.themePink.withOpacity(0.5): EColors.transparent,
+                  color: message.fileUrls==null || message.fileUrls?.length==0
+                 || MessageUtil.getTypeFromUrl(message.fileUrls)!=MessageTypes.IMAGE_MESSAGE? EColors.themePink.withOpacity(0.5): EColors.transparent,
                   child:Column(
                     crossAxisAlignment: isMe
                         ? CrossAxisAlignment.end
@@ -237,8 +241,8 @@ class _ContactScreenState extends State<ContactScreen> {
                     children: [
                       if(showNip)
                         renderUserName(message, isMe),
-                      message.fileUrls==null || message.fileUrls?.length==0 ? Container(width:0,height:0):ImageMessage(message),
-                      if(message.message!=MessageTypes.IMAGE_MESSAGE)
+                      message.fileUrls==null || message.fileUrls?.length==0 ? Container(width:0,height:0):renderFileMessage(message,isMe,showNip),
+                      if(MessageUtil.isTextMessage(message.message))
                         Text(
                         message.message,
                         style: TextStyle(
@@ -367,4 +371,20 @@ class _ContactScreenState extends State<ContactScreen> {
           color: EColors.getRandomColorForUser(message.fromUser)),
     );
   }
+
+
+  renderFileMessage(Message message,bool isMe,bool showNip){
+    if(message.fileUrls!=null
+        && message.fileUrls!='null'
+        && message.fileUrls!=''){
+      switch(MessageUtil.getTypeFromUrl(message.fileUrls)){
+        case MessageTypes.IMAGE_MESSAGE:
+          return ImageMessage(message);
+        case MessageTypes.DOC_MESSAGE:
+          return FileMessage(message,isMe,showNip);
+      }
+    }
+    return SizedBox(height: 0,width: 0);
+  }
+
 }

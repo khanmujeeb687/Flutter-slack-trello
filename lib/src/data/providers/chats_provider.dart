@@ -112,13 +112,18 @@ class ChatsProvider with ChangeNotifier {
     setSelectedChat(selectedChat);
   }
 
-  Future<void> setAllUnSentMessages()async{
-    await DBProvider.db.setAllUnSentFiles();
+  Future<void> setAllUnSentMessages(EFileState first,EFileState second)async{
+    await DBProvider.db.setAllUnSentFiles(first,second);
     updateChats();
   }
 
   Future<void> updateMessageState(int id,EFileState fileState) async{
     await DBProvider.db.changeMessageStatus(id, fileState);
+    updateChats();
+  }
+
+  Future<void> updateMessageFilePath(int id,String filePath) async{
+    await DBProvider.db.updateMessageFilePath(id, filePath);
     updateChats();
   }
 

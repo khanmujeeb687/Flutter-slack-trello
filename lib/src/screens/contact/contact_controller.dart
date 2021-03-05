@@ -178,7 +178,14 @@ class ContactController extends StateControl {
 
   onSelectFilePress(ESelectedFileType selectedFileType) async{
     NavigationUtil.goBack(context);
-    String filePath=await NavigationUtil.openImageEditor(context);
+
+    String filePath;
+    if(selectedFileType==ESelectedFileType.Image){
+      filePath =await NavigationUtil.openImageEditor(context);
+    }else if(selectedFileType==ESelectedFileType.document){
+      filePath =await FileUtil.openFileSelector();
+    }
+
     if(filePath!=null){
       sendMessage(filePaths: filePath);
     }

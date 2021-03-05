@@ -6,7 +6,8 @@ enum ESelectedFileType{
 
 enum EFileState{
   downloaded,
-  notDownloaded,
+  notdownloaded,
+  downloading,
   sending,
   sent,
   unsent

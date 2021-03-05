@@ -81,6 +81,9 @@ dependencies:
 
   nuts_activity_indicator: ^0.1.1
 
+  file_picker: ^1.13.2
+
+
 
 
 
