@@ -43,7 +43,20 @@ class MessageUtil{
       case MediaType.Image:
         return MessageTypes.IMAGE_MESSAGE;
     }
+  }
 
+
+  static getMediaTypeFromMessageType(String messageType){
+    switch(messageType){
+      case MessageTypes.AUDIO_MESSAGE:
+        return MediaType.Audio;
+      case MessageTypes.VIDEO_MESSAGE:
+        return MediaType.Video;
+      case MessageTypes.DOC_MESSAGE:
+        return MediaType.Document;
+      case MessageTypes.IMAGE_MESSAGE:
+        return MediaType.Image;
+    }
   }
 
 }

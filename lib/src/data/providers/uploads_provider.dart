@@ -124,7 +124,7 @@ class UploadsProvider extends ChangeNotifier {
               id: taskId,
               tag: tag,
               message: message,
-              type: MediaType.Video,
+              type: MessageUtil.getMediaTypeFromMessageType(MessageUtil.getTypeFromUrl(_getFileUrl(filename))),
               status: UploadTaskStatus.enqueued,
             ));
   }
