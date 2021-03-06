@@ -5,14 +5,14 @@ import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:wively/src/controller/file_upload_controller.dart';
+import 'package:wively/src/controller/message_controller.dart';
 import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/services/upload_service.dart';
+import 'package:wively/src/utils/message_utils.dart';
 
 import 'chats_provider.dart';
 
-const String uploadURL =
-    "https://us-central1-flutteruploader.cloudfunctions.net/upload";
 
 class UploadItem {
   final String id;
@@ -21,6 +21,7 @@ class UploadItem {
   final int progress;
   final UploadTaskStatus status;
   final Message message;
+  final fileUri;
 
   UploadItem(
       {this.id,
@@ -28,6 +29,7 @@ class UploadItem {
       this.type,
       this.progress = 0,
       this.status = UploadTaskStatus.undefined,
+        this.fileUri,
       this.message});
 
   UploadItem copyWith({UploadTaskStatus status, int progress}) => UploadItem(
@@ -35,6 +37,7 @@ class UploadItem {
       tag: this.tag,
       type: this.type,
       message: this.message,
+      fileUri: this.fileUri,
       status: status ?? this.status,
       progress: progress ?? this.progress);
 
@@ -88,8 +91,10 @@ class UploadsProvider extends ChangeNotifier {
   }
 
   String _uploadUrl() {
-    return uploadURL;
+    return "https://foodsfiesta.com/darwdawguploads/uploadfile.php";
   }
+
+
 
   uploadFile(File file, String tag, Message message) async {
     tasks.remove(tag);
@@ -115,12 +120,17 @@ class UploadsProvider extends ChangeNotifier {
     _tasks.putIfAbsent(
         tag,
         () => UploadItem(
+          fileUri: _getFileUrl(filename),
               id: taskId,
               tag: tag,
               message: message,
               type: MediaType.Video,
               status: UploadTaskStatus.enqueued,
             ));
+  }
+
+  String _getFileUrl(filename) {
+    return "https://foodsfiesta.com/darwdawguploads/uploads/" + filename;
   }
 
   Future cancelUpload(String id) async {
@@ -134,6 +144,10 @@ class UploadsProvider extends ChangeNotifier {
 
   void checkCompletion(UploadTaskResponse result) {
     if (result.status == UploadTaskStatus.complete) {
+      MessageController().sendMessage(tasks[result.tag].message,
+          MessageUtil.getMessageTypeFromMediaType(tasks[result.tag].type),
+        filesUri:tasks[result.tag].fileUri
+      );
       updateLocalStatus(EFileState.sent, tasks[result.tag].message);
     } else if (result.status == UploadTaskStatus.failed ||
         result.status == UploadTaskStatus.canceled) {

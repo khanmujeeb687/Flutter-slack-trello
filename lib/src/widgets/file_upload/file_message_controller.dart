@@ -14,7 +14,7 @@ class FileMessageController extends StateControl {
 
   UploadsProvider _uploadsProvider;
 
-  UploadItem get task => _uploadsProvider?.tasks[message.chatId + message?.id];
+  UploadItem get task => _uploadsProvider?.tasks[message?.fileUrls];
 
   FileMessageController({@required this.context, @required this.message}) {
     init();
@@ -29,18 +29,12 @@ class FileMessageController extends StateControl {
 
 
   uploadFile() async {
-   _uploadsProvider?.uploadFile(File(message?.fileUrls), message.chatId+message?.id,message);
+   _uploadsProvider?.uploadFile(File(message?.fileUrls), message.fileUrls,message);
   }
 
 
   stopUpload() async{
-    _uploadsProvider?.cancelUpload(message.chatId+message?.id);
+    _uploadsProvider?.cancelUpload(message.fileUrls);
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
 
 }

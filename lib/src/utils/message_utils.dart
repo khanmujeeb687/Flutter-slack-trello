@@ -1,5 +1,6 @@
 import 'package:wively/src/data/models/message_types.dart';
 import 'package:path/path.dart';
+import 'package:wively/src/data/services/upload_service.dart';
 
 class MessageUtil{
   static String getMessageType(String message){
@@ -28,6 +29,21 @@ class MessageUtil{
     if(exten.contains('mp4')) return MessageTypes.VIDEO_MESSAGE;
     if(exten.contains('mp3')) return MessageTypes.AUDIO_MESSAGE;
     return MessageTypes.DOC_MESSAGE;
+  }
+
+  static getMessageTypeFromMediaType(MediaType mediaType) {
+
+    switch(mediaType){
+      case MediaType.Audio:
+        return MessageTypes.AUDIO_MESSAGE;
+      case MediaType.Video:
+        return MessageTypes.VIDEO_MESSAGE;
+      case MediaType.Document:
+        return MessageTypes.DOC_MESSAGE;
+      case MediaType.Image:
+        return MessageTypes.IMAGE_MESSAGE;
+    }
+
   }
 
 }
