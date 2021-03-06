@@ -46,12 +46,18 @@ class _AudioMessageState extends State<AudioMessage> {
     super.initState();
   }
 
+  bool get initialized{
+    return ( widget.message.fileUploadState==EFileState.downloaded
+        || widget.message.fileUploadState==EFileState.sent
+        || widget.message.fileUploadState==EFileState.unsent
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (widget.message.fileUploadState == EFileState.downloaded ||
-            widget.message.fileUploadState == EFileState.sent) {
+        if (initialized) {
           if(playing){
             pauseAudio();
           }else{

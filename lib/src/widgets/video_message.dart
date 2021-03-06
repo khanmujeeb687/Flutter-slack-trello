@@ -43,11 +43,18 @@ class _VideoMessageState extends State<VideoMessage> {
     super.initState();
   }
 
+  bool get initialized{
+   return ( widget.message.fileUploadState==EFileState.downloaded
+       || widget.message.fileUploadState==EFileState.sent
+       || widget.message.fileUploadState==EFileState.unsent
+   );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        if(widget.message.fileUploadState==EFileState.downloaded || widget.message.fileUploadState==EFileState.sent){
+        if(initialized){
           OpenFile.open(widget.message.fileUrls);
         }
       },
