@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-import 'package:wively/src/controller/file_upload_controller.dart';
 import 'package:wively/src/controller/message_controller.dart';
 import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
@@ -12,7 +12,6 @@ import 'package:wively/src/data/services/upload_service.dart';
 import 'package:wively/src/utils/message_utils.dart';
 
 import 'chats_provider.dart';
-
 
 class UploadItem {
   final String id;
@@ -29,7 +28,7 @@ class UploadItem {
       this.type,
       this.progress = 0,
       this.status = UploadTaskStatus.undefined,
-        this.fileUri,
+      this.fileUri,
       this.message});
 
   UploadItem copyWith({UploadTaskStatus status, int progress}) => UploadItem(
@@ -94,8 +93,6 @@ class UploadsProvider extends ChangeNotifier {
     return "https://foodsfiesta.com/darwdawguploads/uploadfile.php";
   }
 
-
-
   uploadFile(File file, String tag, Message message) async {
     tasks.remove(tag);
     init();
@@ -120,11 +117,12 @@ class UploadsProvider extends ChangeNotifier {
     _tasks.putIfAbsent(
         tag,
         () => UploadItem(
-          fileUri: _getFileUrl(filename),
+              fileUri: _getFileUrl(filename),
               id: taskId,
               tag: tag,
               message: message,
-              type: MessageUtil.getMediaTypeFromMessageType(MessageUtil.getTypeFromUrl(_getFileUrl(filename))),
+              type: MessageUtil.getMediaTypeFromMessageType(
+                  MessageUtil.getTypeFromUrl(_getFileUrl(filename))),
               status: UploadTaskStatus.enqueued,
             ));
   }
@@ -146,8 +144,7 @@ class UploadsProvider extends ChangeNotifier {
     if (result.status == UploadTaskStatus.complete) {
       MessageController().sendMessage(tasks[result.tag].message,
           MessageUtil.getMessageTypeFromMediaType(tasks[result.tag].type),
-        filesUri:tasks[result.tag].fileUri
-      );
+          filesUri: tasks[result.tag].fileUri);
       updateLocalStatus(EFileState.sent, tasks[result.tag].message);
     } else if (result.status == UploadTaskStatus.failed ||
         result.status == UploadTaskStatus.canceled) {
