@@ -5,6 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/models/message_types.dart';
+import 'package:wively/src/data/models/room.dart';
+import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/screens/contact/contact_controller.dart';
 import 'package:wively/src/utils/dates.dart';
@@ -16,6 +18,7 @@ import 'package:wively/src/widgets/file_upload/audio_message.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
 import 'package:wively/src/widgets/file_upload/file_message.dart';
 import 'package:wively/src/widgets/file_upload/image_message.dart';
+import 'package:wively/src/widgets/image_with_placeholder.dart';
 import 'package:wively/src/widgets/text_field_with_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +100,8 @@ class _ContactScreenState extends State<ContactScreen> {
 
   @override
   Widget build(BuildContext context) {
+    User mUser = _contactController.selectedChat.user;
+    Room mRoom = _contactController.selectedChat.room;
     return WillPopScope(
       onWillPop: _contactController.willPop,
       child: StreamBuilder<Object>(
@@ -114,21 +119,10 @@ class _ContactScreenState extends State<ContactScreen> {
                         tag: _contactController.selectedChat.id + 'profile',
                         child: Material(
                           color: EColors.transparent,
-                          child: CircleAvatar(
-                            child: Text(
-                              _contactController.selectedChat.room == null
-                                  ? _contactController.selectedChat.user.name[0]
-                                  : _contactController
-                                      .selectedChat.room.roomName[0]
-                                      .toUpperCase(),
-                              style: TextStyle(
-                                color: EColors.themeMaroon,
-                                fontSize: 14,
-                              ),
-                            ),
-                            radius: 16,
-                            backgroundColor: EColors.white,
-                          ),
+                          child: ImageWithPlaceholder(mRoom==null?
+                          mUser.profileUrl:mRoom.profileUrl,
+                              placeholderType: mRoom==null?EPlaceholderType.user:EPlaceholderType.room),
+
                         ),
                       ),
                       SizedBox(

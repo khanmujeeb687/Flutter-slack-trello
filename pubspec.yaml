@@ -89,6 +89,8 @@ dependencies:
 
   video_thumbnail: ^0.2.5+1
 
+  page_transition: ^1.1.7+6
+
 
 
 

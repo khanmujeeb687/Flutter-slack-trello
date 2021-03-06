@@ -1,23 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:wively/src/utils/file_util.dart';
 import 'package:wively/src/values/Colors.dart';
 
-class NavigationUtil{
+class NavigationUtil {
+  static navigate(context, Widget destination) async {
+    return await Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.rightToLeft, child: destination));
 
-
-
-
-  static navigate(context,Widget destination)async{
-    return await Navigator.push(context, new MaterialPageRoute(
-      builder: (context){
-        return destination;
-      },
-    ));
+    // return await Navigator.push(context, new MaterialPageRoute(
+    //   builder: (context){
+    //     return destination;
+    //   },
+    // ));
   }
 
-
-  static navigateSlow(context,Widget destination)async{
+  static navigateSlow(context, Widget destination) async {
     return await Navigator.push(
       context,
       PageRouteBuilder(
@@ -30,21 +31,18 @@ class NavigationUtil{
     );
   }
 
-
-  static replace(context,Widget destination)async{
-    return await Navigator.pushReplacement(context, new MaterialPageRoute(
-        builder: (context){
-          return destination;
-        }
-    ));
+  static replace(context, Widget destination) async {
+    return await Navigator.pushReplacement(context,
+        new MaterialPageRoute(builder: (context) {
+      return destination;
+    }));
   }
 
-  static goBack(context)async{
+  static goBack(context) async {
     return Navigator.pop(context);
   }
 
-
-  static Future<String> openImageEditor(context) async{
+  static Future<String> openImageEditor(context) async {
     return await FileUtil.selectImageFromDevice();
   }
 }

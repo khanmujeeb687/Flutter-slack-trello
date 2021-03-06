@@ -63,13 +63,7 @@ class ChatCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Hero(
-                  tag: chat.id+'profile',
-                  child: Material(
-                    color: EColors.transparent,
-                    child: ImageWithPlaceholder(chat.room==null?chat.user.profileUrl:chat.room.profileUrl,placeholderType: this.chat.room==null?EPlaceholderType.user:EPlaceholderType.room),
-                  ),
-                ),
+                ImageWithPlaceholder(chat.room==null?chat.user.profileUrl:chat.room.profileUrl,placeholderType: this.chat.room==null?EPlaceholderType.user:EPlaceholderType.room),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(
