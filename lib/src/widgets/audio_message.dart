@@ -37,12 +37,26 @@ class _AudioMessageState extends State<AudioMessage> {
   bool playing = false;
 
   @override
+  void initState() {
+    if(widget.message.fileUploadState==EFileState.sending){
+      updateLocalStatus(EFileState.unsent);
+    }else if(widget.message.fileUploadState==EFileState.downloading){
+      updateLocalStatus(EFileState.notdownloaded);
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         if (widget.message.fileUploadState == EFileState.downloaded ||
             widget.message.fileUploadState == EFileState.sent) {
-          playAudio();
+          if(playing){
+            pauseAudio();
+          }else{
+            playAudio();
+          }
         }
       },
       child: Bubble(

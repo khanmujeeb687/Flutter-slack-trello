@@ -33,6 +33,16 @@ class _FileMessageState extends State<FileMessage> {
   static FileUploadController _fileUploadController;
   DownloadService _downloadService;
 
+
+  @override
+  void initState() {
+    if(widget.message.fileUploadState==EFileState.sending){
+      updateLocalStatus(EFileState.unsent);
+    }else if(widget.message.fileUploadState==EFileState.downloading){
+      updateLocalStatus(EFileState.notdownloaded);
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
