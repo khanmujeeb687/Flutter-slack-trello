@@ -1,21 +1,26 @@
+//latest
+
 import 'dart:io';
 import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
 import 'package:wively/src/controller/file_upload_controller.dart';
 import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
+import 'package:wively/src/data/providers/uploads_provider.dart';
 import 'package:wively/src/data/services/download_service.dart';
 import 'package:wively/src/data/services/upload_service.dart';
 import 'package:wively/src/utils/file_util.dart';
 import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/screen_util.dart';
 import 'package:wively/src/values/Colors.dart';
+import 'package:wively/src/widgets/file_upload/file_message_controller.dart';
 import 'package:wively/src/widgets/full_image.dart';
 import 'package:wively/src/widgets/lottie_loader.dart';
 
@@ -36,127 +41,174 @@ class _AudioMessageState extends State<AudioMessage> {
   AudioPlayer audioPlayer;
   bool playing = false;
 
+  bool get initialized {
+    return (widget.message.fileUploadState == EFileState.downloaded ||
+        widget.message.fileUploadState == EFileState.sent ||
+        widget.message.fileUploadState == EFileState.unsent ||
+        Provider.of<UploadsProvider>(context)
+            .tasks[widget.message.sendAt.toString()]
+            ?.status ==
+            UploadTaskStatus.complete);
+  }
+
   @override
   void initState() {
-    if(widget.message.fileUploadState==EFileState.sending){
-      updateLocalStatus(EFileState.unsent);
-    }else if(widget.message.fileUploadState==EFileState.downloading){
+    if (widget.message.fileUploadState == EFileState.downloading) {
       updateLocalStatus(EFileState.notdownloaded);
     }
     super.initState();
   }
 
-  bool get initialized{
-    return ( widget.message.fileUploadState==EFileState.downloaded
-        || widget.message.fileUploadState==EFileState.sent
-        || widget.message.fileUploadState==EFileState.unsent
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (initialized) {
-          if(playing){
-            pauseAudio();
-          }else{
-            playAudio();
+        onTap: () {
+          if (initialized) {
+            if(playing){
+              pauseAudio();
+            }else{
+              playAudio();
+            }
           }
-        }
-      },
-      child: Bubble(
-        shadowColor: EColors.transparent,
-        radius: Radius.circular(15),
-        alignment: widget.isMe ? Alignment.topRight : Alignment.topLeft,
-        color: EColors.themePink.withOpacity(0.5),
-        child: Container(
-          padding: EdgeInsets.all(6),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(Icons.audiotrack, color: EColors.themeBlack),
-              SizedBox(
-                width: 6,
-              ),
-              Expanded(
-                  child: Text(
-                FileUtil.getFileName(widget.message.fileUrls),
-                style: TextStyle(color: EColors.white, fontSize: 12),
-              )),
-              () {
-                if (widget.message.fileUploadState == EFileState.sending) {
-                  return Stack(
-                    children: [
-                      lottieLoader(radius: 15),
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        bottom: 0,
-                        child: GestureDetector(
-                          onTap: () {
-                            _fileUploadController?.stopUpload();
-                          },
-                          child: Icon(
-                            Icons.close,
-                            color: EColors.white,
+
+        },
+        child: Bubble(
+          shadowColor: EColors.transparent,
+          radius: Radius.circular(15),
+          alignment: widget.isMe ? Alignment.topRight : Alignment.topLeft,
+          color: EColors.themePink.withOpacity(0.5),
+          child: Container(
+            padding: EdgeInsets.all(6),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(Icons.file_copy_outlined, color: EColors.themeBlack),
+                SizedBox(
+                  width: 6,
+                ),
+                Expanded(
+                    child: Text(
+                      FileUtil.getFileName(widget.message.fileUrls),
+                      style: TextStyle(color: EColors.white, fontSize: 12),
+                    )),
+                    () {
+                  if (widget.message.fileUploadState == EFileState.sending ||
+                      (Provider.of<UploadsProvider>(context)
+                          .tasks[widget.message.sendAt.toString()]
+                          ?.status ==
+                          UploadTaskStatus.enqueued ||
+                          Provider.of<UploadsProvider>(context)
+                              .tasks[widget.message.sendAt.toString()]
+                              ?.status ==
+                              UploadTaskStatus.running)) {
+                    return Stack(
+                      children: [
+                        CircularProgressIndicator(
+                          value: double.parse(
+                              Provider.of<UploadsProvider>(context)
+                                  .tasks[widget.message.sendAt.toString()]
+                                  ?.progress
+                                  .toString()) /
+                              100,
+                          valueColor:
+                          AlwaysStoppedAnimation<Color>(EColors.white),
+                          backgroundColor: EColors.themeGrey,
+                        ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          top: 0,
+                          bottom: 0,
+                          child: GestureDetector(
+                            onTap: () {
+                              Provider.of<UploadsProvider>(context,
+                                  listen: false)
+                                  .cancelUpload(
+                                  widget.message.sendAt.toString());
+                            },
+                            child: Icon(
+                              Icons.close,
+                              color: EColors.white,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                } else if (widget.message.fileUploadState ==
-                    EFileState.unsent) {
-                  return GestureDetector(
-                    onTap: uploadImage,
-                    child: Icon(
-                      Icons.upload_outlined,
-                      color: EColors.white,
-                    ),
-                  );
-                } else if (widget.message.fileUploadState ==
-                    EFileState.notdownloaded) {
-                  return GestureDetector(
-                    onTap: downloadFile,
-                    child: Icon(
-                      Icons.download_rounded,
-                      color: EColors.white,
-                    ),
-                  );
-                } else if (widget.message.fileUploadState ==
-                    EFileState.downloading) {
-                  return lottieLoader(radius: 15);
-                }
-                else if (widget.message.fileUploadState ==
-                    EFileState.downloaded || widget.message.fileUploadState ==
-                    EFileState.sent) {
-                  if(audioPlayer!=null && playing){
+                      ],
+                    );
+                  } else if ((widget.message.fileUploadState ==
+                      EFileState.unsent ||
+                      (Provider.of<UploadsProvider>(context)
+                          .tasks[widget.message.sendAt.toString()]
+                          ?.status ==
+                          UploadTaskStatus.canceled ||
+                          Provider.of<UploadsProvider>(context)
+                              .tasks[widget.message.sendAt.toString()]
+                              ?.status ==
+                              UploadTaskStatus.failed)) &&
+                      Provider.of<UploadsProvider>(context)
+                          .tasks[widget.message.sendAt.toString()]
+                          ?.status !=
+                          UploadTaskStatus.complete) {
                     return GestureDetector(
-                      onTap: pauseAudio,
+                      onTap: () {
+                        Provider.of<UploadsProvider>(context, listen: false)
+                            .uploadFile(
+                            File(widget.message.fileUrls),
+                            widget.message.sendAt.toString(),
+                            widget.message);
+                      },
                       child: Icon(
-                        Icons.pause,
+                        Icons.upload_outlined,
                         color: EColors.white,
                       ),
                     );
-                  }else{
+                  } else if (widget.message.fileUploadState ==
+                      EFileState.notdownloaded) {
                     return GestureDetector(
-                      onTap: playAudio,
+                      onTap: downloadFile,
                       child: Icon(
-                        Icons.play_arrow,
+                        Icons.download_rounded,
                         color: EColors.white,
                       ),
                     );
-                  }
+                  } else if (widget.message.fileUploadState ==
+                      EFileState.downloading) {
+                    return lottieLoader(radius: 15);
+                  }else if ((widget.message.fileUploadState ==
+                      EFileState.downloaded || widget.message.fileUploadState ==
+                      EFileState.sent) ||
+                      Provider.of<UploadsProvider>(context)
+                          .tasks[widget.message.sendAt.toString()]
+                          ?.status ==
+                          UploadTaskStatus.complete
+                  ) {
+                    if(audioPlayer!=null && playing){
+                      return GestureDetector(
+                        onTap: pauseAudio,
+                        child: Icon(
+                          Icons.pause,
+                          color: EColors.white,
+                        ),
+                      );
+                    }else{
+                      return GestureDetector(
+                        onTap: playAudio,
+                        child: Icon(
+                          Icons.play_arrow,
+                          color: EColors.white,
+                        ),
+                      );
+                    }
 
-                }
-                return SizedBox(height: 0, width: 0);
-              }()
-            ],
+                  }
+                  return SizedBox(
+                    height: 0,
+                    width: 0,
+                  );
+                }()
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Future<void> updateLocalStatus(EFileState fileState) async {
@@ -169,7 +221,7 @@ class _AudioMessageState extends State<AudioMessage> {
 
   void uploadImage() async {
     _fileUploadController =
-        new FileUploadController(MediaType.Audio, widget.message);
+    new FileUploadController(MediaType.Document, widget.message);
     _fileUploadController.startUpload(updateLocalStatus);
   }
 
@@ -179,6 +231,26 @@ class _AudioMessageState extends State<AudioMessage> {
     _fileUploadController?.dispose();
     super.dispose();
   }
+
+  playAudio() async {
+    pauseAudio();
+    audioPlayer?.dispose();
+    audioPlayer = AudioPlayer();
+    audioPlayer.play(widget.message.fileUrls,
+        isLocal:
+        FileUtil.fileOriginType(widget.message.fileUrls) == EOrigin.local);
+    setState(() {
+      playing=true;
+    });
+  }
+
+  pauseAudio() async {
+    audioPlayer?.stop();
+    setState(() {
+      playing=false;
+    });
+  }
+
 
   void downloadFile() async {
     String filePath = await FileUtil.createPathFromUrl(widget.message.fileUrls);
@@ -194,27 +266,6 @@ class _AudioMessageState extends State<AudioMessage> {
     }
   }
 
-  playAudio() async {
-    pauseAudio();
-    audioPlayer?.dispose();
-    audioPlayer = AudioPlayer();
-    audioPlayer.play(widget.message.fileUrls,
-        isLocal:
-            FileUtil.fileOriginType(widget.message.fileUrls) == EOrigin.local);
-    setState(() {
-      playing=true;
-    });
-  }
-
-  pauseAudio() async {
-    audioPlayer?.stop();
-    setState(() {
-      playing=false;
-    });
-  }
-
-
-
   Future<void> updateFilePath(String filePath) async {
     await Provider.of<ChatsProvider>(context, listen: false)
         .updateMessageFilePath(widget.message.localId, filePath);
@@ -222,6 +273,4 @@ class _AudioMessageState extends State<AudioMessage> {
       widget.message.fileUrls = filePath;
     });
   }
-
-
 }
