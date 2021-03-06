@@ -76,6 +76,9 @@ class FileUploadController{
        case MediaType.Document:
          typeText=MessageTypes.DOC_MESSAGE;
          break;
+       case MediaType.Audio:
+         typeText=MessageTypes.AUDIO_MESSAGE;
+         break;
      }
 
 

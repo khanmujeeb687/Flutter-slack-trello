@@ -1,7 +1,8 @@
 enum ESelectedFileType{
   Image,
   Video,
-  document
+  document,
+  Audio
 }
 
 enum EFileState{

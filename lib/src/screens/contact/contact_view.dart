@@ -12,6 +12,7 @@ import 'package:wively/src/utils/file_util.dart';
 import 'package:wively/src/utils/message_utils.dart';
 import 'package:wively/src/utils/room_message_controller.dart';
 import 'package:wively/src/values/Colors.dart';
+import 'package:wively/src/widgets/audio_message.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
 import 'package:wively/src/widgets/file_message.dart';
 import 'package:wively/src/widgets/image_message.dart';
@@ -424,6 +425,8 @@ class _ContactScreenState extends State<ContactScreen> {
           return FileMessage(message, isMe, showNip);
         case MessageTypes.VIDEO_MESSAGE:
           return VideoMessage(message, isMe, showNip);
+        case MessageTypes.AUDIO_MESSAGE:
+          return AudioMessage(message, isMe, showNip);
       }
     }
     return SizedBox(height: 0, width: 0);

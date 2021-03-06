@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 
-enum MediaType { Image, Video, Document }
+enum MediaType { Image, Video, Document ,Audio}
 
 class UploadService {
   File _file;

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
@@ -18,27 +19,30 @@ import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/full_image.dart';
 import 'package:wively/src/widgets/lottie_loader.dart';
 
-class VideoMessage extends StatefulWidget {
+class AudioMessage extends StatefulWidget {
   Message message;
   bool isMe;
   bool showNip;
 
-  VideoMessage(this.message, this.isMe, this.showNip);
+  AudioMessage(this.message, this.isMe, this.showNip);
 
   @override
-  _VideoMessageState createState() => _VideoMessageState();
+  _AudioMessageState createState() => _AudioMessageState();
 }
 
-class _VideoMessageState extends State<VideoMessage> {
+class _AudioMessageState extends State<AudioMessage> {
   static FileUploadController _fileUploadController;
   DownloadService _downloadService;
+  AudioPlayer audioPlayer;
+  bool playing = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        if(widget.message.fileUploadState==EFileState.downloaded || widget.message.fileUploadState==EFileState.sent){
-          OpenFile.open(widget.message.fileUrls);
+      onTap: () {
+        if (widget.message.fileUploadState == EFileState.downloaded ||
+            widget.message.fileUploadState == EFileState.sent) {
+          playAudio();
         }
       },
       child: Bubble(
@@ -51,14 +55,16 @@ class _VideoMessageState extends State<VideoMessage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(Icons.video_collection_rounded, color: EColors.themeBlack),
-              SizedBox(width: 6,),
+              Icon(Icons.audiotrack, color: EColors.themeBlack),
+              SizedBox(
+                width: 6,
+              ),
               Expanded(
                   child: Text(
-                    FileUtil.getFileName(widget.message.fileUrls),
-                    style: TextStyle(color: EColors.white, fontSize: 12),
-                  )),
-                  () {
+                FileUtil.getFileName(widget.message.fileUrls),
+                style: TextStyle(color: EColors.white, fontSize: 12),
+              )),
+              () {
                 if (widget.message.fileUploadState == EFileState.sending) {
                   return Stack(
                     children: [
@@ -80,8 +86,8 @@ class _VideoMessageState extends State<VideoMessage> {
                       ),
                     ],
                   );
-                }
-                else if (widget.message.fileUploadState == EFileState.unsent) {
+                } else if (widget.message.fileUploadState ==
+                    EFileState.unsent) {
                   return GestureDetector(
                     onTap: uploadImage,
                     child: Icon(
@@ -89,9 +95,8 @@ class _VideoMessageState extends State<VideoMessage> {
                       color: EColors.white,
                     ),
                   );
-                }
-                else
-                if (widget.message.fileUploadState == EFileState.notdownloaded) {
+                } else if (widget.message.fileUploadState ==
+                    EFileState.notdownloaded) {
                   return GestureDetector(
                     onTap: downloadFile,
                     child: Icon(
@@ -99,25 +104,34 @@ class _VideoMessageState extends State<VideoMessage> {
                       color: EColors.white,
                     ),
                   );
-                }
-                else
-                if (widget.message.fileUploadState == EFileState.downloading) {
+                } else if (widget.message.fileUploadState ==
+                    EFileState.downloading) {
                   return lottieLoader(radius: 15);
                 }
                 else if (widget.message.fileUploadState ==
                     EFileState.downloaded || widget.message.fileUploadState ==
                     EFileState.sent) {
-                    return Icon(
-                      Icons.play_arrow,
-                      color: EColors.white,
+                  if(audioPlayer!=null && playing){
+                    return GestureDetector(
+                      onTap: pauseAudio,
+                      child: Icon(
+                        Icons.pause,
+                        color: EColors.white,
+                      ),
                     );
+                  }else{
+                    return GestureDetector(
+                      onTap: playAudio,
+                      child: Icon(
+                        Icons.play_arrow,
+                        color: EColors.white,
+                      ),
+                    );
+                  }
 
                 }
-                return SizedBox(height: 0,width: 0
-                  ,
-                );
+                return SizedBox(height: 0, width: 0);
               }()
-
             ],
           ),
         ),
@@ -135,12 +149,13 @@ class _VideoMessageState extends State<VideoMessage> {
 
   void uploadImage() async {
     _fileUploadController =
-    new FileUploadController(MediaType.Video, widget.message);
+        new FileUploadController(MediaType.Audio, widget.message);
     _fileUploadController.startUpload(updateLocalStatus);
   }
 
   @override
   void dispose() {
+    audioPlayer?.dispose();
     _fileUploadController?.dispose();
     super.dispose();
   }
@@ -159,6 +174,27 @@ class _VideoMessageState extends State<VideoMessage> {
     }
   }
 
+  playAudio() async {
+    pauseAudio();
+    audioPlayer?.dispose();
+    audioPlayer = AudioPlayer();
+    audioPlayer.play(widget.message.fileUrls,
+        isLocal:
+            FileUtil.fileOriginType(widget.message.fileUrls) == EOrigin.local);
+    setState(() {
+      playing=true;
+    });
+  }
+
+  pauseAudio() async {
+    audioPlayer?.stop();
+    setState(() {
+      playing=false;
+    });
+  }
+
+
+
   Future<void> updateFilePath(String filePath) async {
     await Provider.of<ChatsProvider>(context, listen: false)
         .updateMessageFilePath(widget.message.localId, filePath);
@@ -166,4 +202,6 @@ class _VideoMessageState extends State<VideoMessage> {
       widget.message.fileUrls = filePath;
     });
   }
+
+
 }

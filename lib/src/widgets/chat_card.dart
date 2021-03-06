@@ -151,6 +151,14 @@ class ChatCard extends StatelessWidget {
                                                   Text("Video",style: TextStyle(color: EColors.themeGrey),)
                                                 ],
                                               );
+                                            case MessageTypes.AUDIO_MESSAGE:
+                                              return Row(
+                                                children: [
+                                                  Icon(Icons.audiotrack,size: 15,color: EColors.themeGrey,),
+                                                  SizedBox(width: 10,),
+                                                  Text("Audio",style: TextStyle(color: EColors.themeGrey),)
+                                                ],
+                                              );
                                           }
                                         }
                                         return SizedBox(height: 0,width: 0,);

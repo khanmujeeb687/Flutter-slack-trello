@@ -4,4 +4,5 @@ class MessageTypes{
   static const IMAGE_MESSAGE='IMG_XLOL_MSG';
   static const DOC_MESSAGE='DOC_XLOL_MSG';
   static const VIDEO_MESSAGE='VIDEO_XLOL_MSG';
+  static const AUDIO_MESSAGE='AUDIO_XLOL_MSG';
 }

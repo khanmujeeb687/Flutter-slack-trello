@@ -24,7 +24,7 @@ class _SelectFileState extends State<SelectFile> {
         ),
         alignment: Alignment.center,
         padding: EdgeInsets.all(20),
-        height: ScreenUtil.height(context) / 4,
+        height: ScreenUtil.height(context) / 3,
         child: GridView.count(
           crossAxisCount: 3,
           children: [
@@ -48,6 +48,17 @@ class _SelectFileState extends State<SelectFile> {
                   onTap: () => onPress(ESelectedFileType.Video),
                 ),
                 Text("Video", style: TextStyle(color: EColors.themeGrey))
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  child: Icon(Icons.audiotrack, size: 50, color: EColors.themePink),
+                  onTap: () => onPress(ESelectedFileType.Audio),
+                ),
+                Text("Music", style: TextStyle(color: EColors.themeGrey))
               ],
             ),
             Column(

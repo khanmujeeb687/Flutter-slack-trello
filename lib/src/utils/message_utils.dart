@@ -10,6 +10,8 @@ class MessageUtil{
         return MessageTypes.DOC_MESSAGE;
       case MessageTypes.VIDEO_MESSAGE:
         return MessageTypes.VIDEO_MESSAGE;
+      case MessageTypes.AUDIO_MESSAGE:
+        return MessageTypes.AUDIO_MESSAGE;
       default:
         return null;
     }
@@ -24,6 +26,7 @@ class MessageUtil{
     String exten=extension(url);
     if(exten.contains('jpeg')) return MessageTypes.IMAGE_MESSAGE;
     if(exten.contains('mp4')) return MessageTypes.VIDEO_MESSAGE;
+    if(exten.contains('mp3')) return MessageTypes.AUDIO_MESSAGE;
     return MessageTypes.DOC_MESSAGE;
   }
 
