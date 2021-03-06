@@ -33,7 +33,7 @@ class _ImageMessageState extends State<ImageMessage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if(widget.message.fileUploadState==EFileState.downloaded){
+        if(widget.message.fileUploadState==EFileState.downloaded || widget.message.fileUploadState==EFileState.sent){
           NavigationUtil.navigateSlow(context, FullImage(widget.message.fileUrls));
         }
       },

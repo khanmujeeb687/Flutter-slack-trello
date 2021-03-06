@@ -113,8 +113,8 @@ class FileUtil {
   }
 
 
-  static openFileSelector() async{
-    File file=await FilePicker.getFile(type: FileType.custom,allowedExtensions: ['pdf','docx','mp4']);
+  static openFileSelector([var specific]) async{
+    File file=await FilePicker.getFile(type: FileType.custom,allowedExtensions: specific!=null?specific:['pdf','docx','mp4']);
     return file?.path;
   }
 

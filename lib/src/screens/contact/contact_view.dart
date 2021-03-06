@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:emoji_picker/emoji_picker.dart';
+import 'package:wively/src/widgets/video_message.dart';
 
 enum MessagePosition { BEFORE, AFTER }
 
@@ -65,7 +66,31 @@ class _ContactScreenState extends State<ContactScreen> {
     return (_contactController.selectedChat.messages[index].from !=
             _contactController.selectedChat.messages[index + 1].from ||
         RoomMessageController.isAddedMessage(
-            _contactController.selectedChat.messages[index + 1].message));
+            _contactController.selectedChat.messages[index + 1].message))|| shouldShowTime(index) ;
+  }
+
+  shouldShowBackgroundColor(Message message){
+    if(message.fileUrls!=null
+        && message.fileUrls!='null'
+        && message.fileUrls!=''){
+      switch(MessageUtil.getTypeFromUrl(message.fileUrls)){
+        case MessageTypes.IMAGE_MESSAGE:
+          return false;
+        case MessageTypes.VIDEO_MESSAGE:
+          return false;
+      }
+    }
+    return true;
+  }
+
+
+  shouldShowTime(int index) {
+    if (index == _contactController.selectedChat.messages.length - 1)
+      return true;
+    return (
+        DateTime.
+        fromMillisecondsSinceEpoch(_contactController.selectedChat.messages[index].sendAt)
+            .difference(DateTime.fromMillisecondsSinceEpoch(_contactController.selectedChat.messages[index+1].sendAt)).inSeconds>60);
   }
 
   @override
@@ -160,7 +185,8 @@ class _ContactScreenState extends State<ContactScreen> {
                       Expanded(
                         child: Scrollbar(
                           child: ListView.builder(
-                            cacheExtent:1000 ,
+                            addAutomaticKeepAlives: true,
+                            cacheExtent:10 ,
                             physics: ClampingScrollPhysics(),
                             controller: _contactController.scrollController,
                             padding: EdgeInsets.only(bottom: 5),
@@ -176,7 +202,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                     _contactController
                                         .selectedChat.messages[index],
                                     index,
-                                    shouldShowNip(index)),
+                                    shouldShowNip(index),
+                                    shouldShowTime(index)),
                               );
                             },
                           ),
@@ -203,7 +230,7 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   Widget renderMessage(
-      BuildContext context, Message message, int index, bool showNip) {
+      BuildContext context, Message message, int index, bool showNip, bool showTime) {
     if (_contactController.myUser == null) return Container();
     bool isMe = message.from == _contactController.myUser.id;
     return Column(
@@ -233,7 +260,7 @@ class _ContactScreenState extends State<ContactScreen> {
                       ? (isMe ? BubbleNip.rightTop : BubbleNip.leftTop)
                       : null,
                   color: message.fileUrls==null || message.fileUrls?.length==0
-                 || MessageUtil.getTypeFromUrl(message.fileUrls)!=MessageTypes.IMAGE_MESSAGE? EColors.themePink.withOpacity(0.5): EColors.transparent,
+                 || shouldShowBackgroundColor(message)? EColors.themePink.withOpacity(0.5): EColors.transparent,
                   child:Column(
                     crossAxisAlignment: isMe
                         ? CrossAxisAlignment.end
@@ -243,15 +270,19 @@ class _ContactScreenState extends State<ContactScreen> {
                         renderUserName(message, isMe),
                       message.fileUrls==null || message.fileUrls?.length==0 ? Container(width:0,height:0):renderFileMessage(message,isMe,showNip),
                       if(MessageUtil.isTextMessage(message.message))
-                        Text(
-                        message.message,
-                        style: TextStyle(
-                            color: EColors.white,
-                            fontSize: 14.5,
-                            fontWeight: FontWeight.w400),
-                        textAlign: TextAlign.left,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                          message.message,
+                          style: TextStyle(
+                              color: EColors.white,
+                              fontSize: 14.5,
+                              fontWeight: FontWeight.w400),
+                          textAlign: TextAlign.left,
                       ),
-                      renderMessageSendAt(message, MessagePosition.AFTER)
+                        ),
+                      if(showTime)
+                        renderMessageSendAt(message, MessagePosition.AFTER)
                     ],
                   ),
                 ),
@@ -382,6 +413,8 @@ class _ContactScreenState extends State<ContactScreen> {
           return ImageMessage(message);
         case MessageTypes.DOC_MESSAGE:
           return FileMessage(message,isMe,showNip);
+        case MessageTypes.VIDEO_MESSAGE:
+          return VideoMessage(message);
       }
     }
     return SizedBox(height: 0,width: 0);

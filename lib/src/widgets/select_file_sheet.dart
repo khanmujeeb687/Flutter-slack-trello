@@ -44,6 +44,17 @@ class _SelectFileState extends State<SelectFile> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 GestureDetector(
+                  child: Icon(Icons.video_call, size: 50, color: EColors.themePink),
+                  onTap: () => onPress(ESelectedFileType.Video),
+                ),
+                Text("Video", style: TextStyle(color: EColors.themeGrey))
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GestureDetector(
                   child: Icon(Icons.file_present, size: 50, color: EColors.themePink),
                   onTap: () => onPress(ESelectedFileType.document),
                 ),

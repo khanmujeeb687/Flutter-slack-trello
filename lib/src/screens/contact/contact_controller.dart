@@ -184,8 +184,9 @@ class ContactController extends StateControl {
       filePath =await NavigationUtil.openImageEditor(context);
     }else if(selectedFileType==ESelectedFileType.document){
       filePath =await FileUtil.openFileSelector();
+    }else if(selectedFileType==ESelectedFileType.Video){
+      filePath =await FileUtil.openFileSelector(['mp4']);
     }
-
     if(filePath!=null){
       sendMessage(filePaths: filePath);
     }

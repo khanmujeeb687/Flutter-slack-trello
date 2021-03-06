@@ -63,7 +63,23 @@ class FileUploadController{
 
   onSuccess(String fileUrl) {
      updateLocalStatus(EFileState.sent);
-    _messageController.sendMessage(message,filesUri:fileUrl);
+
+     var typeText='';
+
+     switch(mediaType){
+       case MediaType.Image:
+         typeText=MessageTypes.IMAGE_MESSAGE;
+         break;
+       case MediaType.Video:
+         typeText=MessageTypes.VIDEO_MESSAGE;
+         break;
+       case MediaType.Document:
+         typeText=MessageTypes.DOC_MESSAGE;
+         break;
+     }
+
+
+    _messageController.sendMessage(message,typeText,filesUri:fileUrl);
 
     if(mediaType==MediaType.Image){
       this.file=File(message.fileUrls);

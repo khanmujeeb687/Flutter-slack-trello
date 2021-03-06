@@ -23,6 +23,7 @@ class MessageUtil{
   static String getTypeFromUrl(String url){
     String exten=extension(url);
     if(exten.contains('jpeg')) return MessageTypes.IMAGE_MESSAGE;
+    if(exten.contains('mp4')) return MessageTypes.VIDEO_MESSAGE;
     return MessageTypes.DOC_MESSAGE;
   }
 

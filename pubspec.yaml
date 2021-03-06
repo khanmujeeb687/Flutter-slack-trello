@@ -85,6 +85,11 @@ dependencies:
 
   open_file: ^3.0.3
 
+  cached_video_player: ^1.0.3
+
+  audioplayers: ^0.17.4
+
+
 
 
 
