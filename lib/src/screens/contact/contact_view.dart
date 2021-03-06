@@ -29,6 +29,7 @@ class ContactScreen extends StatefulWidget {
   static final String routeName = "/contact";
 
   Chat parentChat;
+
   ContactScreen({this.parentChat});
 
   @override
@@ -45,7 +46,7 @@ class _ContactScreenState extends State<ContactScreen> {
     _contactController = ContactController(
       context: context,
     );
-    _contactController.parentChat=widget.parentChat;
+    _contactController.parentChat = widget.parentChat;
   }
 
   @override
@@ -64,16 +65,17 @@ class _ContactScreenState extends State<ContactScreen> {
     if (index == _contactController.selectedChat.messages.length - 1)
       return true;
     return (_contactController.selectedChat.messages[index].from !=
-            _contactController.selectedChat.messages[index + 1].from ||
-        RoomMessageController.isAddedMessage(
-            _contactController.selectedChat.messages[index + 1].message))|| shouldShowTime(index) ;
+                _contactController.selectedChat.messages[index + 1].from ||
+            RoomMessageController.isAddedMessage(
+                _contactController.selectedChat.messages[index + 1].message)) ||
+        shouldShowTime(index);
   }
 
-  shouldShowBackgroundColor(Message message){
-    if(message.fileUrls!=null
-        && message.fileUrls!='null'
-        && message.fileUrls!=''){
-      switch(MessageUtil.getTypeFromUrl(message.fileUrls)){
+  shouldShowBackgroundColor(Message message) {
+    if (message.fileUrls != null &&
+        message.fileUrls != 'null' &&
+        message.fileUrls != '') {
+      switch (MessageUtil.getTypeFromUrl(message.fileUrls)) {
         case MessageTypes.IMAGE_MESSAGE:
           return false;
       }
@@ -81,14 +83,15 @@ class _ContactScreenState extends State<ContactScreen> {
     return true;
   }
 
-
   shouldShowTime(int index) {
     if (index == _contactController.selectedChat.messages.length - 1)
       return true;
-    return (
-        DateTime.
-        fromMillisecondsSinceEpoch(_contactController.selectedChat.messages[index].sendAt)
-            .difference(DateTime.fromMillisecondsSinceEpoch(_contactController.selectedChat.messages[index+1].sendAt)).inSeconds>60);
+    return (DateTime.fromMillisecondsSinceEpoch(
+                _contactController.selectedChat.messages[index].sendAt)
+            .difference(DateTime.fromMillisecondsSinceEpoch(
+                _contactController.selectedChat.messages[index + 1].sendAt))
+            .inSeconds >
+        60);
   }
 
   @override
@@ -155,26 +158,28 @@ class _ContactScreenState extends State<ContactScreen> {
                     ],
                   ),
                 ),
-                actions:_contactController.selectedChat.isRoom? [
-                    Hero(
-                      tag: _contactController.selectedChat.id,
-                      child: Material(
-                        color: Colors.transparent,
-                        child: IconButton(
-                          icon: Icon(Icons.dashboard),
-                          onPressed: _contactController.openBoard,
+                actions: _contactController.selectedChat.isRoom
+                    ? [
+                        Hero(
+                          tag: _contactController.selectedChat.id,
+                          child: Material(
+                            color: Colors.transparent,
+                            child: IconButton(
+                              icon: Icon(Icons.dashboard),
+                              onPressed: _contactController.openBoard,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: _contactController.createChildRoom,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.more_vert),
-                    onPressed: _contactController.addRoomScreen,
-                  ),
-                ]:[],
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: _contactController.createChildRoom,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.more_vert),
+                          onPressed: _contactController.addRoomScreen,
+                        ),
+                      ]
+                    : [],
               ),
               body: SafeArea(
                 child: Container(
@@ -184,7 +189,7 @@ class _ContactScreenState extends State<ContactScreen> {
                         child: Scrollbar(
                           child: ListView.builder(
                             addAutomaticKeepAlives: true,
-                            cacheExtent:10 ,
+                            cacheExtent: 10,
                             physics: ClampingScrollPhysics(),
                             controller: _contactController.scrollController,
                             padding: EdgeInsets.only(bottom: 5),
@@ -193,7 +198,9 @@ class _ContactScreenState extends State<ContactScreen> {
                                 _contactController.selectedChat.messages.length,
                             itemBuilder: (BuildContext context, int index) {
                               return Padding(
-                                key:Key(_contactController.selectedChat.messages[index].id.toString()),
+                                key: Key(_contactController
+                                    .selectedChat.messages[index].id
+                                    .toString()),
                                 padding: EdgeInsets.only(
                                     left: 10, right: 10, bottom: 0, top: 0),
                                 child: renderMessage(
@@ -201,8 +208,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                     _contactController
                                         .selectedChat.messages[index],
                                     index,
-                                    shouldShowNip(index),
-                                    shouldShowTime(index)),
+                                    shouldShowNip(index)),
                               );
                             },
                           ),
@@ -211,7 +217,8 @@ class _ContactScreenState extends State<ContactScreen> {
                       TextFieldWithButton(
                         onFileSelectPress: _contactController.showSelectFile,
                         onSubmit: _contactController.sendMessage,
-                        textEditingController: _contactController.textController,
+                        textEditingController:
+                            _contactController.textController,
                         onEmojiTap: (bool showEmojiKeyboard) {
                           _contactController.showEmojiKeyboard =
                               !showEmojiKeyboard;
@@ -229,7 +236,7 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   Widget renderMessage(
-      BuildContext context, Message message, int index, bool showNip, bool showTime) {
+      BuildContext context, Message message, int index, bool showNip) {
     if (_contactController.myUser == null) return Container();
     bool isMe = message.from == _contactController.myUser.id;
     return Column(
@@ -258,29 +265,33 @@ class _ContactScreenState extends State<ContactScreen> {
                   nip: showNip
                       ? (isMe ? BubbleNip.rightTop : BubbleNip.leftTop)
                       : null,
-                  color: message.fileUrls==null || message.fileUrls?.length==0
-                 || shouldShowBackgroundColor(message)? EColors.themePink.withOpacity(0.5): EColors.transparent,
-                  child:Column(
+                  color: message.fileUrls == null ||
+                          message.fileUrls?.length == 0 ||
+                          shouldShowBackgroundColor(message)
+                      ? EColors.themePink.withOpacity(0.5)
+                      : EColors.transparent,
+                  child: Column(
                     crossAxisAlignment: isMe
                         ? CrossAxisAlignment.end
                         : CrossAxisAlignment.start,
                     children: [
-                      if(showNip)
-                        renderUserName(message, isMe),
-                      message.fileUrls==null || message.fileUrls?.length==0 ? Container(width:0,height:0):renderFileMessage(message,isMe,showNip),
-                      if(MessageUtil.isTextMessage(message.message))
+                      if (showNip) renderUserName(message, isMe),
+                      message.fileUrls == null || message.fileUrls?.length == 0
+                          ? Container(width: 0, height: 0)
+                          : renderFileMessage(message, isMe, showNip),
+                      if (MessageUtil.isTextMessage(message.message))
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Text(
-                          message.message,
-                          style: TextStyle(
-                              color: EColors.white,
-                              fontSize: 14.5,
-                              fontWeight: FontWeight.w400),
-                          textAlign: TextAlign.left,
-                      ),
+                            message.message,
+                            style: TextStyle(
+                                color: EColors.white,
+                                fontSize: 14.5,
+                                fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.left,
+                          ),
                         ),
-                      if(showTime)
+                      if (showNip)
                         renderMessageSendAt(message, MessagePosition.AFTER)
                     ],
                   ),
@@ -402,21 +413,19 @@ class _ContactScreenState extends State<ContactScreen> {
     );
   }
 
-
-  renderFileMessage(Message message,bool isMe,bool showNip){
-    if(message.fileUrls!=null
-        && message.fileUrls!='null'
-        && message.fileUrls!=''){
-      switch(MessageUtil.getTypeFromUrl(message.fileUrls)){
+  renderFileMessage(Message message, bool isMe, bool showNip) {
+    if (message.fileUrls != null &&
+        message.fileUrls != 'null' &&
+        message.fileUrls != '') {
+      switch (MessageUtil.getTypeFromUrl(message.fileUrls)) {
         case MessageTypes.IMAGE_MESSAGE:
           return ImageMessage(message);
         case MessageTypes.DOC_MESSAGE:
-          return FileMessage(message,isMe,showNip);
+          return FileMessage(message, isMe, showNip);
         case MessageTypes.VIDEO_MESSAGE:
-          return VideoMessage(message,isMe,showNip);
+          return VideoMessage(message, isMe, showNip);
       }
     }
-    return SizedBox(height: 0,width: 0);
+    return SizedBox(height: 0, width: 0);
   }
-
 }
