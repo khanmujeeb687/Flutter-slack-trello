@@ -100,10 +100,9 @@ class FileUtil {
 
 
   static createPathFromUrl(String url)async{
+    var data=url.split('/');
     return await createPhotoDirectory() +
-        '/' +
-        DateTime.now().toString()+
-        getRemoteExtension(url);
+        '/' + data[data.length-1];
   }
 
 
