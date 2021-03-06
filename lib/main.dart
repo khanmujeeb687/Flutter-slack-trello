@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
+import 'package:wively/src/data/providers/uploads_provider.dart';
 import 'package:wively/src/screens/after_launch_screen/after_launch_screen_view.dart';
 import 'package:wively/src/values/themes/DarkRegular.dart';
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ChatsProvider()),
+        ChangeNotifierProvider(create: (_) => UploadsProvider(_)),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

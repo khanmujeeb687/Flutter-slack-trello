@@ -12,17 +12,17 @@ import 'package:wively/src/utils/file_util.dart';
 import 'package:wively/src/utils/message_utils.dart';
 import 'package:wively/src/utils/room_message_controller.dart';
 import 'package:wively/src/values/Colors.dart';
-import 'package:wively/src/widgets/audio_message.dart';
+import 'package:wively/src/widgets/file_upload/audio_message.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
-import 'package:wively/src/widgets/file_message.dart';
-import 'package:wively/src/widgets/image_message.dart';
+import 'package:wively/src/widgets/file_upload/file_message.dart';
+import 'package:wively/src/widgets/file_upload/image_message.dart';
 import 'package:wively/src/widgets/text_field_with_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:emoji_picker/emoji_picker.dart';
-import 'package:wively/src/widgets/video_message.dart';
+import 'package:wively/src/widgets/file_upload/video_message.dart';
 
 enum MessagePosition { BEFORE, AFTER }
 
