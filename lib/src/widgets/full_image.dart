@@ -21,7 +21,7 @@ class _FullImageState extends State<FullImage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
       ),
-      backgroundColor:EColors.themeBlack,
+      backgroundColor:EColors.transparent,
       body: Hero(
         tag: widget.url,
         child: Material(

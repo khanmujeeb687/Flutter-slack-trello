@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wively/src/utils/file_util.dart';
+import 'package:wively/src/values/Colors.dart';
 
 class NavigationUtil{
 
@@ -20,9 +21,10 @@ class NavigationUtil{
     return await Navigator.push(
       context,
       PageRouteBuilder(
+        fullscreenDialog: true,
         opaque: false,
-        transitionDuration: Duration(milliseconds: 700),
-        reverseTransitionDuration: Duration(milliseconds: 700),
+        transitionDuration: Duration(milliseconds: 600),
+        reverseTransitionDuration: Duration(milliseconds: 400),
         pageBuilder: (_, __, ___) => destination,
       ),
     );

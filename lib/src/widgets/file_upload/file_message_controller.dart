@@ -14,7 +14,7 @@ class FileMessageController extends StateControl {
 
   UploadsProvider _uploadsProvider;
 
-  UploadItem get task => _uploadsProvider?.tasks[message?.fileUrls];
+  UploadItem get task => _uploadsProvider?.tasks[message.sendAt.toString()];
 
   FileMessageController({@required this.context, @required this.message}) {
     init();
@@ -29,12 +29,12 @@ class FileMessageController extends StateControl {
 
 
   uploadFile() async {
-   _uploadsProvider?.uploadFile(File(message?.fileUrls), message.fileUrls,message);
+   _uploadsProvider?.uploadFile(File(message?.fileUrls), message.sendAt.toString(),message);
   }
 
 
   stopUpload() async{
-    _uploadsProvider?.cancelUpload(message.fileUrls);
+    _uploadsProvider?.cancelUpload(message.sendAt.toString());
   }
 
 }
