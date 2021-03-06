@@ -5,10 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:wively/src/data/models/file_models.dart';
+import 'package:wively/src/data/repositories/user_repository.dart';
 import 'package:wively/src/utils/screen_util.dart';
 import 'package:wively/src/values/constants.dart';
 import 'package:path/path.dart';
+import 'package:http/http.dart' as Http;
 
 class FileUtil {
   static selectImageFromDevice() async {
@@ -120,6 +123,45 @@ class FileUtil {
   static getFileName(String url){
     var arr=url.split('/');
     return arr[arr.length-1];
+  }
+
+
+  static String createThumbnailPath(String videoFile){
+    return createPathFromUrl("NUN/"+getFileName(videoFile)+".jpeg");
+  }
+
+
+  static getBaseUrlWithOutExtension(String url){
+    String data=getRemoteExtension(url);
+    /// -1 because dont want to remove .
+    url.substring(0,url.length-data.length-2);
+  }
+
+
+  static String getThumbPathFromUrl(String url){
+    return getBaseUrlWithOutExtension(url)+'jpeg';
+  }
+
+
+
+  static Future<String> createThumbnail(String videoFile) async{
+    String thumPath=createThumbnailPath(videoFile);
+
+    //TODO this can fail also
+    String output = await VideoThumbnail.thumbnailFile(
+      thumbnailPath:thumPath ,
+      video: videoFile,
+      imageFormat: ImageFormat.JPEG,
+      maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+      quality: 5,
+    );
+   return thumPath;
+  }
+
+
+  static Future<String> getRemoteFileSize()async{
+    Http.Response r = await Http.head(url);
+   return  r.headers["content-length"];
   }
 
 }

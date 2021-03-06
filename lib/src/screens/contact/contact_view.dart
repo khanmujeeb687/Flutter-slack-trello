@@ -76,8 +76,6 @@ class _ContactScreenState extends State<ContactScreen> {
       switch(MessageUtil.getTypeFromUrl(message.fileUrls)){
         case MessageTypes.IMAGE_MESSAGE:
           return false;
-        case MessageTypes.VIDEO_MESSAGE:
-          return false;
       }
     }
     return true;
@@ -195,6 +193,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                 _contactController.selectedChat.messages.length,
                             itemBuilder: (BuildContext context, int index) {
                               return Padding(
+                                key:Key(_contactController.selectedChat.messages[index].id.toString()),
                                 padding: EdgeInsets.only(
                                     left: 10, right: 10, bottom: 0, top: 0),
                                 child: renderMessage(
@@ -414,7 +413,7 @@ class _ContactScreenState extends State<ContactScreen> {
         case MessageTypes.DOC_MESSAGE:
           return FileMessage(message,isMe,showNip);
         case MessageTypes.VIDEO_MESSAGE:
-          return VideoMessage(message);
+          return VideoMessage(message,isMe,showNip);
       }
     }
     return SizedBox(height: 0,width: 0);
