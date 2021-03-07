@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
+import 'package:wively/src/data/models/message_types.dart';
 import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
@@ -20,6 +21,7 @@ import 'package:wively/src/screens/task_board/task_board_view.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:wively/src/utils/dates.dart';
 import 'package:wively/src/utils/file_util.dart';
+import 'package:wively/src/utils/message_utils.dart';
 import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/cupertino.dart';
@@ -126,9 +128,21 @@ class ContactController extends StateControl {
    int newMessageId = await Provider.of<ChatsProvider>(context, listen: false)
         .addMessageToChat(newMessage);
     if(filePaths.length>0){
+
+      ///add the local id of message to update it
       newMessage.localId=newMessageId;
+
+      if(MessageUtil.getTypeFromUrl(filePaths)==MessageTypes.IMAGE_MESSAGE){
+        ///upload image thumbnail also
+        Provider.of<UploadsProvider>(context,listen: false).uploadFile(File(FileUtil.getThumbPath(filePaths)),
+            newMessage.sendAt.toString()+'thumb', null);
+      }
+      ///add file to upload queue
       Provider.of<UploadsProvider>(context,listen: false).uploadFile(File(filePaths), newMessage.sendAt.toString(), newMessage);
     }
+
+
+    ///send message if it has text and not file
     if (!this.selectedChat.isRoom && filePaths.length==0){
       await _chatRepository.sendMessage(message, this.selectedChat.user.id);
     }else if(filePaths.length==0){

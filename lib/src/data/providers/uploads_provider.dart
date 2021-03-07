@@ -9,6 +9,7 @@ import 'package:wively/src/controller/message_controller.dart';
 import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/services/upload_service.dart';
+import 'package:wively/src/utils/file_util.dart';
 import 'package:wively/src/utils/message_utils.dart';
 
 import 'chats_provider.dart';
@@ -135,6 +136,7 @@ class UploadsProvider extends ChangeNotifier {
 
   Future cancelUpload(String id) async {
     await uploader.cancel(taskId: tasks[id]?.id);
+    updateLocalStatus(EFileState.unsent, tasks[id].message);
   }
 
   destroy() {
@@ -143,6 +145,7 @@ class UploadsProvider extends ChangeNotifier {
   }
 
   void checkCompletion(UploadTaskResponse result) {
+    if(tasks[result.tag].message==null) return;
     if (result.status == UploadTaskStatus.complete) {
       MessageController().sendMessage(tasks[result.tag].message,
           MessageUtil.getMessageTypeFromMediaType(tasks[result.tag].type),
@@ -155,6 +158,7 @@ class UploadsProvider extends ChangeNotifier {
   }
 
   Future<void> updateLocalStatus(EFileState fileState, Message message) async {
+    if(message==null) return;
     await Provider.of<ChatsProvider>(context, listen: false)
         .updateMessageState(message.localId, fileState);
     notifyListeners();

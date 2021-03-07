@@ -144,7 +144,8 @@ class FileUtil {
 
 
   static String getThumbPathFromUrl(String url){
-    return getBaseUrlWithOutExtension(url)+'jpeg';
+    //TODO logic should be fixed
+    return url.replaceAll('.jpeg', '-alfa.jpeg');
   }
 
 

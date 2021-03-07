@@ -8,6 +8,7 @@ import 'package:wively/src/controller/file_upload_controller.dart';
 import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
+import 'package:wively/src/data/providers/uploads_provider.dart';
 import 'package:wively/src/data/services/download_service.dart';
 import 'package:wively/src/data/services/upload_service.dart';
 import 'package:wively/src/utils/file_util.dart';
@@ -26,15 +27,12 @@ class ImageMessage extends StatefulWidget {
 }
 
 class _ImageMessageState extends State<ImageMessage> {
-  FileUploadController _fileUploadController;
   DownloadService _downloadService;
 
 
   @override
   void initState() {
-    if(widget.message.fileUploadState==EFileState.sending){
-      updateLocalStatus(EFileState.unsent);
-    }else if(widget.message.fileUploadState==EFileState.downloading){
+    if(widget.message.fileUploadState==EFileState.downloading){
       updateLocalStatus(EFileState.notdownloaded);
     }
     super.initState();
@@ -81,7 +79,7 @@ class _ImageMessageState extends State<ImageMessage> {
                       } else {
                         return Stack(
                           children: [
-                            Image.network(widget.message.fileUrls,
+                            Image.network(FileUtil.getThumbPathFromUrl(widget.message.fileUrls),
                                 fit: BoxFit.cover,
                                 width: ScreenUtil.height(context) / 3),
                             BackdropFilter(
@@ -100,9 +98,22 @@ class _ImageMessageState extends State<ImageMessage> {
                   left: 0,
                   child: Center(
                     child: () {
+                      if(widget.message.fileUploadState==EFileState.sending){
+                        return  Center(
+                          child: CircularProgressIndicator(
+                            value: double.parse(
+                                Provider.of<UploadsProvider>(context)
+                                    .tasks[widget.message.sendAt.toString()]
+                                    ?.progress
+                                    .toString()) /
+                                100,
+                            valueColor:
+                            AlwaysStoppedAnimation<Color>(EColors.white),
+                            backgroundColor: EColors.themeGrey,
+                          ),
+                        );
+                      }
                       if (widget.message.fileUploadState ==
-                              EFileState.sending ||
-                          widget.message.fileUploadState ==
                               EFileState.downloading) {
                         return CircularProgressIndicator();
                       } else if (widget.message.fileUploadState ==
@@ -139,7 +150,10 @@ class _ImageMessageState extends State<ImageMessage> {
                     if (widget.message.fileUploadState == EFileState.sending) {
                       return IconButton(
                         onPressed: () {
-                          _fileUploadController?.stopUpload();
+                          Provider.of<UploadsProvider>(context,
+                              listen: false)
+                              .cancelUpload(
+                              widget.message.sendAt.toString());
                         },
                         icon: Icon(
                           Icons.close,
@@ -170,23 +184,21 @@ class _ImageMessageState extends State<ImageMessage> {
   }
 
   void uploadImage() async {
-    _fileUploadController =
-        new FileUploadController(MediaType.Image, widget.message);
-    _fileUploadController.startUpload(updateLocalStatus);
+    Provider.of<UploadsProvider>(context, listen: false)
+        .uploadFile(
+        File(widget.message.fileUrls),
+        widget.message.sendAt.toString(),
+        widget.message);
+    return;
   }
 
-  @override
-  void dispose() {
-    _fileUploadController?.dispose();
-    super.dispose();
-  }
 
   void downloadFile() async {
     String filePath = await FileUtil.createImageName();
     updateLocalStatus(EFileState.downloading);
     _downloadService = new DownloadService();
     var res = await _downloadService.downloadFile(
-        widget.message.fileUrls.replaceAll('-alfa', ''), filePath);
+        widget.message.fileUrls, filePath);
     if (res == null) {
       updateLocalStatus(EFileState.notdownloaded);
     } else {
