@@ -71,7 +71,7 @@ class FileUtil {
         thumbName+
         '.jpeg';
 
-    await writeToFile(await asset.getByteData(quality: 20),filePath);
+    await writeToFile(await asset.getByteData(quality: 10),filePath);
     await writeToFile(await asset.getThumbByteData(100,100,quality: 3),thumbPath);
 
     return filePath;

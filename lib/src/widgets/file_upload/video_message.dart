@@ -22,6 +22,7 @@ import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/file_upload/file_message_controller.dart';
 import 'package:wively/src/widgets/full_image.dart';
 import 'package:wively/src/widgets/lottie_loader.dart';
+import 'package:wively/src/widgets/video_player.dart';
 import 'package:wively/src/widgets/video_thumbnail.dart';
 
 class VideoMessage extends StatefulWidget {
@@ -58,7 +59,8 @@ class _VideoMessageState extends State<VideoMessage> {
     return GestureDetector(
         onTap: () {
           if (initialized) {
-            OpenFile.open(widget.message.fileUrls);
+            NavigationUtil.navigateSlow(context, VideoPlayer(widget.message.fileUrls,widget.message.sendAt.toString()));
+            // OpenFile.open(widget.message.fileUrls);
           }
         },
         child: Stack(
@@ -71,7 +73,11 @@ class _VideoMessageState extends State<VideoMessage> {
                 constraints: BoxConstraints(
                   maxHeight: ScreenUtil.height(context) / 3,
                 ),
-                child: VideoThumbnail(widget.message.fileUrls,showPlay:showPlay())),
+                child: Hero(
+                    tag: widget.message.sendAt.toString(),
+                    child: Material(
+                        color: EColors.transparent,
+                        child: VideoThumbnail(widget.message.fileUrls,showPlay:showPlay())))),
             Positioned(
               top: 0,
               left: 0,

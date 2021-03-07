@@ -91,6 +91,9 @@ dependencies:
 
   page_transition: ^1.1.7+6
 
+  cached_video_player: ^1.0.3
+
+
 
 
 

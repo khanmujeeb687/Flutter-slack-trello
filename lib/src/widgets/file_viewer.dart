@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/services/upload_service.dart';
 import 'package:wively/src/utils/file_util.dart';
 import 'package:wively/src/utils/message_utils.dart';
 import 'package:wively/src/utils/screen_util.dart';
 import 'package:wively/src/values/Colors.dart';
+import 'package:wively/src/widgets/cache_image.dart';
 import 'package:wively/src/widgets/video_thumbnail.dart';
 
 
@@ -61,7 +65,7 @@ class FileViewer extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 5),
       color: EColors.themePink,
       width: 100,
-      child: Icon(Icons.image,size: 30),
+      child: FileUtil.fileOriginType(url)==EOrigin.local?Image.file(File(url),fit: BoxFit.cover,):CacheImage(url),
     );
   }
 
