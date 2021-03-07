@@ -108,10 +108,12 @@ class _ContactScreenState extends State<ContactScreen> {
           stream: _contactController.streamController.stream,
           builder: (context, snapshot) {
             return Scaffold(
-              appBar: CustomAppBar(
+              appBar: AppBar(
+                titleSpacing: 0,
                 title: GestureDetector(
-                  onTap: () => _contactController
-                      .openRoom(_contactController?.selectedChat?.room?.id),
+                  onTap: (){
+                    _contactController.onAppBarClick();
+                  },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -119,10 +121,13 @@ class _ContactScreenState extends State<ContactScreen> {
                         tag: _contactController.selectedChat.id + 'profile',
                         child: Material(
                           color: EColors.transparent,
-                          child: ImageWithPlaceholder(mRoom==null?
-                          mUser.profileUrl:mRoom.profileUrl,
-                              placeholderType: mRoom==null?EPlaceholderType.user:EPlaceholderType.room),
-
+                          child: ImageWithPlaceholder(
+                              mRoom == null
+                                  ? mUser.profileUrl
+                                  : mRoom.profileUrl,
+                              placeholderType: mRoom == null
+                                  ? EPlaceholderType.user
+                                  : EPlaceholderType.room),
                         ),
                       ),
                       SizedBox(

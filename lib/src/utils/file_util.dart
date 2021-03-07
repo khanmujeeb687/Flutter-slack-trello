@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
@@ -162,6 +163,15 @@ class FileUtil {
   static Future<String> getRemoteFileSize()async{
     Http.Response r = await Http.head(url);
    return  r.headers["content-length"];
+  }
+
+ Future<Uint8List> getVideoThumbBytes( String videoFile) async{
+    return await VideoThumbnail.thumbnailData(
+      video: videoFile,
+      imageFormat: ImageFormat.JPEG,
+      maxWidth: 100, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+      quality: 5,
+    );
   }
 
 }

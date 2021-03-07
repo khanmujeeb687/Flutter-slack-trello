@@ -128,6 +128,10 @@ class ChatsProvider with ChangeNotifier {
     updateChats();
   }
 
+  Future<List<String>> getAllMediasForChat(Chat chat) async{
+   return await DBProvider.db.getAllMediasForChatId(chat.id);
+  }
+
   Future<void> clearDatabase() async {
     await DBProvider.db.clearDatabase();
     updateChats();

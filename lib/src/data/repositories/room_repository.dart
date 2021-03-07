@@ -54,6 +54,24 @@ class RoomRepository{
     }
   }
 
+
+
+   Future<dynamic> getAllCommonRooms(String userId) async {
+    try {
+      var url=MyUrls.ROOM+'/common/'+userId;
+      var response = await http.get(url);
+      final dynamic roomJson = jsonDecode(response.body)['rooms'];
+      print(roomJson.toString());
+      List<Room> rooms=[];
+      roomJson?.forEach((room)=>rooms.add(Room.fromJson(room)));
+      // final List<dynamic> rooms = roomJson.map((room) => Room.fromJson(room)).toList();
+      return rooms;
+    } catch (err) {
+      debugPrint(err.toString());
+      return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
+    }
+  }
+
   Future<dynamic> getRoomById(String roomId)async{
     try {
       var response = await http.get(MyUrls.ROOM_ONE+'/'+roomId);

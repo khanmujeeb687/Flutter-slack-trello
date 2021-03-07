@@ -45,7 +45,7 @@ class Message {
     unreadByMe = json['unreadByMe'] ?? true;
     sendAt = json['sendAt'];
     fromUser = json['from']['username'];
-    fileUrls = json['filesUri'];
+    fileUrls = json['filesUri']==null?'':json['filesUri'];
     fileUploadState=EFileState.notdownloaded;
   }
 

@@ -300,6 +300,17 @@ class DBProvider {
         [filePath, messageId]);
   }
 
+  Future<dynamic> getAllMediasForChatId(String id) async {
+    final db = await database;
+    var data = await db.rawQuery('''
+    SELECT file_urls FROM tb_message
+     WHERE chat_id=? AND NOT file_urls=?
+        ''',[id,'']);
+    List<String> data1=[];
+    data.forEach((element) {data1.add(element['file_urls']);});
+    return data1;
+  }
+
   Future<void> setAllUnSentFiles(EFileState first, EFileState second) async {
     final db = await database;
     await db.rawQuery('''

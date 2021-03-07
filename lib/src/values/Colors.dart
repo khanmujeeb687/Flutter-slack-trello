@@ -7,6 +7,7 @@ class EColors{
   static final Color blackTransparent=Colors.black26;
   static final Color transparent=Colors.transparent;
   static final Color white=Colors.white;
+  static final Color red=Colors.redAccent;
   static final Color themeBlack=HexColor('#1a1d21');
   static final Color themeMaroon=HexColor('#1c141c');
   static final Color themeGrey=HexColor('#d1d2d3');

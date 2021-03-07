@@ -9,6 +9,7 @@ import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/data/repositories/chat_repository.dart';
+import 'package:wively/src/screens/profile/profile_view.dart';
 import 'package:wively/src/screens/room/create_room.dart';
 import 'package:wively/src/screens/room/room_info.dart';
 import 'package:wively/src/screens/room/room_view.dart';
@@ -192,6 +193,21 @@ class ContactController extends StateControl {
     if(filePath!=null){
       sendMessage(filePaths: filePath);
     }
+  }
+
+
+
+  openProfile(){
+    NavigationUtil.navigate(context, ProfileView(selectedChat?.user,selectedChat));
+  }
+
+  onAppBarClick(){
+    if(selectedChat.isRoom){
+      openRoom(selectedChat?.room?.id);
+    }else{
+      openProfile();
+    }
+
   }
 
 }
