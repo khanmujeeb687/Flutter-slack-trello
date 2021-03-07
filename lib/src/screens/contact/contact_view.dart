@@ -82,6 +82,8 @@ class _ContactScreenState extends State<ContactScreen> {
       switch (MessageUtil.getTypeFromUrl(message.fileUrls)) {
         case MessageTypes.IMAGE_MESSAGE:
           return false;
+        case MessageTypes.VIDEO_MESSAGE:
+          return false;
       }
     }
     return true;

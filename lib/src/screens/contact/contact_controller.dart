@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,6 +9,7 @@ import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
+import 'package:wively/src/data/providers/uploads_provider.dart';
 import 'package:wively/src/data/repositories/chat_repository.dart';
 import 'package:wively/src/screens/profile/profile_view.dart';
 import 'package:wively/src/screens/room/create_room.dart';
@@ -111,7 +113,7 @@ class ContactController extends StateControl {
         selectedChat.room == null ? selectedChat.user.id : selectedChat.room.id;
     final newMessage = Message(
         fileUrls:filePaths,
-        fileUploadState: EFileState.unsent,
+        fileUploadState: EFileState.sending,
         chatId: selectedChat.id,
         from: myId,
         to: selectedChat.room != null ? null : to,
@@ -121,8 +123,12 @@ class ContactController extends StateControl {
         unreadByMe: false,
         fromUser: myUser.username);
     textController.text = "";
-    await Provider.of<ChatsProvider>(context, listen: false)
+   int newMessageId = await Provider.of<ChatsProvider>(context, listen: false)
         .addMessageToChat(newMessage);
+    if(filePaths.length>0){
+      newMessage.localId=newMessageId;
+      Provider.of<UploadsProvider>(context,listen: false).uploadFile(File(filePaths), newMessage.sendAt.toString(), newMessage);
+    }
     if (!this.selectedChat.isRoom && filePaths.length==0){
       await _chatRepository.sendMessage(message, this.selectedChat.user.id);
     }else if(filePaths.length==0){

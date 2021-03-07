@@ -107,9 +107,10 @@ class ChatsProvider with ChangeNotifier {
   }
 
   addMessageToChat(Message message) async {
-    await DBProvider.db.addMessage(message);
+   int id= await DBProvider.db.addMessage(message);
     updateChats();
     setSelectedChat(selectedChat);
+    return id;
   }
 
   Future<void> setAllUnSentMessages(EFileState first,EFileState second)async{

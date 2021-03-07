@@ -15,6 +15,10 @@ import 'package:path/path.dart';
 import 'package:http/http.dart' as Http;
 
 class FileUtil {
+
+
+  static Map<String, Uint8List> thumbStore={};
+
   static selectImageFromDevice() async {
     try {
       // PickedFile file = await ImagePicker.platform.pickImage(source: ImageSource.gallery, imageQuality: 15);
@@ -166,12 +170,17 @@ class FileUtil {
   }
 
  Future<Uint8List> getVideoThumbBytes( String videoFile) async{
-    return await VideoThumbnail.thumbnailData(
+    if(FileUtil.thumbStore[videoFile]!=null) return FileUtil.thumbStore[videoFile];
+    Uint8List uint8list= await VideoThumbnail.thumbnailData(
       video: videoFile,
       imageFormat: ImageFormat.JPEG,
       maxWidth: 100, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
       quality: 5,
     );
+
+    FileUtil.thumbStore.putIfAbsent(videoFile, () => uint8list);
+
+    return uint8list;
   }
 
 }
