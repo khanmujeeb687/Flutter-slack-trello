@@ -41,11 +41,7 @@ class _VideoMessageState extends State<VideoMessage> {
   bool get initialized {
     return (widget.message.fileUploadState == EFileState.downloaded ||
         widget.message.fileUploadState == EFileState.sent ||
-        widget.message.fileUploadState == EFileState.unsent ||
-        Provider.of<UploadsProvider>(context)
-                .tasks[widget.message.sendAt.toString()]
-                ?.status ==
-            UploadTaskStatus.complete);
+        widget.message.fileUploadState == EFileState.unsent);
   }
 
   @override
@@ -84,15 +80,7 @@ class _VideoMessageState extends State<VideoMessage> {
                   style: TextStyle(color: EColors.white, fontSize: 12),
                 )),
                 () {
-                  if (widget.message.fileUploadState == EFileState.sending ||
-                      (Provider.of<UploadsProvider>(context)
-                                  .tasks[widget.message.sendAt.toString()]
-                                  ?.status ==
-                              UploadTaskStatus.enqueued ||
-                          Provider.of<UploadsProvider>(context)
-                                  .tasks[widget.message.sendAt.toString()]
-                                  ?.status ==
-                              UploadTaskStatus.running)) {
+                  if (widget.message.fileUploadState == EFileState.sending) {
                     return Stack(
                       children: [
                         CircularProgressIndicator(
@@ -127,19 +115,7 @@ class _VideoMessageState extends State<VideoMessage> {
                       ],
                     );
                   } else if ((widget.message.fileUploadState ==
-                              EFileState.unsent ||
-                          (Provider.of<UploadsProvider>(context)
-                                      .tasks[widget.message.sendAt.toString()]
-                                      ?.status ==
-                                  UploadTaskStatus.canceled ||
-                              Provider.of<UploadsProvider>(context)
-                                      .tasks[widget.message.sendAt.toString()]
-                                      ?.status ==
-                                  UploadTaskStatus.failed)) &&
-                      Provider.of<UploadsProvider>(context)
-                              .tasks[widget.message.sendAt.toString()]
-                              ?.status !=
-                          UploadTaskStatus.complete) {
+                              EFileState.unsent)) {
                     return GestureDetector(
                       onTap: () {
                         Provider.of<UploadsProvider>(context, listen: false)
@@ -167,11 +143,7 @@ class _VideoMessageState extends State<VideoMessage> {
                     return lottieLoader(radius: 15);
                   } else if ((widget.message.fileUploadState ==
                               EFileState.downloaded ||
-                          widget.message.fileUploadState == EFileState.sent) ||
-                      Provider.of<UploadsProvider>(context)
-                              .tasks[widget.message.sendAt.toString()]
-                              ?.status ==
-                          UploadTaskStatus.complete) {
+                          widget.message.fileUploadState == EFileState.sent)) {
                     return Icon(
                       Icons.play_arrow,
                       color: EColors.white,

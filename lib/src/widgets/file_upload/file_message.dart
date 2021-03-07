@@ -41,11 +41,7 @@ class _FileMessageState extends State<FileMessage> {
   bool get initialized {
     return (widget.message.fileUploadState == EFileState.downloaded ||
         widget.message.fileUploadState == EFileState.sent ||
-        widget.message.fileUploadState == EFileState.unsent ||
-        Provider.of<UploadsProvider>(context)
-            .tasks[widget.message.sendAt.toString()]
-            ?.status ==
-            UploadTaskStatus.complete);
+        widget.message.fileUploadState == EFileState.unsent);
   }
 
   @override
@@ -84,15 +80,7 @@ class _FileMessageState extends State<FileMessage> {
                       style: TextStyle(color: EColors.white, fontSize: 12),
                     )),
                     () {
-                  if (widget.message.fileUploadState == EFileState.sending ||
-                      (Provider.of<UploadsProvider>(context)
-                          .tasks[widget.message.sendAt.toString()]
-                          ?.status ==
-                          UploadTaskStatus.enqueued ||
-                          Provider.of<UploadsProvider>(context)
-                              .tasks[widget.message.sendAt.toString()]
-                              ?.status ==
-                              UploadTaskStatus.running)) {
+                  if (widget.message.fileUploadState == EFileState.sending) {
                     return Stack(
                       children: [
                         CircularProgressIndicator(
@@ -126,20 +114,8 @@ class _FileMessageState extends State<FileMessage> {
                         ),
                       ],
                     );
-                  } else if ((widget.message.fileUploadState ==
-                      EFileState.unsent ||
-                      (Provider.of<UploadsProvider>(context)
-                          .tasks[widget.message.sendAt.toString()]
-                          ?.status ==
-                          UploadTaskStatus.canceled ||
-                          Provider.of<UploadsProvider>(context)
-                              .tasks[widget.message.sendAt.toString()]
-                              ?.status ==
-                              UploadTaskStatus.failed)) &&
-                      Provider.of<UploadsProvider>(context)
-                          .tasks[widget.message.sendAt.toString()]
-                          ?.status !=
-                          UploadTaskStatus.complete) {
+                  } else if (widget.message.fileUploadState ==
+                      EFileState.unsent) {
                     return GestureDetector(
                       onTap: () {
                         Provider.of<UploadsProvider>(context, listen: false)

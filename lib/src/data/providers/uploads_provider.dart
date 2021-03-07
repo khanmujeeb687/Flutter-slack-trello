@@ -111,8 +111,10 @@ class UploadsProvider extends ChangeNotifier {
       files: [fileItem],
       method: UploadMethod.POST,
       tag: tag,
-      showNotification: true,
+      showNotification: false,
     );
+
+    updateLocalStatus(EFileState.sending, message);
 
     _tasks.putIfAbsent(
         tag,

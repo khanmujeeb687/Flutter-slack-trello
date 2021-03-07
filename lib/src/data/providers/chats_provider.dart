@@ -120,6 +120,7 @@ class ChatsProvider with ChangeNotifier {
   Future<void> updateMessageState(int id,EFileState fileState) async{
     await DBProvider.db.changeMessageStatus(id, fileState);
     updateChats();
+    setSelectedChat(selectedChat);
   }
 
   Future<void> updateMessageFilePath(int id,String filePath) async{
