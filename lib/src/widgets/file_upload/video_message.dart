@@ -63,98 +63,102 @@ class _VideoMessageState extends State<VideoMessage> {
             // OpenFile.open(widget.message.fileUrls);
           }
         },
-        child: Stack(
-          children: [
-            Container(
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10)
-              ),
-                constraints: BoxConstraints(
-                  maxHeight: ScreenUtil.height(context) / 3,
+        child: SizedBox(
+          height: ScreenUtil.height(context)/3,
+          width: ScreenUtil.height(context)/4,
+          child: Stack(
+            children: [
+              Container(
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10)
                 ),
-                child: Hero(
-                    tag: widget.message.sendAt.toString(),
-                    child: Material(
-                        color: EColors.transparent,
-                        child: VideoThumbnail(widget.message.fileUrls,showPlay:showPlay())))),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: () {
-                if (widget.message.fileUploadState == EFileState.sending) {
-                  return Stack(
-                    children: [
-                      Center(
-                        child: CircularProgressIndicator(
-                          value: double.parse(
-                                  Provider.of<UploadsProvider>(context)
-                                      .tasks[widget.message.sendAt.toString()]
-                                      ?.progress
-                                      .toString()) /
-                              100,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(EColors.white),
-                          backgroundColor: EColors.themeGrey,
-                        ),
-                      ),
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        bottom: 0,
-                        child: GestureDetector(
-                          onTap: () {
-                            Provider.of<UploadsProvider>(context,
-                                    listen: false)
-                                .cancelUpload(
-                                    widget.message.sendAt.toString());
-                          },
-                          child: Icon(
-                            Icons.close,
-                            color: EColors.white,
+                  constraints: BoxConstraints(
+                    maxHeight: ScreenUtil.height(context) / 3,
+                  ),
+                  child: Hero(
+                      tag: widget.message.sendAt.toString(),
+                      child: Material(
+                          color: EColors.transparent,
+                          child: VideoThumbnail(widget.message.fileUrls,showPlay:showPlay())))),
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: () {
+                  if (widget.message.fileUploadState == EFileState.sending) {
+                    return Stack(
+                      children: [
+                        Center(
+                          child: CircularProgressIndicator(
+                            value: double.parse(
+                                    Provider.of<UploadsProvider>(context)
+                                        .tasks[widget.message.sendAt.toString()]
+                                        ?.progress
+                                        .toString()) /
+                                100,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(EColors.white),
+                            backgroundColor: EColors.themeGrey,
                           ),
                         ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          top: 0,
+                          bottom: 0,
+                          child: GestureDetector(
+                            onTap: () {
+                              Provider.of<UploadsProvider>(context,
+                                      listen: false)
+                                  .cancelUpload(
+                                      widget.message.sendAt.toString());
+                            },
+                            child: Icon(
+                              Icons.close,
+                              color: EColors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else if ((widget.message.fileUploadState ==
+                              EFileState.unsent)) {
+                    return GestureDetector(
+                      onTap: () {
+                        Provider.of<UploadsProvider>(context, listen: false)
+                            .uploadFile(
+                                File(widget.message.fileUrls),
+                                widget.message.sendAt.toString(),
+                                widget.message);
+                      },
+                      child: Icon(
+                        Icons.upload_outlined,
+                        color: EColors.white,
                       ),
-                    ],
+                    );
+                  } else if (widget.message.fileUploadState ==
+                      EFileState.notdownloaded) {
+                    return GestureDetector(
+                      onTap: downloadFile,
+                      child: Icon(
+                        Icons.download_rounded,
+                        color: EColors.white,
+                      ),
+                    );
+                  } else if (widget.message.fileUploadState ==
+                      EFileState.downloading) {
+                    return lottieLoader(radius: 15);
+                  }
+                  return SizedBox(
+                    height: 0,
+                    width: 0,
                   );
-                } else if ((widget.message.fileUploadState ==
-                            EFileState.unsent)) {
-                  return GestureDetector(
-                    onTap: () {
-                      Provider.of<UploadsProvider>(context, listen: false)
-                          .uploadFile(
-                              File(widget.message.fileUrls),
-                              widget.message.sendAt.toString(),
-                              widget.message);
-                    },
-                    child: Icon(
-                      Icons.upload_outlined,
-                      color: EColors.white,
-                    ),
-                  );
-                } else if (widget.message.fileUploadState ==
-                    EFileState.notdownloaded) {
-                  return GestureDetector(
-                    onTap: downloadFile,
-                    child: Icon(
-                      Icons.download_rounded,
-                      color: EColors.white,
-                    ),
-                  );
-                } else if (widget.message.fileUploadState ==
-                    EFileState.downloading) {
-                  return lottieLoader(radius: 15);
-                }
-                return SizedBox(
-                  height: 0,
-                  width: 0,
-                );
-              }(),
-            ),
-          ],
+                }(),
+              ),
+            ],
+          ),
         ));
   }
 
