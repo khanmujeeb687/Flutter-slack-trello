@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:bubble/bubble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:time_formatter/time_formatter.dart';
 import 'package:wively/src/data/models/chat.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/models/message_types.dart';
@@ -110,6 +111,9 @@ class _ContactScreenState extends State<ContactScreen> {
       child: StreamBuilder<Object>(
           stream: _contactController.streamController.stream,
           builder: (context, snapshot) {
+            String lastSeen='';
+            if(_contactController?.selectedChat!=null && _contactController.selectedChat.user.lastSeen!=null)
+              lastSeen = formatTime(_contactController?.selectedChat?.user?.lastSeen);
             return Scaffold(
               appBar: AppBar(
                 titleSpacing: 0,
@@ -152,22 +156,27 @@ class _ContactScreenState extends State<ContactScreen> {
                           (){
                           if(!_contactController.selectedChat.isRoom){
                             if(_contactController.selectedChat.user.online!=null && _contactController.selectedChat.user.online){
-                              return Text("Online");
+                              return Row(
+                                children: [
+                                  CircleAvatar(radius: 5,
+                                  backgroundColor: Colors.green,),
+                                  SizedBox(width: 3),
+                                  Text("online"),
+                                ],
+                              );
                             }else if(_contactController.selectedChat.user.lastSeen!=null){
-                              return Text(DateTime.fromMillisecondsSinceEpoch(_contactController.selectedChat.user.lastSeen).toUtc().toString());
+                              return Text("last seen "+lastSeen);
                             }
-                            return Nothing();
-                          }else{
-                            return Text("");
                           }
+                           return Text(
+                              "@${_contactController.selectedChat.room == null ? _contactController.selectedChat.user.username : _contactController.selectedChat.room.roomName}",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 10,
+                              ),
+                            );
                           }()
-                          // Text(
-                          //   "@${_contactController.selectedChat.room == null ? _contactController.selectedChat.user.username : _contactController.selectedChat.room.roomName}",
-                          //   style: TextStyle(
-                          //     color: Colors.grey,
-                          //     fontSize: 10,
-                          //   ),
-                          // ),
+
                         ],
                       ),
                     ],
