@@ -282,7 +282,8 @@ class _ContactScreenState extends State<ContactScreen> {
             : Material(
                 color: Colors.transparent,
                 child: Bubble(
-                  shadowColor: EColors.transparent,
+                  elevation: 5,
+                  shadowColor: shouldShowBackgroundColor(message)?EColors.themeMaroon:EColors.transparent,
                   radius: Radius.circular(15),
                   margin: !showNip
                       ? BubbleEdges.only(

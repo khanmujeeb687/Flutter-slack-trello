@@ -68,29 +68,31 @@ class _ImageMessageState extends State<ImageMessage> {
             // alignment: Alignment.center,
             child: Stack(
               children: [
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: () {
-                      if (FileUtil.fileOriginType(widget.message.fileUrls) ==
-                          EOrigin.local) {
-                        return Image.file(File(widget.message.fileUrls),
-                            fit: BoxFit.cover,
-                            width: ScreenUtil.height(context) / 3);
-                      } else {
-                        return Stack(
-                          children: [
-                            Image.network(FileUtil.getThumbPathFromUrl(widget.message.fileUrls),
-                                fit: BoxFit.cover,
-                                width: ScreenUtil.height(context) / 3),
-                            BackdropFilter(
-                                filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
-                                child: Container(
-                                  color: EColors.themeBlack.withOpacity(0.3),
-                                )),
-                          ],
-                        );
-                      }
-                    }()),
+                SizedBox(
+                  height: ScreenUtil.height(context) / 4 ,
+                  width:ScreenUtil.height(context) / 4 ,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: () {
+                        if (FileUtil.fileOriginType(widget.message.fileUrls) ==
+                            EOrigin.local) {
+                          return Image.file(File(widget.message.fileUrls),
+                              fit: BoxFit.cover);
+                        } else {
+                          return Stack(
+                            children: [
+                              Image.network(FileUtil.getThumbPathFromUrl(widget.message.fileUrls),
+                                  fit: BoxFit.cover),
+                              BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
+                                  child: Container(
+                                    color: EColors.themeBlack.withOpacity(0.3),
+                                  )),
+                            ],
+                          );
+                        }
+                      }()),
+                ),
                 Positioned(
                   top: 0,
                   bottom: 0,
@@ -166,7 +168,14 @@ class _ImageMessageState extends State<ImageMessage> {
                       width: 0,
                     );
                   }()),
-                )
+                ),
+                Positioned(
+                    top: 2,
+                    right: 0,
+                    child: IconButton(
+                      iconSize: 20,
+                      icon: Icon(Icons.more_vert,color: EColors.white,),
+                    ))
               ],
             ),
           ),
