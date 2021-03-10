@@ -54,6 +54,7 @@ class DBProvider {
       SELECT tb_user._id,
              tb_user.name,
              tb_user.profile_url,
+             tb_user.last_seen,
              tb_user.username
       FROM tb_user
       WHERE tb_user._id = '$id'
@@ -230,6 +231,7 @@ class DBProvider {
              tb_user.name,
              tb_user.profile_url,
              tb_user.username,
+             tb_user.last_seen,
              tb_message.id_message,
              tb_message._id as message_id,
              tb_message.from_user,
@@ -331,8 +333,8 @@ class DBProvider {
   updateUser(User user) async {
     final db = await database;
     return await db.rawQuery('''
-     UPDATE tb_user SET _id = ?, username = ?, name = ?, profile_url = ? WHERE _id = ?
-        ''',[user.id,user.username,user.name,user.profileUrl.toString(),user.id]);
+     UPDATE tb_user SET _id = ?, username = ?, name = ?, profile_url = ?, last_seen = ? WHERE _id = ?
+        ''',[user.id,user.username,user.name,user.profileUrl.toString(),user.lastSeen,user.id]);
   }
 
   Future<void> clearDatabase() async {

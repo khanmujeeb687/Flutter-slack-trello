@@ -93,8 +93,9 @@ dependencies:
 
   cached_video_player: ^1.0.3
 
+  contacts_service: ^0.4.6
 
-
+  connectivity: ^3.0.2
 
 
 

@@ -18,6 +18,7 @@ import 'package:wively/src/widgets/file_upload/audio_message.dart';
 import 'package:wively/src/widgets/custom_app_bar.dart';
 import 'package:wively/src/widgets/file_upload/file_message.dart';
 import 'package:wively/src/widgets/file_upload/image_message.dart';
+import 'package:wively/src/widgets/file_viewer.dart';
 import 'package:wively/src/widgets/image_with_placeholder.dart';
 import 'package:wively/src/widgets/text_field_with_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -148,13 +149,25 @@ class _ContactScreenState extends State<ContactScreen> {
                               fontSize: 16,
                             ),
                           ),
-                          Text(
-                            "@${_contactController.selectedChat.room == null ? _contactController.selectedChat.user.username : _contactController.selectedChat.room.roomName}",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 10,
-                            ),
-                          ),
+                          (){
+                          if(!_contactController.selectedChat.isRoom){
+                            if(_contactController.selectedChat.user.online!=null && _contactController.selectedChat.user.online){
+                              return Text("Online");
+                            }else if(_contactController.selectedChat.user.lastSeen!=null){
+                              return Text(DateTime.fromMillisecondsSinceEpoch(_contactController.selectedChat.user.lastSeen).toUtc().toString());
+                            }
+                            return Nothing();
+                          }else{
+                            return Text("");
+                          }
+                          }()
+                          // Text(
+                          //   "@${_contactController.selectedChat.room == null ? _contactController.selectedChat.user.username : _contactController.selectedChat.room.roomName}",
+                          //   style: TextStyle(
+                          //     color: Colors.grey,
+                          //     fontSize: 10,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ],

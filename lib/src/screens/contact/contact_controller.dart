@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wively/src/data/models/chat.dart';
+import 'package:wively/src/data/models/custom_error.dart';
 import 'package:wively/src/data/models/file_models.dart';
 import 'package:wively/src/data/models/message.dart';
 import 'package:wively/src/data/models/message_types.dart';
@@ -12,6 +13,7 @@ import 'package:wively/src/data/models/user.dart';
 import 'package:wively/src/data/providers/chats_provider.dart';
 import 'package:wively/src/data/providers/uploads_provider.dart';
 import 'package:wively/src/data/repositories/chat_repository.dart';
+import 'package:wively/src/data/repositories/user_repository.dart';
 import 'package:wively/src/screens/profile/profile_view.dart';
 import 'package:wively/src/screens/room/create_room.dart';
 import 'package:wively/src/screens/room/room_info.dart';
@@ -23,21 +25,29 @@ import 'package:wively/src/utils/dates.dart';
 import 'package:wively/src/utils/file_util.dart';
 import 'package:wively/src/utils/message_utils.dart';
 import 'package:wively/src/utils/navigation_util.dart';
+import 'package:wively/src/utils/socket_controller.dart';
 import 'package:wively/src/utils/state_control.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:wively/src/widgets/select_file_sheet.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
 
 class ContactController extends StateControl {
   BuildContext context;
 
   ChatRepository _chatRepository = ChatRepository();
 
+  UserRepository _userRepository = UserRepository();
+
+  IO.Socket socket = SocketController.socket;
+
+
   ScrollController scrollController;
 
   ChatsProvider _chatsProvider;
 
-  Chat get selectedChat => _chatsProvider.selectedChat;
+  Chat get selectedChat => _chatsProvider?.selectedChat;
 
   List<Chat> get chats => _chatsProvider.chats;
 
@@ -72,6 +82,7 @@ class ContactController extends StateControl {
 
   void init() {
     scrollController = new ScrollController()..addListener(_scrollListener);
+    joinChat();
     initMyUser();
   }
 
@@ -179,6 +190,7 @@ class ContactController extends StateControl {
   }
 
   Future<bool> willPop() async {
+    leaveChat();
     await _chatsProvider.setSelectedChat(parentChat);
     return true;
   }
@@ -227,7 +239,38 @@ class ContactController extends StateControl {
     }else{
       openProfile();
     }
-
   }
+
+
+  joinChat() async{
+    await Future.delayed(Duration(milliseconds: 200));
+    socket.on("online", (dynamic data) async {
+      print(data.toString()+'DataMan');
+      if(data['userId']==selectedChat.user.id){
+        selectedChat.user.online=data['value'];
+        if(data['lastSeen']!=null){
+          selectedChat.user.lastSeen=data['lastSeen'];
+          _chatsProvider.updateLastSeen(selectedChat.user);
+        }
+        notifyListeners();
+      }
+    });
+    dynamic user = await _userRepository.joinLeaveChat(selectedChat.user.id, true);
+    if(user is User){
+      selectedChat.user=user;
+      _chatsProvider.updateLastSeen(selectedChat.user);
+      notifyListeners();
+    }else if(user is CustomError){
+      print(user.errorMessage.toString()+'error');
+    }
+  }
+
+
+  leaveChat() async {
+    _userRepository.joinLeaveChat(selectedChat.user.id, false);
+    socket.off('online');
+  }
+
+
 
 }

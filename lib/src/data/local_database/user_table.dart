@@ -14,6 +14,7 @@ class UserTable {
             id_user integer primary key autoincrement, 
             _id text not null,
             name text not null,
+            last_seen int,
             profile_url text,
             username text not null)
           ''');

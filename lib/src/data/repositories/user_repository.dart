@@ -57,4 +57,17 @@ class UserRepository {
       return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
     }
   }
+
+  Future <dynamic> joinLeaveChat(String userId, bool value) async{
+    try {
+      var response = await http.post('${MyUrls.ROOM}/join',body: jsonEncode({'roomId':userId,'value':value}));
+      final dynamic usersResponse = jsonDecode(response.body)['data'];
+      if(usersResponse!=null){
+        return User.fromJson(usersResponse);
+      }
+      return null;
+    } catch (err) {
+      return CustomError.fromJson({'error': true, 'errorMessage': err.toString()});
+    }
+  }
 }

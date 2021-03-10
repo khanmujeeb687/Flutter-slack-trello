@@ -9,13 +9,17 @@ class User {
   String username;
   String chatId;
   String profileUrl;
+  bool online;
+  int lastSeen;
 
   User({
     @required this.id,
     @required this.name,
     @required this.username,
     this.chatId,
-    this.profileUrl
+    this.profileUrl,
+    this.online,
+    this.lastSeen
   });
 
   User.fromJson(Map<String, dynamic> json) {
@@ -24,6 +28,8 @@ class User {
     username = json['username'];
     chatId = json['chatId'];
     profileUrl=json['profileUrl'];
+    online=json['online']=='true';
+    lastSeen=json['lastSeen'];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,7 +37,8 @@ class User {
       '_id': id,
       'name': name,
       'username': username,
-      'profileUrl': profileUrl
+      'profileUrl': profileUrl,
+      'lastSeen': lastSeen
     };
   }
 
@@ -40,6 +47,7 @@ class User {
     name = json['name'];
     username = json['username'];
     profileUrl=json['profile_url'];
+    lastSeen=json['last_seen'];
   }
 
   Map<String, dynamic> toLocalDatabaseMap() {
@@ -48,11 +56,12 @@ class User {
     map['name'] = name;
     map['username'] = username;
     map['profile_url']= profileUrl;
+    map['last_seen']= lastSeen;
     return map;
   }
 
   @override
   String toString() {
-    return '{"_id":"$id","name":"$name","username":"$username","profileUrl":"$profileUrl"}';
+    return '{"_id":"$id","name":"$name","username":"$username","profileUrl":"$profileUrl","lastSeen":$lastSeen}';
   }
 }

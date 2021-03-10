@@ -142,4 +142,10 @@ class ChatsProvider with ChangeNotifier {
    await _dbUpdate.updateUserDatabase();
     updateChats();
   }
+
+
+  updateLastSeen(User user) async{
+     await DBProvider.db.updateUser(user);
+     updateChats();
+  }
 }
