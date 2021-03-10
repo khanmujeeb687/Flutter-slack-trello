@@ -30,6 +30,11 @@ import '../../utils/NotificationsHandler.dart';
 import '../../utils/NotificationsHandler.dart';
 
 class HomeController extends StateControl with WidgetsBindingObserver {
+
+  int _selectedTab=0;
+
+  int get selectedTab=>_selectedTab;
+
   ChatRepository _chatRepository = ChatRepository();
 
   UserRepository _userRepository = UserRepository();
@@ -76,6 +81,11 @@ class HomeController extends StateControl with WidgetsBindingObserver {
     if(user!=null){
       _user=a;
     }
+  }
+
+  void changeTab(int a){
+    _selectedTab=a;
+    notifyListeners();
   }
 
   @override

@@ -104,15 +104,15 @@ class _ContactScreenState extends State<ContactScreen> {
 
   @override
   Widget build(BuildContext context) {
-    User mUser = _contactController.selectedChat.user;
-    Room mRoom = _contactController.selectedChat.room;
+    User mUser = _contactController.selectedChat?.user;
+    Room mRoom = _contactController.selectedChat?.room;
     return WillPopScope(
       onWillPop: _contactController.willPop,
       child: StreamBuilder<Object>(
           stream: _contactController.streamController.stream,
           builder: (context, snapshot) {
             String lastSeen='';
-            if(_contactController?.selectedChat!=null && _contactController.selectedChat.user.lastSeen!=null)
+            if(_contactController?.selectedChat!=null && _contactController.selectedChat.user!=null && _contactController.selectedChat.user.lastSeen!=null)
               lastSeen = formatTime(_contactController?.selectedChat?.user?.lastSeen);
             return Scaffold(
               appBar: AppBar(
@@ -142,7 +142,7 @@ class _ContactScreenState extends State<ContactScreen> {
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(
                             _contactController.selectedChat.room == null
@@ -153,29 +153,35 @@ class _ContactScreenState extends State<ContactScreen> {
                               fontSize: 16,
                             ),
                           ),
-                          (){
-                          if(!_contactController.selectedChat.isRoom){
-                            if(_contactController.selectedChat.user.online!=null && _contactController.selectedChat.user.online){
-                              return Row(
-                                children: [
-                                  CircleAvatar(radius: 5,
-                                  backgroundColor: Colors.green,),
-                                  SizedBox(width: 3),
-                                  Text("online"),
-                                ],
-                              );
-                            }else if(_contactController.selectedChat.user.lastSeen!=null){
-                              return Text("last seen "+lastSeen);
+                          AnimatedSwitcher(
+                            transitionBuilder: (Widget child,Animation<double > animation){
+                              return ScaleTransition(scale: animation,child: child);
+                            },
+                            duration: const Duration(milliseconds: 600),
+                          child: (){
+                            if(!_contactController.selectedChat.isRoom){
+                              if(_contactController.selectedChat.user.online!=null && _contactController.selectedChat.user.online){
+                                return Row(
+                                  children: [
+                                    CircleAvatar(radius: 5,
+                                      backgroundColor: Colors.green,),
+                                    SizedBox(width: 3),
+                                    Text("online"),
+                                  ],
+                                );
+                              }else if(_contactController.selectedChat.user.lastSeen!=null){
+                                return Text("last seen "+lastSeen);
+                              }
                             }
-                          }
-                           return Text(
+                            return Text(
                               "@${_contactController.selectedChat.room == null ? _contactController.selectedChat.user.username : _contactController.selectedChat.room.roomName}",
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 10,
                               ),
                             );
-                          }()
+                          }(),
+                          )
 
                         ],
                       ),

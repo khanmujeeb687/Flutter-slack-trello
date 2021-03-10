@@ -27,11 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return StreamBuilder<Object>(
         stream: _settingsController.streamController.stream,
         builder: (context, snapshot) {
-          return Scaffold(
-            appBar: CustomAppBar(
-              title: Text('settings'),
-            ),
-            body: SafeArea(
+          return SafeArea(
               child: Container(
                 child: ListView(
                   padding: EdgeInsets.all(0),
@@ -59,7 +55,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
               ),
-            ),
           );
         });
   }

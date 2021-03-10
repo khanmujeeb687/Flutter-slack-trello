@@ -244,6 +244,7 @@ class ContactController extends StateControl {
 
   joinChat() async{
     await Future.delayed(Duration(milliseconds: 200));
+    if(selectedChat?.isRoom) return;
     socket.on("online", (dynamic data) async {
       print(data.toString()+'DataMan');
       if(data['userId']==selectedChat.user.id){
@@ -257,7 +258,7 @@ class ContactController extends StateControl {
     });
     dynamic user = await _userRepository.joinLeaveChat(selectedChat.user.id, true);
     if(user is User){
-      selectedChat.user=user;
+      selectedChat?.user=user;
       _chatsProvider.updateLastSeen(selectedChat.user);
       notifyListeners();
     }else if(user is CustomError){
@@ -267,6 +268,7 @@ class ContactController extends StateControl {
 
 
   leaveChat() async {
+    if(selectedChat?.isRoom) return;
     _userRepository.joinLeaveChat(selectedChat.user.id, false);
     socket.off('online');
   }
