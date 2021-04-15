@@ -259,7 +259,7 @@ class ContactController extends StateControl {
     dynamic user = await _userRepository.joinLeaveChat(selectedChat.user.id, true);
     if(user is User){
       selectedChat?.user=user;
-      _chatsProvider.updateLastSeen(selectedChat.user);
+      _chatsProvider.updateLastSeen(selectedChat?.user);
       notifyListeners();
     }else if(user is CustomError){
       print(user.errorMessage.toString()+'error');
