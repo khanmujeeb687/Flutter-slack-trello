@@ -16,7 +16,6 @@ class AllTaskBoardsScreen extends StatefulWidget {
 class _AllTaskBoardsScreenState extends State<AllTaskBoardsScreen> {
 
   List<Room> rooms=[];
-  List<Task> tasks=[];
 
   @override
   void initState() {
@@ -26,11 +25,6 @@ class _AllTaskBoardsScreenState extends State<AllTaskBoardsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(tasks.length==0){
-      return Center(
-        child: lottieLoader(),
-      );
-    }
     return ListView(
       scrollDirection: Axis.horizontal,
       children: List.generate(rooms.length, (index) => LimitedBox(
@@ -41,18 +35,8 @@ class _AllTaskBoardsScreenState extends State<AllTaskBoardsScreen> {
   }
 
   void init() async{
-    fetchAllTasks();
     rooms=await DBProvider.db.getAllRooms();
     setState(() {});
   }
 
-  void fetchAllTasks() async{
-    var data=await new TaskBoardRepository().getAllUserTasks();
-    if(data is List<Task>){
-      setState(() {
-        tasks.clear();
-        tasks.addAll(data);
-      });
-    }
-  }
 }
