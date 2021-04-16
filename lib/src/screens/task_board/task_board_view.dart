@@ -13,9 +13,7 @@ import 'package:wively/src/widgets/lottie_loader.dart';
 
 class TaskBoardView extends StatefulWidget {
   String roomId;
-  List<Task> tasks;
-  Room room;
-  TaskBoardView(this.roomId,[this.tasks,this.room]);
+  TaskBoardView(this.roomId);
 
   @override
   _TaskBoardViewState createState() => _TaskBoardViewState();
@@ -28,7 +26,7 @@ class _TaskBoardViewState extends State<TaskBoardView> {
   @override
   void initState() {
     _taskBoardController = new TaskBoardController(context: context);
-    _taskBoardController.fetchBoard(widget.roomId,widget.tasks,widget.room);
+    _taskBoardController.fetchBoard(widget.roomId);
     super.initState();
   }
 
@@ -54,10 +52,8 @@ class _TaskBoardViewState extends State<TaskBoardView> {
                         child: RefreshIndicator(
                           color: EColors.themeBlack,
                           onRefresh: () async {
-                            if(widget.tasks==null){
                               await _taskBoardController
                                   .fetchBoard(widget.roomId);
-                            }
                           },
                           child: SingleChildScrollView(
                             controller: _taskBoardController.scrollController,

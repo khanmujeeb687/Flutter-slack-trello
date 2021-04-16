@@ -36,7 +36,7 @@ class _AllTaskBoardsScreenState extends State<AllTaskBoardsScreen> {
       children: List.generate(rooms.length, (index) => LimitedBox(
           maxHeight: ScreenUtil.height(context),
           maxWidth: ScreenUtil.width(context)*.9,
-          child: TaskBoardView(rooms[index].id,tasks.where((element) => element.room==rooms[index].id).toList(),rooms[index]))),
+          child: TaskBoardView(rooms[index].id))),
     );
   }
 

@@ -98,6 +98,7 @@ dependencies:
   connectivity: ^3.0.2
 
   time_formatter: ^1.0.0
+  shimmer: ^2.0.0
 
 
 
