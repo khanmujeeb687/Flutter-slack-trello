@@ -19,7 +19,7 @@ import 'package:wively/src/screens/room/create_room.dart';
 import 'package:wively/src/screens/room/room_info.dart';
 import 'package:wively/src/screens/room/room_view.dart';
 import 'package:wively/src/screens/task_board/add_task_view.dart';
-import 'package:wively/src/screens/task_board/task_board_view.dart';
+import 'package:wively/src/screens/task_board/task_board_screen.dart';
 import 'package:wively/src/utils/custom_shared_preferences.dart';
 import 'package:wively/src/utils/dates.dart';
 import 'package:wively/src/utils/file_util.dart';

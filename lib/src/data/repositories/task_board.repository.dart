@@ -25,6 +25,18 @@ class TaskBoardRepository {
     }
   }
 
+  Future<dynamic> getAllUserTasks() async {
+    try {
+      Response response = await http.get('${MyUrls.ADD_TASK}');
+      final List<dynamic> taskJson = jsonDecode(response.body)['data'];
+      final List<Task> tasks = taskJson.map((task) => Task.fromJson(task)).toList();
+      return tasks;
+    } catch (e) {
+      return CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
+
+    }
+  }
+
 
   Future<dynamic> createNewTask(map) async {
     try {

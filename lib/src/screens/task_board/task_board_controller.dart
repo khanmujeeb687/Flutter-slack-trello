@@ -66,9 +66,21 @@ class TaskBoardController extends StateControl {
     }
   }
 
-  Future<void> fetchBoard(String roomId) async{
-    if(room==null)
-      await getRoom(roomId);
+  Future<void> fetchBoard(String roomId,[List<Task> taskList,Room mRoom]) async{
+    if(room==null) {
+      if(mRoom!=null){
+        this.room=mRoom;
+      }else{
+        await getRoom(roomId);
+      }
+    }
+    if(taskList!=null){
+      tasks.clear();
+      tasks.addAll(taskList);
+      loading=false;
+      notifyListeners();
+      return;
+    }
     var data=await _taskBoardRepository.getAllTasks(room.taskBoardId);
     if(data is List<Task>){
       tasks.clear();
@@ -128,7 +140,7 @@ class TaskBoardController extends StateControl {
         'desc':desc,
         'title':title,
         'taskBoardId':room.taskBoardId,
-        'assignedTo':selectedUser.toJson(),
+        'assignedTo':Provider.of<ChatsProvider>(context,listen: false).currentUser.toJson(),
         'createdBy':_provider.currentUser.id,
         'roomId':room.id,
       }:passedData;

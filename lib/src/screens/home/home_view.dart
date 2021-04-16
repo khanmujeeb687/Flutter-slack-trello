@@ -2,6 +2,7 @@ import 'package:wively/src/screens/add_chat/add_chat_view.dart';
 import 'package:wively/src/screens/home/home_controller.dart';
 import 'package:wively/src/screens/room/create_room.dart';
 import 'package:wively/src/screens/settings/settings_view.dart';
+import 'package:wively/src/screens/task_board/all_task_boards_screen.dart';
 import 'package:wively/src/utils/navigation_util.dart';
 import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/bottom_navigation_bar.dart';
@@ -68,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: _animatedSwitcher()
             ),
           ),
-          floatingActionButton: FloatingActionButton(
+          floatingActionButton:_homeController.selectedTab==2?null:FloatingActionButton(
             onPressed: _homeController.addRoomScreen,
             backgroundColor: Theme.of(context).primaryColor,
             child: Icon(
@@ -90,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 1:
         return usersList(context,onlyDms: true);
       case 2:
-        return usersList(context,onlyDms: true);
+        return AllTaskBoardsScreen();
       case 3:
         return SettingsScreen();
     }

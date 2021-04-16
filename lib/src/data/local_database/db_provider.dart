@@ -344,4 +344,20 @@ class DBProvider {
     await db.rawQuery("DELETE FROM tb_user");
     await db.rawQuery("DELETE FROM tb_room");
   }
+
+  Future<List<Room>> getAllRooms() async{
+    final db = await database;
+    var maps = await db.rawQuery('''
+    SELECT * FROM tb_room''');
+    if (maps.length > 0) {
+      List<Room> rooms = [];
+
+      maps.toList().forEach((map) {
+        rooms.add(Room.fromLocalDatabaseMap(map));
+      });
+
+      return rooms;
+    }
+    return [];
+  }
 }
