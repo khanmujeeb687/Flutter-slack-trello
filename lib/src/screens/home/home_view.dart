@@ -44,42 +44,51 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Object>(
-      stream: _homeController.streamController.stream,
-      builder: (context, snapshot) {
-        return Scaffold(
-          appBar: CustomAppBar(
-            title: Text(_homeController.loading ? 'Connecting...' : 'Chats'),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.supervised_user_circle),
-                onPressed: () {
-                  NavigationUtil.navigate(context,CreateRoom());
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.account_circle),
-                onPressed: _homeController.openAddChatScreen,
-              ),
-            ],
-          ),
-          body: SafeArea(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 400),
-                child: _animatedSwitcher()
-            ),
-          ),
-          floatingActionButton:_homeController.selectedTab==2?null:FloatingActionButton(
-            onPressed: _homeController.addRoomScreen,
-            backgroundColor: Theme.of(context).primaryColor,
-            child: Icon(
-              Icons.message,
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-          bottomNavigationBar: EBottomNavigation(_homeController.changeTab,_homeController.selectedTab)
-        );
+    return WillPopScope(
+      onWillPop: () async{
+        if(_homeController.selectedTab!=0){
+          _homeController.changeTab(0);
+          return false;
+        }
+        return true;
       },
+      child: StreamBuilder<Object>(
+        stream: _homeController.streamController.stream,
+        builder: (context, snapshot) {
+          return Scaffold(
+            appBar: CustomAppBar(
+              title: Text(_homeController.loading ? 'Connecting...' : 'Chats'),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.supervised_user_circle),
+                  onPressed: () {
+                    NavigationUtil.navigate(context,CreateRoom());
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.account_circle),
+                  onPressed: _homeController.openAddChatScreen,
+                ),
+              ],
+            ),
+            body: SafeArea(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                  child: _animatedSwitcher()
+              ),
+            ),
+            floatingActionButton:_homeController.selectedTab==2?null:FloatingActionButton(
+              onPressed: _homeController.addRoomScreen,
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Icon(
+                Icons.message,
+                color: Theme.of(context).accentColor,
+              ),
+            ),
+            bottomNavigationBar: EBottomNavigation(_homeController.changeTab,_homeController.selectedTab)
+          );
+        },
+      ),
     );
   }
 
