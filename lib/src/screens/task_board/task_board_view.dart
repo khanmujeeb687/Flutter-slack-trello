@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wively/src/data/models/room.dart';
 import 'package:wively/src/data/models/task.dart';
 import 'package:wively/src/screens/task_board/task_board_controller.dart';
+import 'package:wively/src/shimmer/task_board_shimmer.dart';
 import 'package:wively/src/utils/screen_util.dart';
 import 'package:wively/src/values/Colors.dart';
 import 'package:wively/src/widgets/SimpleTextFormField.dart';
@@ -78,7 +79,7 @@ class _TaskBoardViewState extends State<TaskBoardView> {
                                       const EdgeInsets.fromLTRB(8, 20, 8, 8),
                                   child: () {
                                     if (_taskBoardController.loading) {
-                                      return lottieLoader();
+                                      return TaskBoardShimmer();
                                     }
                                     if (_taskBoardController.tasks.length ==
                                         0) {
