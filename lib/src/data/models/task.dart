@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:wively/src/data/models/user.dart';
 
 class Task{
@@ -21,8 +23,9 @@ class Task{
     title=map['title'];
     status=map['status'];
     taskBoardId=map['taskBoardId'];
-    if(!(map['assignedTo']==null))
-      assignedTo=User.fromJson(map['assignedTo']);
+    if(!(map['assignedTo']==null)) {
+      assignedTo = User.fromJson(map['assignedTo'] is User? map['assignedTo'].toJson():map['assignedTo']);
+    }
     createdBy=User.fromJson(map['createdBy']);
     deadline=map['deadline'];
     room=map['room'];

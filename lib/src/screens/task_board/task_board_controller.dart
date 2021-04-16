@@ -80,7 +80,7 @@ class TaskBoardController extends StateControl {
 
   getAllMembers(Room room)async{
     this.room=room;
-    var data=await _roomRepository.getAllMembers(room.id);
+    var data=await _roomRepository.getAllMembers(room?.id);
     if(data is List<User>){
       members=data;
     }
@@ -128,7 +128,7 @@ class TaskBoardController extends StateControl {
         'desc':desc,
         'title':title,
         'taskBoardId':room.taskBoardId,
-        'assignedTo':selectedUser,
+        'assignedTo':selectedUser.toJson(),
         'createdBy':_provider.currentUser.id,
         'roomId':room.id,
       }:passedData;
